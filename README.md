@@ -14,3 +14,8 @@ Gregory!
 
 More information: https://github.com/GregoryVerspecht/TheMona/wiki
 
+## Project Status
+![Project Status](https://img.shields.io/badge/status-initiatie-blue)
+
+This project is currently in the **Initiation Phase**. We are in the process of gathering requirements and setting up the basic structure.
+
