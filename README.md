@@ -1,5 +1,10 @@
-# TheMona
+# The Mona
 
-**TheMona** is een interactief en uitbreidbaar drankspel gebouwd met de Raspberry Pi. Het spel maakt gebruik van robuuste, verlichte knoppen en biedt verschillende speelse uitdagingen die eenvoudig kunnen worden uitgebreid met nieuwe functies. Dit project is ontworpen om eenvoudig mee te nemen naar feestjes en kan worden aangepast aan verschillende spelopties en regels, waardoor het een veelzijdige en leuke toevoeging is aan elke sociale gelegenheid.
+**The Mona** is an interactive and expandable drinking game built with the Raspberry Pi. Whether you're at a party or just hanging out with friends, The Mona adds a unique twist to your gatherings. Featuring robust, illuminated buttons, the game offers various playful challenges that are easy to expand with new features. It's designed to be portable and customizable, so you can tweak the game options and rules to fit any occasion.
 
-Meer informatie: https://github.com/GregoryVerspecht/TheMona/wiki
+Not only is it fun to play, but it's also a blast to build and customize. I hope you enjoy creating and playing it as much as I did.
+
+Cheers, 
+Gregory!
+
+More information: https://github.com/GregoryVerspecht/TheMona/wiki
