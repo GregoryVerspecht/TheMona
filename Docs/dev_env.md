@@ -8,6 +8,9 @@
 - OS: Raspberry Pi OS - Lite (64 Bit) --> geen nood aan desktop versie, kosten wat drukken --> webapp
 [Raspberry Pi OS](https://www.raspberrypi.com/software/operating-systems/) (Deze versie is op debian 12 (bookworm))
 - Opgesteld op een windows 11 pc
+- Conversie image naar iso - https://www.starwindsoftware.com/starwind-v2v-converter
+- https://cloudbase.it/qemu-img-windows/
+    QEMU" .\qemu-img.exe convert -f raw -O vmdk .\2024-11-19-raspios-bookworm-arm64-lite.img .\2024-11-19-raspios-bookworm-arm64-lite.vmdk
 
 
 ### Aanmaken VM
@@ -30,11 +33,16 @@
 - Disk: 16 GB (dynamisch uitbreidend).
 - Netwerkadapter: Kies "Bridged" zodat de VM hetzelfde netwerk gebruikt als je smartphone.
 
-5. OS toevoegen: (Opgepast is geen iso file maar image)
-TODO: uitzoeken convertie
+5. OS toevoegen: 
+
 
 - Download de Raspberry Pi OS (64-bit Lite) image.
-- Voeg deze toe als opstart-medium in de CD/DVD (SATA)-instellingen.
+- Download StarWind V2V Converter
+- Open V2V Converter
+- Source: Kies voor "Local file" > de extracted img file
+- Destination: Local File > "VMDK"
+- VMDK image format > growable image
+- Voeg deze disk toe aan de VM
 
 6. Start de VM:
 - Boot vanaf de ISO en volg de installatie-instructies.
