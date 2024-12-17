@@ -33,6 +33,14 @@
       address=/#/192.168.69.1
   notify: Restart dnsmasq
 
+- name: Add DNS entry for the Flask app
+  lineinfile:
+    path: /etc/dnsmasq.conf
+    line: "address=/the-mona-game/192.168.69.1"
+    state: present
+  notify: Restart dnsmasq
+
+
 - name: Ensure dnsmasq starts after hostapd
   block:
     - name: Add hostapd dependency to dnsmasq service

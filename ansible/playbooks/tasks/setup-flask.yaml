@@ -1,12 +1,11 @@
-# Installeren van vereisten
-- name: Install python3-venv and iptables
+- name: Install python3-venv, iptables, and openssl
   apt:
     name:
       - python3-venv
       - iptables
+      - openssl
     state: present
 
-# Flask virtual environment aanmaken
 - name: Create a virtual environment for Flask
   command: python3 -m venv /home/mona/flask_venv
   args:
@@ -22,7 +21,24 @@
   args:
     creates: /home/mona/flask_venv/lib/python3.*/site-packages/flask
 
-# Flask app deployen
+- name: Create SSL directory
+  file:
+    path: /home/mona/ssl
+    state: directory
+    owner: mona
+    group: mona
+    mode: '0755'
+
+- name: Generate SSL certificate
+  command: >
+    openssl req -x509 -newkey rsa:2048
+    -keyout /home/mona/ssl/key.pem
+    -out /home/mona/ssl/cert.pem
+    -days 365 -nodes
+    -subj "/C=BE/ST=Antwerp/L=Heist-op-den-Berg/O=The Mona/OU=GVE/CN=the-mona-game"
+  args:
+    creates: /home/mona/ssl/cert.pem
+
 - name: Deploy Flask application
   copy:
     dest: /home/mona/app.py
@@ -41,12 +57,28 @@
           <body>
               <h1>Welkom bij The Mona WiFi Hotspot!</h1>
               <p>Je bent nu verbonden met de hotspot!</p>
+              <p>Liesa please collab!</p>
           </body>
           </html>
           """
 
       if __name__ == "__main__":
-          app.run(host="0.0.0.0", port=80)
+          app.run(host="0.0.0.0", port=8443, ssl_context=("/home/mona/ssl/cert.pem", "/home/mona/ssl/key.pem"))
+
+- name: Redirect HTTPS traffic to Flask app
+  command: iptables -t nat -A PREROUTING -p tcp --dport 443 -j REDIRECT --to-port 8443
+
+- name: Ensure iptables directory exists
+  file:
+    path: /etc/iptables
+    state: directory
+    mode: '0755'
+
+- name: Save iptables rules
+  shell: iptables-save > /etc/iptables/rules.v4
+  args:
+    creates: /etc/iptables/rules.v4
+
 
 - name: Add Flask server to autostart
   cron:
@@ -54,7 +86,6 @@
     special_time: reboot
     job: "/home/mona/flask_venv/bin/python /home/mona/app.py &"
 
-# Correcte permissies
 - name: Ensure correct permissions for app files
   file:
     path: /home/mona/
