@@ -1,0 +1,60 @@
+- name: Configure hostapd
+  become: true
+  copy:
+    dest: /etc/hostapd/hostapd.conf
+    content: |
+      interface=wlan0
+      driver=nl80211
+      ssid=The-Mona
+      hw_mode=g
+      channel=6
+      macaddr_acl=0
+      auth_algs=1
+      ignore_broadcast_ssid=0
+      wpa=2
+      wpa_passphrase=mona1234
+      wpa_key_mgmt=WPA-PSK
+      rsn_pairwise=CCMP
+
+- name: Enable and start hostapd
+  become: true
+  command: |
+    systemctl unmask hostapd &&
+    systemctl enable hostapd &&
+    systemctl start hostapd
+
+- name: Configure dnsmasq for DHCP and Captive Portal
+  become: true
+  copy:
+    dest: /etc/dnsmasq.conf
+    content: |
+      interface=wlan0
+      dhcp-range=192.168.69.2,192.168.69.69,255.255.255.0,24h
+      address=/#/192.168.69.1
+  notify: Restart dnsmasq
+
+- name: Ensure dnsmasq starts after hostapd
+  block:
+    - name: Add hostapd dependency to dnsmasq service
+      lineinfile:
+        path: /lib/systemd/system/dnsmasq.service
+        insertafter: '^\[Unit\]'
+        line: |
+          After=hostapd.service
+          Requires=hostapd.service
+        state: present
+
+    - name: Reload systemd daemon
+      command: systemctl daemon-reload
+
+    - name: Restart hostapd service
+      become: true
+      service:
+        name: hostapd
+        state: restarted
+
+    - name: Restart dnsmasq service
+      become: true
+      service:
+        name: dnsmasq
+        state: restarted
