@@ -1,0 +1,69 @@
+- name: Install required packages for Flask and HTTPS
+  apt:
+    name:
+      - python3-venv
+      - iptables
+      - openssl
+    state: present
+
+- name: Create a virtual environment for Flask
+  command: python3 -m venv /home/mona/flask_venv
+  args:
+    creates: /home/mona/flask_venv
+
+- name: Upgrade pip in the virtual environment
+  command: /home/mona/flask_venv/bin/pip install --upgrade pip
+  args:
+    creates: /home/mona/flask_venv/bin/pip
+
+- name: Install Flask in the virtual environment
+  command: /home/mona/flask_venv/bin/pip install flask
+  args:
+    creates: /home/mona/flask_venv/lib/python3.*/site-packages/flask
+
+- name: Generate SSL certificate for HTTPS
+  command: >
+    openssl req -x509 -newkey rsa:2048
+    -keyout /home/mona/ssl/key.pem
+    -out /home/mona/ssl/cert.pem
+    -days 365 -nodes
+    -subj "/C=BE/ST=Antwerp/L=Heist-op-den-Berg/O=The Mona Game/OU=Production/CN=the-mona-game"
+  args:
+    creates: /home/mona/ssl/cert.pem
+
+- name: Ensure SSL directory exists
+  file:
+    path: /home/mona/ssl
+    state: directory
+    owner: mona
+    group: mona
+    mode: '0755'
+
+- name: Deploy Flask production application with PWA
+  copy:
+    src: ../../src/dev/
+    dest: /home/mona/the-mona/
+    owner: mona
+    group: mona
+    mode: '0755'
+
+- name: Add Flask server to autostart
+  cron:
+    name: "Start Flask server at boot"
+    special_time: reboot
+    job: "/home/mona/flask_venv/bin/python /home/mona/the-mona/app/app.py &"
+
+- name: Redirect HTTPS traffic to Flask app
+  command: iptables -t nat -A PREROUTING -p tcp --dport 443 -j REDIRECT --to-port 8443
+
+- name: Save iptables rules
+  shell: iptables-save > /etc/iptables/rules.v4
+  args:
+    creates: /etc/iptables/rules.v4
+
+- name: Ensure correct permissions for app files
+  file:
+    path: /home/mona/
+    owner: mona
+    group: mona
+    recurse: yes
