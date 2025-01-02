@@ -21,7 +21,7 @@
       update_config=1
   notify: Restart wpa_supplicant
 
-- name: Set proper permissions for wpa_supplicant.conf
+- name: Ensure permissions for wpa_supplicant.conf
   file:
     path: /etc/wpa_supplicant/wpa_supplicant.conf
     owner: root
@@ -30,17 +30,3 @@
 
 - name: Unblock Wi-Fi using rfkill
   command: rfkill unblock wlan
-
-- name: Restart wpa_supplicant service
-  service:
-    name: wpa_supplicant
-    state: restarted
-
-- name: Restart dhcpcd service
-  service:
-    name: dhcpcd
-    state: restarted
-
-- name: Reboot Raspberry Pi
-  reboot:
-    msg: "Rebooting to apply Wi-Fi settings"
