@@ -40,29 +40,80 @@
     state: present
   notify: Restart dnsmasq
 
+- name: Ensure override directory for dnsmasq exists
+  become: true
+  file:
+    path: /etc/systemd/system/dnsmasq.service.d
+    state: directory
+    mode: '0755'
 
-- name: Ensure dnsmasq starts after hostapd
-  block:
-    - name: Add hostapd dependency to dnsmasq service
-      lineinfile:
-        path: /lib/systemd/system/dnsmasq.service
-        insertafter: '^\[Unit\]'
-        line: |
-          After=hostapd.service
-          Requires=hostapd.service
-        state: present
+- name: Ensure override directory for hostapd exists
+  become: true
+  file:
+    path: /etc/systemd/system/hostapd.service.d
+    state: directory
+    mode: '0755'
 
-    - name: Reload systemd daemon
-      command: systemctl daemon-reload
+- name: Add persistent network dependency to dnsmasq
+  become: true
+  copy:
+    dest: /etc/systemd/system/dnsmasq.service.d/override.conf
+    content: |
+      [Unit]
+      After=network-online.target hostapd.service
+      Wants=network-online.target
 
-    - name: Restart hostapd service
-      become: true
-      service:
-        name: hostapd
-        state: restarted
+      [Service]
+      ExecStartPre=/bin/sleep 5
 
-    - name: Restart dnsmasq service
-      become: true
-      service:
-        name: dnsmasq
-        state: restarted
+- name: Add persistent network dependency to hostapd
+  become: true
+  copy:
+    dest: /etc/systemd/system/hostapd.service.d/override.conf
+    content: |
+      [Unit]
+      After=network-online.target
+      Wants=network-online.target
+
+- name: Reload systemd daemon
+  become: true
+  command: systemctl daemon-reload
+
+- name: Enable dnsmasq and hostapd services
+  become: true
+  service:
+    name: "{{ item }}"
+    enabled: true
+  loop:
+    - hostapd
+    - dnsmasq
+
+- name: Restart dnsmasq and hostapd services
+  become: true
+  service:
+    name: "{{ item }}"
+    state: restarted
+  loop:
+    - hostapd
+    - dnsmasq
+
+- name: Disable power management for WiFi
+  become: true
+  copy:
+    dest: /etc/udev/rules.d/70-wifi-powersave.rules
+    content: |
+      ACTION=="add", SUBSYSTEM=="net", KERNEL=="wlan0", RUN+="/sbin/iw dev wlan0 set power_save off"
+
+- name: Clear old leases and config caches
+  become: true
+  shell: |
+    rm -f /var/lib/misc/dnsmasq.leases
+    rm -f /var/run/hostapd/wlan0
+  ignore_errors: true
+
+- name: Ensure nl80211 module is loaded at boot
+  become: true
+  lineinfile:
+    path: /etc/modules
+    line: nl80211
+    state: present
