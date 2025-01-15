@@ -60,5 +60,5 @@ html, body {
 }
 
 main {
- /* flex-grow: 1; /* Zorgt ervoor dat de inhoud van main zich uitstrekt en de footer naar beneden duwt */
+ flex-grow: 1; /* Zorgt ervoor dat de inhoud van main zich uitstrekt en de footer naar beneden duwt */
 }
