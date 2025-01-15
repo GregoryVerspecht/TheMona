@@ -64,3 +64,11 @@ main {
   text-align: center; /* Centraal uitlijnen van tekst */
 }
 
+footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Horizontaal centreren */
+  justify-content: center; /* Inhoud gecentreerd houden */
+  text-align: center; /* Tekst gecentreerd uitlijnen */
+   /* Optionele padding voor wat ruimte */
+}
