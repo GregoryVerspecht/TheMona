@@ -53,12 +53,14 @@ html, body {
   height: 100%; /* Zorgt ervoor dat de pagina altijd volledig wordt gevuld */
 }
 
-.cover-container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh; /* Minimaliseer de hoogte om de volledige viewport te vullen */
-}
+
 
 main {
- flex-grow: 1; /* Zorgt ervoor dat de inhoud van main zich uitstrekt en de footer naar beneden duwt */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Zorgt dat de inhoud in het midden staat */
+  justify-content: center; /* Zorgt dat het main-gedeelte verticaal gecentreerd is */
+  height: 100%; 
+  text-align: center; /* Centraal uitlijnen van tekst */
 }
+
