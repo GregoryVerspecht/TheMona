@@ -1,74 +1,107 @@
-/*
- * Globals
- */
-
-
-/* Custom default button */
-.btn-light,
-.btn-light:hover,
-.btn-light:focus {
-  color: #333;
-  text-shadow: none; /* Prevent inheritance from `body` */
+/* Reset voor een consistente basis */
+body, html {
+  height: 100%; /* Zorg dat de body en html 100% van de viewport innemen */
+  margin: 0; /* Verwijder standaard marges */
+  padding: 0; /* Verwijder standaard padding */
+  box-sizing: border-box; /* Inclusief padding en border in berekeningen */
 }
 
-
-/*
- * Base structure
- */
-
+/* Algemene stijl voor de achtergrond en tekstkleur */
 body {
-  text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
-  box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
+  background-color: #121212; /* Donkere achtergrond */
+  color: #fff; /* Witte tekstkleur */
+  font-family: Arial, sans-serif; /* Standaard lettertype */
+  text-align: center; /* Centreer alle tekst standaard */
 }
 
+/* Container die de volledige hoogte van de pagina vult */
 .cover-container {
-  max-width: 42em;
+  display: flex;
+  flex-direction: column; /* Verticale indeling */
+  min-height: 100vh; /* Vul altijd de volledige hoogte van het scherm */
 }
 
-
-/*
- * Header
- */
-
-.nav-masthead .nav-link {
-  color: rgba(255, 255, 255, .5);
-  border-bottom: .25rem solid transparent;
+/* Stijl voor de header */
+header {
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Lichte scheiding */
 }
 
-.nav-masthead .nav-link:hover,
-.nav-masthead .nav-link:focus {
-  border-bottom-color: rgba(255, 255, 255, .25);
+/* Navigatie */
+header .nav-link {
+  color: #fff; /* Witte tekstkleur voor links */
+  text-decoration: none; /* Geen onderstreping */
+  margin: 0 0.5rem; /* Ruimte tussen links */
 }
 
-.nav-masthead .nav-link + .nav-link {
-  margin-left: 1rem;
+header .nav-link.active,
+header .nav-link:hover {
+  color: #ffc107; /* Gele kleur voor actieve of hoverende links */
 }
 
-.nav-masthead .active {
-  color: #fff;
-  border-bottom-color: #fff;
-}
-
-html, body {
-  height: 100%; /* Zorgt ervoor dat de pagina altijd volledig wordt gevuld */
-}
-
-
-
+/* Hoofdgedeelte */
 main {
+  flex-grow: 1; /* Laat het main-gedeelte de resterende ruimte innemen */
   display: flex;
   flex-direction: column;
-  align-items: center; /* Zorgt dat de inhoud in het midden staat */
-  justify-content: center; /* Zorgt dat het main-gedeelte verticaal gecentreerd is */
-  height: 100%; 
-  text-align: center; /* Centraal uitlijnen van tekst */
+  justify-content: center; /* Verticaal centreren */
+  align-items: center; /* Horizontaal centreren */
+  padding: 2rem 1rem; /* Binnenruimte */
 }
 
+section {
+  margin-bottom: 2rem; /* Ruimte tussen secties */
+}
+
+h1, h2 {
+  font-weight: bold;
+}
+
+p {
+  line-height: 1.6; /* Verbeterde leesbaarheid */
+}
+
+
+
+/* Knoppen */
+.btn {
+  padding: 0.75rem 1.5rem; /* Extra ruimte voor grotere knoppen */
+  border-radius: 5px; /* Rond de hoeken iets af */
+  transition: all 0.3s ease; /* Zachte hover-animatie */
+}
+
+.btn:hover {
+  background-color: #ffc107; /* Gele achtergrond bij hover */
+  color: #121212; /* Donkere tekstkleur bij hover */
+}
+
+/* Footer */
 footer {
-  display: flex;
+  padding: 1rem 0;
+  text-align: center;
+  font-size: 0.875rem; /* Kleinere tekst voor de footer */
+  color: rgba(255, 255, 255, 0.6); /* Lichtere tekstkleur */
+}
+
+/* Zorg dat de Home Section de volledige hoogte inneemt */
+#home {
+  display: flex; /* Gebruik flexbox voor centrering */
   flex-direction: column;
+  justify-content: center; /* Verticaal centreren */
   align-items: center; /* Horizontaal centreren */
-  justify-content: center; /* Inhoud gecentreerd houden */
-  text-align: center; /* Tekst gecentreerd uitlijnen */
-   /* Optionele padding voor wat ruimte */
+  min-height: 100vh; /* Volledige hoogte van de viewport */
+ /* padding: 2rem; /* Voeg wat padding toe */
+
+}
+/* Afbeeldingen */
+img {
+  max-width: 50%; /* Zorg dat afbeeldingen responsief zijn */
+  height: auto; /* Behoud de verhoudingen */
+  border-radius: 10px; /* Subtiele afgeronde hoeken */
+}
+
+#home img {
+  max-width: 60%; /* Beperk de breedte tot 60% van de container */
+  height: auto; /* Zorg dat de verhoudingen behouden blijven */
+  border-radius: 10px; /* Optioneel: ronde hoeken voor een modern uiterlijk */
 }
