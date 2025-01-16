@@ -6,9 +6,7 @@
 
 For detailed information about the project, including its background and purpose, please visit our [Wiki Page](https://github.com/GregoryVerspecht/TheMona/wiki).
 
-[![Go to Wiki](https://img.shields.io/badge/Go%20to%20Wiki-blue?style=for-the-badge)](https://github.com/GregoryVerspecht/TheMona/wiki)
-
-[![Visite the site](https://img.shields.io/badge/Go%20to%20Wiki-blue?style=for-the-badge)]([https://github.com/GregoryVerspecht/TheMona/wiki](https://gregoryverspecht.github.io/TheMona/))
+[![Visit the site](https://img.shields.io/badge/Go%20to%20Wiki-blue?style=for-the-badge)](https://gregoryverspecht.github.io/TheMona/)
 
 
 ## Project Status ![Project Status](https://img.shields.io/badge/Status-Initiation-blue)
