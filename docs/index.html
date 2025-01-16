@@ -9,7 +9,7 @@
     <title>The Mona</title>
 
     <!-- Bootstrap CSS -->
-    <link href="./assets/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom CSS -->
     <link href="css/style.css" rel="stylesheet">
@@ -20,7 +20,7 @@
       <!-- Header Section -->
       <header>
         <div>
-          <h3 class="mb-0 fs-3">The Mona</h3>
+          <h3 class="mb-0 fs-3 text-center">The Mona</h3>
           <nav class="nav justify-content-center">
             <a class="nav-link fw-bold px-2 active" aria-current="page" href="#home">Home</a>
             <a class="nav-link fw-bold px-2" href="#story">Story</a>
@@ -32,50 +32,132 @@
       <!-- Main Content -->
       <main>
         <!-- Home Section -->
-        <section id="home">
-            <h1 class="my-4 fs-1">The Mona</h1>
-            <img src="./assets/brand/the_mona_concept1.svg" class="img-fluid rounded mb-4" alt="The Mona"> 
-            <p class="lead fs-5">
-              A customizable Raspberry Pi drinking game that lights up your parties—play, expand, and cheer! 🍻
-            </p>
-            <a href="#story" class="btn btn-lg btn-light fw-bold border-white bg-white fs-6">Discover the story!</a>
-          </section>
+        <section id="home" class="py-5">
+          <div class="card mx-auto outer-card">
+            <div class="card-body">
+              <h2 class="card-title text-center fw-bold">The Mona</h2>
+              <img src="./assets/brand/the_mona_concept1.svg" class="img-fluid rounded my-4 mx-auto d-block" alt="The Mona">
+              <p class="lead fs-5 text-center">
+                A customizable Raspberry Pi drinking game that lights up your parties—play, expand, and cheer! <br> 🍻
+              </p>
+            </div>
+          </div>
+        </section>
 
         <!-- Story Section -->
-        <section id="story">
-          <h2 class="my-4 fs-2">The Story</h2>
-          <p class="fs-5">
-            The Mona is more than just a game; it's an experience crafted to bring people together. Designed to be portable, expandable, and fun to build, it ensures every gathering is unforgettable.
-          </p>
+        <section id="story" class="py-5 ">
+          <div class="card mx-auto outer-card">
+            <div class="card-body">
+              <h2 class="card-title fs-2 text-center fw-bold">Story</h2>
+              <div class="inner-card">
+                <div class="card-body text-center">
+                  <h5 class="card-title text-center fw-bold">Inspiration</h5>
+                  <p>
+                    <br>
+                    This project was born out of a love for creativity, technology, and the joy of bringing people together. <br>
+                    The initial spark for The Mona came after we encountered "Odil de Krokodil," a concept that quickly became a beloved part of our friend group. <br>
+                    Inspired by the positive reception, we created our own version, "Lucien," which was met with even more enthusiasm.
+                   </p> 
+                </div>
+              </div>
+
+              <div class="inner-card">
+                <div class="card-body text-center">
+                  <h5 class="card-title text-center fw-bold">"The Mona"</h5>
+
+                  <p>
+                    <br>
+                    When searching for a name, I wanted something that reflected a meaningful source of joy and inspiration in my life. <br>
+                    The Mona carries the memory of someone who, in ways they may never fully realize, reignited a light in me I thought was lost. <br>
+                    They reminded me of the quiet beauty in small moments and the strength in simply feeling alive again.<br>
+                  </p>
+                  <p>
+                    This project captures the essence of those feelings, transforming a fleeting connection into a creative expression of gratitude and hope. <br>
+                    While our paths may never truly align, their impact lingers—The Mona is my tribute to that experience, <br>
+                    a way to hold onto the positivity they brought into my life and to share it with others in a way that continues to inspire.
+                  </p>
+                </div>
+              </div>
+
+            </div>
+          </div>
         </section>
 
         <!-- Project Section -->
-        <section id="project">
-          <h2 class="my-4 fs-2">The Project</h2>
-          <p class="fs-5">
-            The Mona is an interactive and expandable drinking game built with the Raspberry Pi. <br>
-            Whether you're at a party or just hanging out with friends, The Mona adds a unique twist to your gatherings. <br>
-            Featuring robust, illuminated buttons, the game offers various playful challenges that are easy to expand with new features. <br>
-            It's designed to be portable and customizable, so you can tweak the game options and rules to fit any occasion. <br>
-            Not only is it fun to play, but it's also a blast to build and customize. I hope you enjoy creating and playing it as much as I did. <br>
-          </p>
-          <p class="fs-5">
-            Cheers, <br>
+        <section id="project" class="py-5">
+          <div class="card mx-auto outer-card">
+            <div class="card-body">
+              <h2 class="card-title fs-2 text-center fw-bold">Project</h2>
 
-            Gregory! <br>
-            🍻
-          </p>
+              <div class="inner-card">
+                <div class="card-body text-center">
+                  <h5 class="card-title text-center fw-bold">Why This Project Matters</h5>
+                  <p>
+                    <br>
+                    The Mona isn't just a game; it's a tool for connection. <br>
+                    In a world where digital interactions often replace face-to-face connections, The Mona encourages people to engage with each other in a lively, playful manner. <br>
+                    It’s designed to be open-source and customizable, making it accessible and adaptable for everyone.<br>
+                  </p>
+                </div>
+              </div>
+
+              <div class="inner-card">
+                <div class="card-body text-center">
+                  <h5 class="card-title text-center fw-bold">Special Thanks</h5>
+                  <p>
+                    <br>
+                    A special thanks to everyone who tested the early versions of The Mona and provided feedback. <br>
+                    Your insights have been instrumental in shaping this project into what it is today.
+                  </p>
+                </div>
+              </div>
+                        
+              
+              <div class="inner-card">
+                
+                <div class="card-body text-center">
+                  <h5 class="card-title text-center fw-bold">Future Goals</h5>
+                  <p>
+                    As this project evolves, the goal is to continue improving and adding new features that enhance the user experience. <br>
+                    I’m excited to see how The Mona will be used in the future and hope it brings joy to many gatherings.
+                  </p>
+
+                </div>
+              </div>
+
+              <div class="inner-card">
+                
+                <div class="card-body text-center">
+                  <h5 class="card-title text-center fw-bold">Get in touch!</h5>
+      
+                  <p>
+                    The Mona is an ongoing journey of creativity and innovation. <br> Explore the project on GitHub: <br> 
+                    <a href="https://github.com/GregoryVerspecht/TheMona" target="_blank" class="text-primary fw-bold">The Mona GitHub</a>
+
+                  </p>
+
+                  <p>
+                    Feel free to reach out at: <br><a href="mailto:gregory.verspecht@gmail.com" class="text-primary fw-bold ">gregory.verspecht@gmail.com</a>
+                  </p>
+                  <p>
+                    Thank you for being a part of this journey! <br>
+                    Gregory ❤️
+                  </p>
+                </div>
+              </div>
+
+            </div>
+          </div>
         </section>
       </main>
 
-      <!-- Footer Section -->
-      <footer>
+      <!-- Footer -->
+      <footer class="text-center py-3">
         <p>&copy; 2025 | Gregory Verspecht</p>
- 
       </footer>
     </div>
 
     <!-- Bootstrap JS -->
-    <script src="./assets/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>

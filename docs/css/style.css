@@ -1,107 +1,58 @@
-/* Reset voor een consistente basis */
+/* Algemene instellingen */
 body, html {
-  height: 100%; /* Zorg dat de body en html 100% van de viewport innemen */
-  margin: 0; /* Verwijder standaard marges */
-  padding: 0; /* Verwijder standaard padding */
-  box-sizing: border-box; /* Inclusief padding en border in berekeningen */
-}
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+ 
 
-/* Algemene stijl voor de achtergrond en tekstkleur */
-body {
-  background-color: #121212; /* Donkere achtergrond */
-  color: #fff; /* Witte tekstkleur */
-  font-family: Arial, sans-serif; /* Standaard lettertype */
-  text-align: center; /* Centreer alle tekst standaard */
 }
+.card-body{
 
-/* Container die de volledige hoogte van de pagina vult */
-.cover-container {
-  display: flex;
-  flex-direction: column; /* Verticale indeling */
-  min-height: 100vh; /* Vul altijd de volledige hoogte van het scherm */
-}
-
-/* Stijl voor de header */
-header {
-  padding: 1rem 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Lichte scheiding */
-}
-
-/* Navigatie */
-header .nav-link {
-  color: #fff; /* Witte tekstkleur voor links */
-  text-decoration: none; /* Geen onderstreping */
-  margin: 0 0.5rem; /* Ruimte tussen links */
-}
-
-header .nav-link.active,
-header .nav-link:hover {
-  color: #ffc107; /* Gele kleur voor actieve of hoverende links */
-}
-
-/* Hoofdgedeelte */
-main {
-  flex-grow: 1; /* Laat het main-gedeelte de resterende ruimte innemen */
-  display: flex;
-  flex-direction: column;
-  justify-content: center; /* Verticaal centreren */
-  align-items: center; /* Horizontaal centreren */
-  padding: 2rem 1rem; /* Binnenruimte */
-}
-
-section {
-  margin-bottom: 2rem; /* Ruimte tussen secties */
-}
-
-h1, h2 {
-  font-weight: bold;
-}
-
-p {
-  line-height: 1.6; /* Verbeterde leesbaarheid */
+  color: #bcbdbe;
 }
 
 
+.card-title {
+  color: #e8e9e9;
+ 
+}
+/* Buitenste cards */
+.outer-card {
+  max-width: 800px;
+  margin-bottom: 2rem;
+ 
+  background: #1d2124;
+  border: none;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  border-radius: 10px;
 
-/* Knoppen */
-.btn {
-  padding: 0.75rem 1.5rem; /* Extra ruimte voor grotere knoppen */
-  border-radius: 5px; /* Rond de hoeken iets af */
-  transition: all 0.3s ease; /* Zachte hover-animatie */
+
 }
 
-.btn:hover {
-  background-color: #ffc107; /* Gele achtergrond bij hover */
-  color: #121212; /* Donkere tekstkleur bij hover */
-}
-
-/* Footer */
-footer {
-  padding: 1rem 0;
-  text-align: center;
-  font-size: 0.875rem; /* Kleinere tekst voor de footer */
-  color: rgba(255, 255, 255, 0.6); /* Lichtere tekstkleur */
-}
-
-/* Zorg dat de Home Section de volledige hoogte inneemt */
-#home {
-  display: flex; /* Gebruik flexbox voor centrering */
-  flex-direction: column;
-  justify-content: center; /* Verticaal centreren */
-  align-items: center; /* Horizontaal centreren */
-  min-height: 100vh; /* Volledige hoogte van de viewport */
- /* padding: 2rem; /* Voeg wat padding toe */
+/* Binnenste cards */
+.inner-card {
+  
+  background: linear-gradient(120deg, #212529, #1d2124);
+  border: none;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 20px auto; /* Ruimte tussen de innerlijke cards */
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 90%; /* 10% smaller dan de parent card */
 
 }
-/* Afbeeldingen */
-img {
-  max-width: 50%; /* Zorg dat afbeeldingen responsief zijn */
-  height: auto; /* Behoud de verhoudingen */
-  border-radius: 10px; /* Subtiele afgeronde hoeken */
-}
 
-#home img {
-  max-width: 60%; /* Beperk de breedte tot 60% van de container */
-  height: auto; /* Zorg dat de verhoudingen behouden blijven */
-  border-radius: 10px; /* Optioneel: ronde hoeken voor een modern uiterlijk */
+/* Responsiviteit */
+@media (max-width: 768px) {
+  .outer-card {
+    padding: 10px;
+
+  }
+
+  .inner-card {
+    max-width: 95%; /* Nog flexibeler op kleinere schermen */
+
+  }
 }
