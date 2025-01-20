@@ -13,3 +13,10 @@ For detailed information about the project, including its background and purpose
 
 This project is currently in the **Initiation Phase**. We are in the process of gathering requirements and setting up the basic structure.
 
+#TO DO
+Bluetooth automatisch verbinden
+COnfig voor neopixel voorzien
+
+packages providen ansible
+
+Libraries voor music (wav/mp3) sudo apt install libsdl2-mixer-2.0-0

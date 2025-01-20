@@ -2,6 +2,7 @@ import RPi.GPIO as GPIO
 import pygame
 import time
 
+
 # GPIO configuratie
 LED_PIN = 18  # GPIO-pin waarop de LED is aangesloten
 
