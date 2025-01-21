@@ -20,3 +20,17 @@ COnfig voor neopixel voorzien
 packages providen ansible
 
 Libraries voor music (wav/mp3) sudo apt install libsdl2-mixer-2.0-0
+
+# SERVICES
+
+
+
+# Korte werking
+
+- webserver flask
+- PWA voor interface
+
+- main app:
+  - backend flask-api - the_mona_app.py
+  - frontend react + MUI
+
