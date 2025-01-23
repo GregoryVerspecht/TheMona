@@ -1,0 +1,24 @@
+---
+- name: Deploy project to Raspberry Pi
+  hosts: raspberrypi
+  become: true
+  tasks:
+    - name: Maak een directory op de Raspberry Pi
+      file:
+        path: /home/mona/the-mona
+        state: directory
+        mode: '0755'
+
+    - name: Kopieer projectbestanden naar de Raspberry Pi
+      copy:
+        src: ../../src/dev/
+        dest: /home/mona/the-mona/
+        mode: '0755'
+
+    #- name: Geef uitvoerrechten aan scripts
+    #  file:
+      #  path: /home/pi/project/deploy.sh
+       # mode: '0755'
+
+   # - name: Voer het deploy script uit
+    #  command: bash /home/pi/project/deploy.sh

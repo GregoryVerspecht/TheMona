@@ -1,44 +1,35 @@
-import RPi.GPIO as GPIO
-from flask import Flask, render_template, send_from_directory, make_response, request, jsonify
+from flask import Flask, render_template, request, jsonify
+import subprocess
+import os
 
-app = Flask(__name__, static_url_path='/static', template_folder='../templates')
+app = Flask(__name__)
 
-# GPIO Setup
-GPIO.setmode(GPIO.BCM)
-pins = [17, 18, 27]
-for pin in pins:
-    GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+# Dictionary voor beschikbare game modes
+game_modes = {
+    "mode1": "game_modes/mode1.py",
+    "mode2": "game_modes/mode2.py",
+    "mode3": "game_modes/flash2.py"
+    
+}
 
-@app.after_request
-def add_headers(response):
-    response.headers['Access-Control-Allow-Origin'] = '*'
-    response.headers['Service-Worker-Allowed'] = '/'
-    response.headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains'
-    response.headers['X-Content-Type-Options'] = 'nosniff'
-    response.headers['X-Frame-Options'] = 'DENY'
-    return response
+@app.route("/")
+def index():
+    return render_template("index.html", modes=game_modes.keys())
 
-
-@app.route('/')
-def home():
-    return render_template('index.html')
-
-@app.route('/static/<path:path>')
-def static_files(path):
-    response = make_response(send_from_directory('static', path))
-    response.headers['Access-Control-Allow-Origin'] = '*'
-    return response
-
-# API route to get pin status
-@app.route('/api/pins/status', methods=['GET'])
-def get_pin_status():
-    status = {pin: GPIO.input(pin) for pin in pins}
-    return jsonify(status)
-
-# API route to start the game
-@app.route('/api/game/start', methods=['POST'])
+@app.route("/start", methods=["POST"])
 def start_game():
-    return jsonify({'message': 'Game started!'})
+    mode = request.json.get("mode")
+    if mode in game_modes:
+        # Start de game mode (bijv. als subprocess)
+        subprocess.Popen(["python", game_modes[mode]])
+        return jsonify({"status": "success", "message": f"{mode} started"})
+    return jsonify({"status": "error", "message": "Invalid mode"})
+
+@app.route("/stop", methods=["POST"])
+def stop_game():
+    mode = request.json.get("mode")
+    # Je kunt hier logica toevoegen om een specifieke subprocess te beëindigen
+    return jsonify({"status": "success", "message": f"{mode} stopped"})
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8443, ssl_context=("/home/mona/ssl/cert.pem", "/home/mona/ssl/key.pem"))
+    app.run(debug=True)
