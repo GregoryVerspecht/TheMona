@@ -1,3 +1,8 @@
 flask
 gunicorn
 RPi.GPIO
+flask_cors
+adafruit-blinka
+rpi_ws281x 
+adafruit-circuitpython-neopixel
+pygame

@@ -3,48 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="manifest" href="/static/manifest.json">
-    <title>Game Selector</title>
-    <script>
-        async function startGame(mode) {
-            const response = await fetch('/start', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ mode }),
-            });
-            const data = await response.json();
-            alert(data.message);
-        }
-        
-        async function stopGame(mode) {
-            const response = await fetch('/stop', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ mode }),
-            });
-            const data = await response.json();
-            alert(data.message);
-        }
-    </script>
+    <title>The Mona Modes</title>
 </head>
 <body>
-    <h1>Game Selector</h1>
-    <div>
-        {% for mode in modes %}
-            <button onclick="startGame('{{ mode }}')">Start {{ mode }}</button>
-            <button onclick="stopGame('{{ mode }}')">Stop {{ mode }}</button>
-        {% endfor %}
-    </div>
+    <h1>The Mona Modes</h1>
+
+    <!-- Toon categorieën en modes -->
+    {% for category, modes in categories.items() %}
+        <h2>{{ category.replace('_', ' ').title() }}</h2>
+        <ul>
+            {% for mode in modes.keys() %}
+                <li>
+                    {{ mode }}
+                    <button onclick="startMode('{{ category }}', '{{ mode }}')">Start</button>
+                    <button onclick="stopMode('{{ category }}', '{{ mode }}')">Stop</button>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endfor %}
+
+    <script>
+        function startMode(category, mode) {
+            fetch('/start', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ category: category, mode: mode })
+            })
+            .then(response => response.json())
+            .then(data => alert(data.message));
+        }
+
+        function stopMode(category, mode) {
+            fetch('/stop', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ category: category, mode: mode })
+            })
+            .then(response => response.json())
+            .then(data => alert(data.message));
+        }
+    </script>
 </body>
 </html>
-<script>
-  if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/static/service-worker.js')
-          .then(() => console.log('Service Worker registered'))
-          .catch(err => console.error('Service Worker registration failed', err));
-  }
-</script>
