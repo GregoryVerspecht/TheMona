@@ -35,7 +35,7 @@
 
           [Service]
           User=mona
-          WorkingDirectory=/home/mona/the-mona/app
+          WorkingDirectory=/home/mona/the-mona
           ExecStart=/home/mona/the-mona/.venv/bin/python /home/mona/the-mona/app/app.py
           Restart=always
 

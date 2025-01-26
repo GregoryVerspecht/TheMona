@@ -3,17 +3,29 @@ import subprocess
 import os
 import signal
 
-app = Flask(__name__, template_folder='../templates')
+app = Flask(
+    __name__,
+    template_folder=os.path.join(os.getcwd(), "views"),  # Absoluut pad naar views
+    static_folder=os.path.join(os.getcwd(), "static")    # Absoluut pad naar assets
+)
+
 
 # Categorieën met modes
 categories = {
     "game_modes": {
-        "mode1": "/home/mona/the-mona/app/game_modes/mode1.py",
-        "mode2": "/home/mona/the-mona/app/game_modes/mode2.py"
+        "Squid Game": "/home/mona/the-mona/app/game_modes/mode1.py",
+        "Russian Roulette": "/home/mona/the-mona/app/game_modes/mode2.py"
     },
     "maintenance_modes": {
-        "Flashkes": "/home/mona/the-mona/app/game_modes/flash2.py",
-        "Sound of the Police": "/home/mona/the-mona/app/game_modes/sound-of-the-police.py"
+        "Flashkes": "/home/mona/the-mona/app/maintenance/flash2.py",
+        "Sound of the Police": "/home/mona/the-mona/app/maintenance/sound-of-the-police.py",
+        "Rainbow": "/home/mona/the-mona/app/maintenance/rainbow.py"
+    },
+        "sounboard": {
+        "Peppa_Pig_The_Mix": "/home/mona/the-mona/app/soundboard/playsound_peppa_liesa.py",
+        "Sound of the Police": "/home/mona/the-mona/app/soundboard/playsound_sound_of_the_police.py",
+        "Meow": "/home/mona/the-mona/app/soundboard/playsound_meow.py",
+        "PgPgPg": "/home/mona/the-mona/app/soundboard/playsound_liesa_pgpg.py"
     }
 }
 
@@ -44,6 +56,17 @@ def start_mode():
 
     return jsonify({"status": "error", "message": "Invalid mode or category"})
 
+@app.route("/debug")
+def debug():
+    print("Template folder:", app.template_folder)
+    print("Bestand aanwezig:", os.path.exists(os.path.join(app.template_folder, "index.html")))
+    return render_template("index.html")
+
+
+@app.route("/direct")
+def direct():
+    with open('/home/mona/the-mona/templates/index.html') as f:
+        return f.read()
 
 @app.route("/stop", methods=["POST"])
 def stop_mode():
@@ -61,4 +84,7 @@ def stop_mode():
 
 
 if __name__ == "__main__":
+
+    print("Templates folder:", os.path.abspath(app.template_folder))
+
     app.run(host="0.0.0.0", port=8443, ssl_context=("/home/mona/ssl/cert.pem", "/home/mona/ssl/key.pem"))
