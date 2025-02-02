@@ -8,15 +8,10 @@
     "scope": "/",
     "icons": [
       {
-        "src": "/static/the_mona_concept_192.png",
-        "sizes": "192x192",
-        "type": "image/png"
-      },
-      {
-        "src": "/static/the_mona_concept_512.png",
-        "sizes": "512x512",
+        "src": "/static/the-mona.png",
         "type": "image/png"
       }
+
     ]
   }
   

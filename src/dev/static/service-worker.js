@@ -5,8 +5,8 @@ self.addEventListener('install', function(event) {
       return cache.addAll([
         '/',
         '/static/manifest.json',
-        '/static/the_mona_concept_192.png',
-        '/static/the_mona_concept_512.png'
+        '/static/the-mona.png',
+        '/static/the-mona.png'
       ]);
     })
   );
