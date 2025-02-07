@@ -87,7 +87,9 @@ body, html {
   position: fixed;
   top: -80px; /* Verberg navbar boven beeld */
   width: 100%;
-  background: rgba(29, 33, 36, 0.8);
+  background: rgba(29, 33, 36, 0.9);
+  text-align: center;
+  padding: 10px 0;
   transition: top 0.4s ease-in-out, background 0.3s ease-in-out;
   z-index: 1000;
 }
@@ -98,14 +100,21 @@ body, html {
   background: rgba(29, 33, 36, 1);
 }
 
-/* 🔹 Hamburger-icoon styling */
-.animated-icon span {
-  display: block;
-  background-color: white;
-  height: 3px;
-  margin: 5px 0;
-  width: 30px;
-  transition: all 0.3s ease-in-out;
+/* 🔹 De "The Mona" knop in het midden met icoon */
+.nav-toggle-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.nav-icon {
+  font-size: 1.8rem;
 }
 
 /* 🔹 Navigatiemenu styling */
@@ -115,11 +124,11 @@ body, html {
   width: 220px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
   position: absolute;
-  top: 60px;
-  right: 10px;
+  top: 100%; /* Zet menu direct onder de knop */
+  left: 50%;
+  transform: translateX(-50%);
   display: none;
   opacity: 0;
-  transform: translateY(-10px);
   transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
@@ -127,7 +136,7 @@ body, html {
 #mobileNav.show {
   display: block;
   opacity: 1;
-  transform: translateY(0);
+  transform: translateX(-50%) translateY(5px);
 }
 
 /* 🔹 Navigatielinks */
@@ -136,26 +145,13 @@ body, html {
   color: white;
   padding: 10px;
   text-decoration: none;
-  text-align: left;
+  text-align: center;
   font-weight: bold;
 }
 
-/* 🔹 Navbar en content meer naar het midden op grotere schermen */
+/* 🔹 Extra aanpassingen voor grotere schermen */
 @media (min-width: 992px) {
-  #navbar .container-fluid {
-    max-width: 90%; /* Houdt navbar netjes gecentreerd */
-    margin: 0 auto;
-  }
-
-  .hero-logo {
-    max-width: 50%; /* Logo iets kleiner op grote schermen */
-  }
-
-  .container.position-relative {
-    max-width: 55%; /* Tekst gecentreerd houden */
-  }
-
   .nav-menu {
-    right: 15px; /* Zorgt ervoor dat het dropdown-menu niet te ver naar binnen schuift */
+    width: 240px;
   }
 }

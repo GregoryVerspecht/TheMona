@@ -19,16 +19,14 @@
     <div class="cover-container">
       <header id="navbar" class="fixed-top">
         <nav class="navbar navbar-dark">
-          <div class="container-fluid d-flex justify-content-between align-items-center">
-            <h3 class="mb-0 fs-3 text-light">The Mona</h3>
-            
-            <!-- Hamburger-knop -->
-            <button class="navbar-toggler" type="button" id="navToggle">
-              <div class="animated-icon"><span></span><span></span><span></span></div>
+          <div class="container-fluid d-flex justify-content-center align-items-center">
+            <!-- Nav-knop met tekst en icoon -->
+            <button class="nav-toggle-btn" id="navToggle">
+              <span class="nav-icon">☰</span> The Mona
             </button>
           </div>
         </nav>
-        
+      
         <!-- Navigatiemenu -->
         <div id="mobileNav" class="nav-menu p-4">
           <button class="btn btn-link btn-block nav-link text-light" data-target="#home">Home</button>
@@ -37,11 +35,6 @@
         </div>
       </header>
       
-      
-      
-      
-      
-
       <!-- Main Content -->
       <main>
         <!-- Home Section -->
@@ -178,7 +171,7 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-      // Navbar effect: standaard verborgen en tonen bij scrollen
+      // Navbar effect: verborgen op de hero-sectie, verschijnt bij scrollen
       window.addEventListener("scroll", function () {
         var navbar = document.getElementById("navbar");
         if (window.scrollY > 50) { // Zodra gebruiker een beetje scrolt
@@ -188,9 +181,19 @@
         }
       });
       
-      // Openen en sluiten van het hamburger-menu
+      // Openen en sluiten van het menu
       document.getElementById("navToggle").addEventListener("click", function () {
         document.getElementById("mobileNav").classList.toggle("show");
+      });
+      
+      // Sluit het menu als je ergens anders klikt
+      document.addEventListener("click", function (event) {
+        let nav = document.getElementById("mobileNav");
+        let navToggle = document.getElementById("navToggle");
+      
+        if (!nav.contains(event.target) && !navToggle.contains(event.target)) {
+          nav.classList.remove("show");
+        }
       });
       
       // Smooth scroll naar secties en sluit menu na klik
@@ -201,10 +204,12 @@
           if (targetSection) {
             targetSection.scrollIntoView({ behavior: "smooth" });
           }
-          document.getElementById("mobileNav").classList.remove("show"); // Sluit menu na klikken
+          document.getElementById("mobileNav").classList.remove("show");
         });
       });
       </script>
+      
+      
       
       
       
