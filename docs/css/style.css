@@ -156,3 +156,42 @@ body, html {
     width: 240px;
   }
 }
+
+
+/* **/
+
+/* 🔹 Snap scroll blijft actief, maar content kan scrollen als nodig */
+section {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  overflow: hidden; /* Voorkomt dat de sectie buiten beeld gaat */
+}
+
+/* 🔹 Als de content te groot is, maak het binnen de sectie scrollbaar */
+.section-content {
+  max-height: 90vh; /* Zorgt ervoor dat de navbar en padding blijven zichtbaar */
+  overflow-y: auto; /* Scroll alleen binnen de sectie indien nodig */
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* 🔹 Extra: Verberg de scrollbar voor een clean effect (optioneel) */
+.section-content::-webkit-scrollbar {
+  display: none; /* Verbergt de scrollbar in Chrome, Safari */
+}
+
+/* 🔹 Op mobiel toestaan dat de sectie flexibeler is */
+@media (max-width: 768px) {
+  section {
+    height: auto; /* Sectie kan groter worden als nodig */
+    min-height: 100vh; /* Maar blijft minimaal een hele viewport hoog */
+  }
+  .section-content {
+    max-height: none; /* Geen beperking op mobiel */
+  }
+}
