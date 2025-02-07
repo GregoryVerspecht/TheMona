@@ -6,3 +6,4 @@ adafruit-blinka
 rpi_ws281x 
 adafruit-circuitpython-neopixel
 pygame
+paho-mqtt
