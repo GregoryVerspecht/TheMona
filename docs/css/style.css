@@ -125,7 +125,7 @@ body, html {
   transform: translateX(-50%) translateY(5px);
 }
 
-/* 🔹 Fix voor mobiel en kleinere schermen 
+/* 🔹 Fix voor mobiel en kleinere schermen */
 @media (max-width: 768px) {
   .section-content {
     max-width: 95%;
@@ -135,7 +135,7 @@ body, html {
     padding-right: 5vw;
   }
 }
-*/
+
 /* 🔹 Cards styling */
 .card-body {
   color: #bcbdbe;
