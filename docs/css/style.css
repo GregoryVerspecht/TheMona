@@ -5,8 +5,45 @@ body, html {
   padding: 0;
   font-family: Arial, sans-serif;
  
-
 }
+
+#home {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background: url("../assets/images/background.jpeg") center/cover no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* Overlay om tekst beter leesbaar te maken */
+#home .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+/* Zorgen dat content boven de overlay blijft */
+#home .container {
+  position: relative;
+  z-index: 2;
+}
+
+/* Stijl voor het logo */
+.hero-logo {
+  width: 500px; /* Pas grootte aan indien nodig */
+  max-width: 80%;
+  height: auto;
+}
+
+
+
+
 .card-body{
 
   color: #bcbdbe;
@@ -55,4 +92,29 @@ body, html {
     max-width: 95%; /* Nog flexibeler op kleinere schermen */
 
   }
+}
+
+#navbar {
+  width: 100%;
+  padding: 10px 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  transition: background 0.3s ease-in-out;
+}
+
+#navbar a {
+  color: white;
+  transition: color 0.3s ease-in-out;
+}
+
+/* Standaard transparant in de hero */
+#navbar.transparent {
+  background: transparent;
+}
+
+/* Bij scrollen wordt de navbar een donkere balk */
+#navbar.scrolled {
+  background: rgba(0, 0, 0, 0.8);
 }

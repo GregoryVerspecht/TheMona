@@ -18,31 +18,37 @@
 
     <div class="cover-container">
       <!-- Header Section -->
-      <header>
-        <div>
-          <h3 class="mb-0 fs-3 text-center">The Mona</h3>
-          <nav class="nav justify-content-center">
-            <a class="nav-link fw-bold px-2 active" aria-current="page" href="#home">Home</a>
+      <header id="navbar" class="fixed-top">
+        <div class="container d-flex align-items-center justify-content-between">
+          <h3 class="mb-0 fs-3">The Mona</h3>
+          <nav class="nav">
+            <a class="nav-link fw-bold px-2" href="#home">Home</a>
             <a class="nav-link fw-bold px-2" href="#story">Story</a>
             <a class="nav-link fw-bold px-2" href="#project">Project</a>
           </nav>
         </div>
       </header>
+      
 
       <!-- Main Content -->
       <main>
         <!-- Home Section -->
-        <section id="home" class="py-5">
-          <div class="card mx-auto outer-card">
-            <div class="card-body">
-              <h2 class="card-title text-center fw-bold">The Mona</h2>
-              <img src="./assets/brand/the-mona.svg" class="img-fluid rounded my-4 mx-auto d-block" alt="The Mona">
-              <p class="lead fs-5 text-center">
-                A customizable Raspberry Pi drinking game that lights up your parties—play, expand, and cheer! <br> 🍻
-              </p>
-            </div>
+        <section id="home" class="d-flex align-items-center justify-content-center text-center text-light">
+          <div class="overlay"></div>
+          <div class="container position-relative">
+            <!-- Logo -->
+            <img src="./assets/brand/the-mona.svg" alt="The Mona Logo" class="hero-logo mb-3">
+            
+            <!-- Titel en beschrijving -->
+            <h1 class="display-3 fw-bold">The Mona</h1>
+            <p class="lead fs-4">A customizable Raspberry Pi drinking game that lights up your parties! 🍻</p>
+            
+            <!-- Call-to-action knop -->
+            <a href="#story" class="btn btn-primary btn-lg mt-3">Learn More</a>
           </div>
         </section>
+        
+        
 
         <!-- Story Section -->
         <section id="story" class="py-5 ">
