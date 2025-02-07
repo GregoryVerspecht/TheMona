@@ -134,6 +134,18 @@ body, html {
   }
 }
 
+/* 🔹 Fix voor center op mobiel */
+@media (max-width: 768px) {
+  .outer-card, .section-content {
+    max-width: 90%; /* Zorgt dat het niet tegen de rand zit */
+    width: 90%; /* Zorgt ervoor dat het goed in verhouding blijft */
+    margin: 0 auto; /* Centreert het blok */
+    padding-left: 10px; /* Zorgt dat er altijd padding aan beide kanten is */
+    padding-right: 10px;
+  }
+}
+
+
 /* 🔹 Cards styling */
 .card-body {
   color: #bcbdbe;
