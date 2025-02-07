@@ -94,14 +94,18 @@ body, html {
   }
 }
 
-/* 🔹 Standaard: Navbar onzichtbaar */
+/* 🔹 Navbar blijft onzichtbaar tot scrollen */
 #navbar {
   position: fixed;
-  top: -100px; /* Navbar verstopt boven de pagina */
+  top: -100px;
   width: 100%;
   padding: 10px;
   background: rgba(0, 0, 0, 0.8);
   transition: top 0.3s ease-in-out;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Logo links, hamburger rechts */
 }
 
 /* 🔹 Navbar verschijnt bij scrollen */
@@ -109,25 +113,29 @@ body, html {
   top: 0;
 }
 
-/* 🔹 Hamburger-knop */
+/* 🔹 Hamburger-knop styling */
 .navbar-toggler {
   background: none;
   border: none;
   font-size: 24px;
   color: white;
   cursor: pointer;
+  position: relative;
+  z-index: 1100;
 }
 
-/* 🔹 Navigatiemenu (Standaard verborgen) */
+/* 🔹 Navigatiemenu direct onder de hamburger-knop */
 .nav {
   display: none;
   position: absolute;
-  top: 100%; /* Direct onder de hamburger-knop */
-  right: 10px;
+  top: 100%; /* Direct onder de knop */
+  right: 0; /* Zorgt ervoor dat het menu altijd rechts blijft */
   background: rgba(0, 0, 0, 0.9);
   padding: 10px;
   border-radius: 5px;
-  width: 200px; /* Breder voor nette uitstraling */
+  width: 200px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
 }
 
 /* 🔹 Navigatielinks */
@@ -136,19 +144,27 @@ body, html {
   color: white;
   padding: 10px;
   text-decoration: none;
-  text-align: center;
+  text-align: left;
 }
 
 /* 🔹 Toon menu bij klik */
 #mobileNav.show {
   display: block;
+  opacity: 1;
+  transform: translateY(0);
 }
 
-/* 🔹 Extra: Op grotere schermen dropdown centreren */
+/* 🔹 Extra: Zorg dat het menu altijd rechts onder de knop blijft */
 @media (min-width: 768px) {
   .nav {
-    right: auto;
-    left: 50%;
-    transform: translateX(-50%);
+    right: 0; /* Zorgt ervoor dat het menu niet naar het midden springt */
+    left: auto;
+    transform: none;
   }
+}
+
+#mobileNav {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
