@@ -26,7 +26,7 @@ body, html {
   justify-content: center;
   text-align: center;
   overflow: hidden; /* Scroll weg */
-  padding: 80px 5px 5px 50px; /* Voegt extra ruimte toe bovenaan */
+  padding: 50px 5px 50px 5px; /* Voegt extra ruimte toe bovenaan */
   scroll-snap-align: start;
 }
 
