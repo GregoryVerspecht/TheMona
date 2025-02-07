@@ -1,90 +1,157 @@
-from flask import Flask, render_template, request, jsonify
-import subprocess
-import os
-import signal
+from flask import Flask, jsonify, request
+import paho.mqtt.client as mqtt
+import json
+import time
+import threading  # ✅ Gebruik threading om knipperen asynchroon te maken
 
-app = Flask(
-    __name__,
-    template_folder=os.path.join(os.getcwd(), "views"),  # Absoluut pad naar views
-    static_folder=os.path.join(os.getcwd(), "static")    # Absoluut pad naar assets
-)
+# Flask App Setup
+app = Flask(__name__)
 
+# MQTT Configuratie
+MQTT_BROKER = "192.168.69.69"
+MQTT_TOPIC_RGB = "neopixel/set"
+MQTT_TOPIC_BUTTONS = "esp/status"
 
-# Categorieën met modes
-categories = {
-    "game_modes": {
-        "Squid Game": "/home/mona/the-mona/app/game_modes/mode1.py",
-        "Russian Roulette": "/home/mona/the-mona/app/game_modes/mode2.py"
-    },
-    "maintenance_modes": {
-        "Flashkes": "/home/mona/the-mona/app/maintenance/flash2.py",
-        "Sound of the Police": "/home/mona/the-mona/app/maintenance/sound-of-the-police.py",
-        "Rainbow": "/home/mona/the-mona/app/maintenance/rainbow.py"
-    },
-        "sounboard": {
-        "Peppa_Pig_The_Mix": "/home/mona/the-mona/app/soundboard/playsound_peppa_liesa.py",
-        "Sound of the Police": "/home/mona/the-mona/app/soundboard/playsound_sound_of_the_police.py",
-        "Meow": "/home/mona/the-mona/app/soundboard/playsound_meow.py",
-        "PgPgPg": "/home/mona/the-mona/app/soundboard/playsound_liesa_pgpg.py"
-    }
+mqtt_client = mqtt.Client()
+
+# **ESP ID's**
+ESP_IDS = [1, 2, 3, 4, 5, 6]  # 🚀 De ESP's die we willen aansturen
+
+# **Modes voor ALLE ESPs**
+MODES = {
+    "static_red": (255, 0, 0),
+    "static_green": (0, 255, 0),
+    "static_blue": (0, 0, 255),
+    "flash_red": (255, 0, 0),
+    "flash_green": (0, 255, 0),
+    "flash_blue": (0, 0, 255)
 }
 
-# Globale variabelen voor actieve processen
-active_process = None
+# **Threading fix: Zorgt ervoor dat er niet meerdere flash-loops tegelijk draaien**
+flash_active = False
 
+# **MQTT Callback: Luistert naar knoppen**
+def on_message(client, userdata, message):
+    payload = message.payload.decode("utf-8")
+    print(f"📩 MQTT Bericht ontvangen: {payload}")
+
+    try:
+        data = json.loads(payload)
+
+        if "event" in data and data["event"] == "PRESSED":
+            esp_id = data.get("id", "Unknown")
+
+            # **ESP 1-3 → Statische mode (Rood, Groen, Blauw)**
+            if esp_id == 1:
+                print("🚀 Mode: Alle ESPs worden ROOD")
+                set_rgb_mode("static_red")
+            elif esp_id == 2:
+                print("🚀 Mode: Alle ESPs worden GROEN")
+                set_rgb_mode("static_green")
+            elif esp_id == 3:
+                print("🚀 Mode: Alle ESPs worden BLAUW")
+                set_rgb_mode("static_blue")
+
+            # **ESP 4-6 → Knipper mode (Rood, Groen, Blauw)**
+            elif esp_id == 4:
+                print("🚀 Mode: Alle ESPs knipperen ROOD")
+                start_flashing("flash_red")
+            elif esp_id == 5:
+                print("🚀 Mode: Alle ESPs knipperen GROEN")
+                start_flashing("flash_green")
+            elif esp_id == 6:
+                print("🚀 Mode: Alle ESPs knipperen BLAUW")
+                start_flashing("flash_blue")
+
+    except json.JSONDecodeError:
+        print("❌ Ongeldig JSON-formaat ontvangen!")
+
+# **Setup MQTT-client**
+def setup_mqtt():
+    mqtt_client.on_message = on_message
+    mqtt_client.connect(MQTT_BROKER, 1883, 60)
+    mqtt_client.subscribe(MQTT_TOPIC_BUTTONS)
+    mqtt_client.loop_start()
+
+# **Mode instellen voor ALLE ESPs**
+def set_rgb_mode(mode):
+    global flash_active
+    flash_active = False  # 🚨 Stop knipperen als een statische mode wordt gekozen
+    if mode in MODES:
+        r, g, b = MODES[mode]
+        for esp_id in ESP_IDS:
+            set_rgb_color(esp_id, r, g, b)
+        print(f"✅ Mode ingesteld: {mode} (R:{r}, G:{g}, B:{b})")
+
+# **Asynchroon starten van de knippermodus**
+def start_flashing(mode):
+    global flash_active
+    if flash_active:
+        return  # ✅ Voorkom dubbele knipper-processen
+
+    flash_active = True
+    thread = threading.Thread(target=flash_rgb_mode, args=(mode,))
+    thread.start()
+
+# **Knipper-modus voor ALLE ESPs (5 seconden)**
+def flash_rgb_mode(mode):
+    global flash_active
+    if mode in MODES:
+        r, g, b = MODES[mode]
+        start_time = time.time()
+
+        while flash_active and (time.time() - start_time) < 5:  # ✅ Stop na 5 seconden
+            for esp_id in ESP_IDS:
+                set_rgb_color(esp_id, r, g, b)
+            time.sleep(0.5)
+            for esp_id in ESP_IDS:
+                set_rgb_color(esp_id, 0, 0, 0)  # LEDs uit
+            time.sleep(0.5)
+
+        flash_active = False  # ✅ Knippermodus gestopt
+        print(f"✅ Knippermodus afgerond: {mode} (R:{r}, G:{g}, B:{b})")
+
+# **Stuur RGB-kleur naar een specifieke ESP**
+def set_rgb_color(esp_id, r, g, b, brightness=100):
+    command = {
+        "id": esp_id,
+        "led": "ON",
+        "r": r,
+        "g": g,
+        "b": b,
+        "brightness": brightness
+    }
+    mqtt_client.publish(MQTT_TOPIC_RGB, json.dumps(command))
+    print(f"📡 LED-kleur gestuurd naar ESP {esp_id}: R:{r}, G:{g}, B:{b}")
 
 @app.route("/")
 def index():
-    # Geef alle categorieën en modes door aan de template
-    return render_template("index.html", categories=categories)
+    return jsonify({"status": "success", "message": "Flask MQTT RGB Controller"})
 
+@app.route("/reset", methods=["POST"])
+def reset_color():
+    """ Reset alle LEDs naar blauw """
+    set_rgb_mode("static_blue")
+    return jsonify({"status": "success", "message": "LEDs op blauw gezet"})
 
-@app.route("/start", methods=["POST"])
-def start_mode():
-    global active_process
-    mode = request.json.get("mode")
-    category = request.json.get("category")
+@app.route("/set_color", methods=["POST"])
+def set_color():
+    """ Handmatig een kleur instellen via een POST request """
+    data = request.json
+    esp_id = data.get("id", None)
+    r = data.get("r", 0)
+    g = data.get("g", 0)
+    b = data.get("b", 0)
+    brightness = data.get("brightness", 100)
 
-    if category in categories and mode in categories[category]:
-        if active_process is not None:
-            return jsonify({"status": "error", "message": "A mode is already running"})
-
-        # Start de geselecteerde mode met sudo
-        process = subprocess.Popen(["sudo", "python", categories[category][mode]])
-        active_process = {"mode": mode, "category": category, "process": process}
-        return jsonify({"status": "success", "message": f"{mode} from {category} started"})
-
-    return jsonify({"status": "error", "message": "Invalid mode or category"})
-
-@app.route("/debug")
-def debug():
-    print("Template folder:", app.template_folder)
-    print("Bestand aanwezig:", os.path.exists(os.path.join(app.template_folder, "index.html")))
-    return render_template("index.html")
-
-
-@app.route("/direct")
-def direct():
-    with open('/home/mona/the-mona/templates/index.html') as f:
-        return f.read()
-
-@app.route("/stop", methods=["POST"])
-def stop_mode():
-    global active_process
-    mode = request.json.get("mode")
-    category = request.json.get("category")
-
-    if active_process and active_process["mode"] == mode and active_process["category"] == category:
-        process = active_process["process"]
-        os.kill(process.pid, signal.SIGTERM)
-        active_process = None
-        return jsonify({"status": "success", "message": f"{mode} from {category} stopped"})
-
-    return jsonify({"status": "error", "message": "Mode not running or invalid"})
-
+    if esp_id in ESP_IDS:
+        set_rgb_color(esp_id, r, g, b, brightness)
+        return jsonify({"status": "success", "message": f"LEDs ingesteld op R:{r} G:{g} B:{b} voor ESP {esp_id}"})
+    else:
+        return jsonify({"status": "error", "message": "Ongeldige ESP ID"}), 400
 
 if __name__ == "__main__":
-
-    print("Templates folder:", os.path.abspath(app.template_folder))
-
-    app.run(host="0.0.0.0", port=8443, ssl_context=("/home/mona/ssl/cert.pem", "/home/mona/ssl/key.pem"))
+    setup_mqtt()
+    print("🚀 MQTT gestart, zet alle LEDs op blauw!")
+    set_rgb_mode("static_blue")  # Zet alle ESP's op blauw bij opstart
+    app.run(host="0.0.0.0", port=8443)
