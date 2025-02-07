@@ -7,7 +7,7 @@ body, html {
   scroll-behavior: smooth;
 }
 
-/* 🔹 Snap scrolling (alleen op desktop) */
+/* 🔹 Snap scrolling (alleen op desktop) 
 @media (min-width: 768px) {
   html {
     scroll-snap-type: y proximity;
@@ -16,7 +16,7 @@ body, html {
     scroll-snap-align: start;
   }
 }
-
+*/
 /* 🔹 Secties */
 .section {
   min-height: 100vh;
@@ -125,7 +125,7 @@ body, html {
   transform: translateX(-50%) translateY(5px);
 }
 
-/* 🔹 Fix voor mobiel en kleinere schermen */
+/* 🔹 Fix voor mobiel en kleinere schermen 
 @media (max-width: 768px) {
   .section-content {
     max-width: 95%;
@@ -135,7 +135,7 @@ body, html {
     padding-right: 5vw;
   }
 }
-
+*/
 /* 🔹 Cards styling */
 .card-body {
   color: #bcbdbe;
@@ -163,7 +163,7 @@ body, html {
   background: linear-gradient(120deg, #212529, #1d2124);
   border: none;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-  margin: 10px auto;
+  margin: 50px auto;
   width: auto;
   padding: 20px;
   border-radius: 8px;
