@@ -94,27 +94,49 @@ body, html {
   }
 }
 
+/* 🔹 Standaard: Navbar onzichtbaar */
 #navbar {
-  width: 100%;
-  padding: 10px 0;
   position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 10;
-  transition: background 0.3s ease-in-out;
-}
-
-#navbar a {
-  color: white;
-  transition: color 0.3s ease-in-out;
-}
-
-/* Standaard transparant in de hero */
-#navbar.transparent {
-  background: transparent;
-}
-
-/* Bij scrollen wordt de navbar een donkere balk */
-#navbar.scrolled {
+  top: -100px; /* Navbar verstopt boven de pagina */
+  width: 100%;
+  padding: 10px;
   background: rgba(0, 0, 0, 0.8);
+  transition: top 0.3s ease-in-out;
+}
+
+/* 🔹 Navbar zichtbaar bij scrollen */
+#navbar.scrolled {
+  top: 0;
+}
+
+/* 🔹 Hamburger-knop */
+.navbar-toggler {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: white;
+  cursor: pointer;
+}
+
+/* 🔹 Verborgen menu standaard */
+.nav {
+  display: none;
+  position: absolute;
+  top: 50px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.9);
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.nav a {
+  display: block;
+  color: white;
+  padding: 10px;
+  text-decoration: none;
+}
+
+/* 🔹 Toon menu bij klik */
+#mobileNav.show {
+  display: block;
 }
