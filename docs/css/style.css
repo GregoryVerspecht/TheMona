@@ -73,6 +73,7 @@ body, html {
 }
 
 /* 🔹 Responsiviteit voor kleinere schermen */
+/*
 @media (max-width: 768px) {
   .outer-card {
     padding: 10px;
@@ -81,7 +82,7 @@ body, html {
     max-width: 95%;
   }
 }
-
+*/
 /* 🔹 Navbar standaard verborgen op de hero-sectie */
 #navbar {
   position: fixed;
