@@ -1,12 +1,12 @@
-/* Algemene instellingen */
+/* 🔹 Algemene instellingen */
 body, html {
   height: 100%;
   margin: 0;
   padding: 0;
   font-family: Arial, sans-serif;
- 
 }
 
+/* 🔹 Hero-sectie */
 #home {
   position: relative;
   width: 100%;
@@ -18,7 +18,7 @@ body, html {
   text-align: center;
 }
 
-/* Overlay om tekst beter leesbaar te maken */
+/* 🔹 Overlay om tekst beter leesbaar te maken */
 #home .overlay {
   position: absolute;
   top: 0;
@@ -28,123 +28,99 @@ body, html {
   background: rgba(0, 0, 0, 0.6);
 }
 
-/* Zorgen dat content boven de overlay blijft */
+/* 🔹 Content boven de overlay */
 #home .container {
   position: relative;
   z-index: 2;
 }
 
-/* Stijl voor het logo */
+/* 🔹 Logo styling */
 .hero-logo {
-  width: 500px; /* Pas grootte aan indien nodig */
+  width: 500px;
   max-width: 80%;
   height: auto;
 }
 
-
-
-
-.card-body{
-
+/* 🔹 Cards styling */
+.card-body {
   color: #bcbdbe;
 }
 
-
 .card-title {
   color: #e8e9e9;
- 
 }
-/* Buitenste cards */
+
+/* 🔹 Buitenste cards */
 .outer-card {
   max-width: 800px;
   margin-bottom: 2rem;
- 
   background: #1d2124;
   border: none;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   padding: 20px;
   border-radius: 10px;
-
-
 }
 
-/* Binnenste cards */
+/* 🔹 Binnenste cards */
 .inner-card {
-  
   background: linear-gradient(120deg, #212529, #1d2124);
   border: none;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-  margin: 20px auto; /* Ruimte tussen de innerlijke cards */
+  margin: 20px auto;
   padding: 20px;
   border-radius: 8px;
-  max-width: 90%; /* 10% smaller dan de parent card */
-
+  max-width: 90%;
 }
 
-/* Responsiviteit */
+/* 🔹 Responsiviteit voor kleinere schermen */
 @media (max-width: 768px) {
   .outer-card {
     padding: 10px;
-
   }
-
   .inner-card {
-    max-width: 95%; /* Nog flexibeler op kleinere schermen */
-
+    max-width: 95%;
   }
 }
 
-/* 🔹 Navbar blijft onzichtbaar tot scrollen */
+/* 🔹 Navbar standaard verborgen op de hero-sectie */
 #navbar {
   position: fixed;
-  top: -100px;
+  top: -80px; /* Verberg navbar boven beeld */
   width: 100%;
-  padding: 10px;
-  background: rgba(0, 0, 0, 0.8);
-  transition: top 0.3s ease-in-out;
+  background: rgba(29, 33, 36, 0.8);
+  transition: top 0.4s ease-in-out, background 0.3s ease-in-out;
   z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: space-between; /* Logo links, hamburger rechts */
 }
 
 /* 🔹 Navbar verschijnt bij scrollen */
 #navbar.scrolled {
   top: 0;
+  background: rgba(29, 33, 36, 1);
 }
 
-/* 🔹 Hamburger-knop styling */
-.navbar-toggler {
-  background: none;
-  border: none;
-  font-size: 24px;
-  color: white;
-  cursor: pointer;
-  position: relative;
-  z-index: 1100;
-}
-
-/* 🔹 Navigatiemenu direct onder de hamburger-knop */
-.nav {
-  display: none;
-  position: absolute;
-  top: 100%; /* Direct onder de knop */
-  right: 0; /* Zorgt ervoor dat het menu altijd rechts blijft */
-  background: rgba(0, 0, 0, 0.9);
-  padding: 10px;
-  border-radius: 5px;
-  width: 200px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
-}
-
-/* 🔹 Navigatielinks */
-.nav a {
+/* 🔹 Hamburger-icoon styling */
+.animated-icon span {
   display: block;
-  color: white;
-  padding: 10px;
-  text-decoration: none;
-  text-align: left;
+  background-color: white;
+  height: 3px;
+  margin: 5px 0;
+  width: 30px;
+  transition: all 0.3s ease-in-out;
+}
+
+/* 🔹 Navigatiemenu styling */
+.nav-menu {
+  background: #1d2124;
+  border-radius: 10px;
+  width: 220px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  position: absolute;
+  top: 60px;
+  right: 10px;
+  display: none;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
 /* 🔹 Toon menu bij klik */
@@ -154,17 +130,32 @@ body, html {
   transform: translateY(0);
 }
 
-/* 🔹 Extra: Zorg dat het menu altijd rechts onder de knop blijft */
-@media (min-width: 768px) {
-  .nav {
-    right: 0; /* Zorgt ervoor dat het menu niet naar het midden springt */
-    left: auto;
-    transform: none;
-  }
+/* 🔹 Navigatielinks */
+.nav-link {
+  display: block;
+  color: white;
+  padding: 10px;
+  text-decoration: none;
+  text-align: left;
+  font-weight: bold;
 }
 
-#mobileNav {
-  opacity: 0;
-  transform: translateY(-10px);
-  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+/* 🔹 Navbar en content meer naar het midden op grotere schermen */
+@media (min-width: 992px) {
+  #navbar .container-fluid {
+    max-width: 90%; /* Houdt navbar netjes gecentreerd */
+    margin: 0 auto;
+  }
+
+  .hero-logo {
+    max-width: 50%; /* Logo iets kleiner op grote schermen */
+  }
+
+  .container.position-relative {
+    max-width: 55%; /* Tekst gecentreerd houden */
+  }
+
+  .nav-menu {
+    right: 15px; /* Zorgt ervoor dat het dropdown-menu niet te ver naar binnen schuift */
+  }
 }
