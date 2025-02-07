@@ -26,7 +26,7 @@ body, html {
   justify-content: center;
   text-align: center;
   overflow: hidden; /* Scroll weg */
-  padding: 80px 50px 50px 50px; /* Voegt extra ruimte toe bovenaan */
+  padding: 80px 5px 5px 50px; /* Voegt extra ruimte toe bovenaan */
   scroll-snap-align: start;
 }
 
@@ -145,7 +145,8 @@ body, html {
 
 /* 🔹 Buitenste cards */
 .outer-card {
-  max-width: 800px;
+  /*max-width: 800px; */
+  max-width: 90vw;
   margin-bottom: 2rem;
   background: #1d2124;
   border: none;
