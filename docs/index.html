@@ -174,7 +174,7 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-      document.addEventListener("scroll", function() {
+      document.addEventListener("scroll", function () {
         var navbar = document.getElementById("navbar");
         if (window.scrollY > 100) {
           navbar.classList.add("scrolled");
@@ -183,10 +183,20 @@
         }
       });
       
-      document.getElementById("navToggle").addEventListener("click", function() {
+      // Toggle het menu bij klikken op de hamburger-knop
+      document.getElementById("navToggle").addEventListener("click", function () {
         document.getElementById("mobileNav").classList.toggle("show");
       });
+      
+      // Sluit het menu bij klikken op een menu-item
+      document.querySelectorAll("#mobileNav a").forEach(function (link) {
+        link.addEventListener("click", function () {
+          document.getElementById("mobileNav").classList.remove("show");
+        });
+      });
       </script>
+      
+      
       
   </body>
 </html>
