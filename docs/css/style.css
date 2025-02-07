@@ -72,15 +72,7 @@ body, html {
   max-width: 90%;
 }
 
-/* 🔹 Responsiviteit voor kleinere schermen */
-@media (max-width: 768px) {
-  .outer-card {
-    padding: 10px;
-  }
-  .inner-card {
-    max-width: 95%;
-  }
-}
+
 
 /* 🔹 Navbar standaard verborgen op de hero-sectie */
 #navbar {
