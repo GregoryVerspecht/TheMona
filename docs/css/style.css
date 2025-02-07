@@ -5,7 +5,6 @@ body, html {
   padding: 0;
   font-family: Arial, sans-serif;
   scroll-behavior: smooth;
-  
 }
 
 /* 🔹 Snap scrolling (alleen op desktop) */
@@ -25,16 +24,16 @@ body, html {
   align-items: center;
   justify-content: center;
   text-align: center;
-  overflow: hidden; /* Scroll weg */
-  padding: 50px 5px 50px 5px; /* Voegt extra ruimte toe bovenaan */
+  overflow: hidden;
+  padding: 50px 5vw; /* Voegt extra ruimte toe links en rechts */
   scroll-snap-align: start;
 }
 
 /* Voorkom dat het scroll-snap effect wordt geforceerd op de footer */
 .end-buffer {
-  height: 5vh; /* Geeft extra ruimte zodat je niet terugveert */
-  background: transparent; /* Onzichtbare buffer */
-  scroll-snap-align: none; /* Uitschakelen voor deze sectie */
+  height: 5vh;
+  background: transparent;
+  scroll-snap-align: none;
 }
 
 /* 🔹 Hero-sectie */
@@ -58,20 +57,19 @@ body, html {
   height: auto;
 }
 
-/* 🔹 Zorg ervoor dat de secties met veel content scrollbaar blijven */
+/* 🔹 Zorg ervoor dat de secties met veel content goed uitlijnen */
 .section-content {
-  min-height: auto; /* Zorgt ervoor dat de sectie zo groot wordt als nodig */
-  max-height: none; /* Verwijdert de limiet en scrollbar */
-  overflow: visible; /* Laat de sectie groeien i.p.v. scrollen */
-  padding: 50px; /* Houdt ruimte rondom content */
-  background: #1d2124; /* DONKERGRIJS - Zorgt voor consistentie */
+  min-height: auto;
+  max-height: none;
+  overflow: visible;
+  padding: 50px;
+  background: #1d2124;
   color: white;
   border-radius: 10px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-  
+  width: 90%; /* Zorgt ervoor dat de content niet te breed wordt */
+  max-width: 1100px; /* Max breedte voor grote schermen */
 }
-
-
 
 /* 🔹 Navbar */
 #navbar {
@@ -127,24 +125,16 @@ body, html {
   transform: translateX(-50%) translateY(5px);
 }
 
-/* 🔹 Op mobiel de max-height weghalen zodat alles goed wordt weergegeven */
+/* 🔹 Fix voor mobiel en kleinere schermen */
 @media (max-width: 768px) {
   .section-content {
-    max-height: none; /* Zorgt ervoor dat het niet afgekapt wordt */
+    max-width: 95%;
+    width: auto;
+    margin: 0 auto;
+    padding-left: 5vw;
+    padding-right: 5vw;
   }
 }
-
-/* 🔹 Fix voor center op mobiel */
-@media (max-width: 768px) {
-  .outer-card, .section-content {
-    max-width: 90%; /* Zorgt dat het niet tegen de rand zit */
-    width: 90%; /* Zorgt ervoor dat het goed in verhouding blijft */
-    margin: 0 auto; /* Centreert het blok */
-    padding-left: 10px; /* Zorgt dat er altijd padding aan beide kanten is */
-    padding-right: 10px;
-  }
-}
-
 
 /* 🔹 Cards styling */
 .card-body {
@@ -157,8 +147,9 @@ body, html {
 
 /* 🔹 Buitenste cards */
 .outer-card {
-  /*max-width: 800px; */
-  max-width: 90vw;
+  max-width: 1100px; /* Voorkomt dat het te breed wordt op grote schermen */
+  width: 85vw; /* Houdt rekening met de schermbreedte */
+  margin: 0 auto;
   margin-bottom: 2rem;
   background: #1d2124;
   border: none;
@@ -172,7 +163,8 @@ body, html {
   background: linear-gradient(120deg, #212529, #1d2124);
   border: none;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-  margin: 20px auto;
+  margin: 10px auto;
+  width: auto;
   padding: 20px;
   border-radius: 8px;
   max-width: 90%;
