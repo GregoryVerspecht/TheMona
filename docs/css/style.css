@@ -4,21 +4,37 @@ body, html {
   margin: 0;
   padding: 0;
   font-family: Arial, sans-serif;
+  scroll-behavior: smooth;
 }
 
-/* 🔹 Hero-sectie */
-#home {
-  position: relative;
-  width: 100%;
-  height: 100vh;
-  background: url("../assets/images/background.jpeg") center/cover no-repeat;
+/* 🔹 Snap scrolling (alleen op desktop) */
+@media (min-width: 768px) {
+  html {
+    scroll-snap-type: y mandatory;
+  }
+  .section {
+    scroll-snap-align: start;
+  }
+}
+
+/* 🔹 Secties */
+.section {
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
+  overflow: hidden; /* Scroll weg */
+  padding: 80px 50px 50px 50px; /* Voegt extra ruimte toe bovenaan */
 }
 
-/* 🔹 Overlay om tekst beter leesbaar te maken */
+
+/* 🔹 Hero-sectie */
+#home {
+  background: url("../assets/images/background.jpeg") center/cover no-repeat;
+  position: relative;
+}
+
 #home .overlay {
   position: absolute;
   top: 0;
@@ -28,17 +44,84 @@ body, html {
   background: rgba(0, 0, 0, 0.6);
 }
 
-/* 🔹 Content boven de overlay */
-#home .container {
-  position: relative;
-  z-index: 2;
-}
-
-/* 🔹 Logo styling */
 .hero-logo {
   width: 500px;
   max-width: 80%;
   height: auto;
+}
+
+/* 🔹 Zorg ervoor dat de secties met veel content scrollbaar blijven */
+.section-content {
+  min-height: auto; /* Zorgt ervoor dat de sectie zo groot wordt als nodig */
+  max-height: none; /* Verwijdert de limiet en scrollbar */
+  overflow: visible; /* Laat de sectie groeien i.p.v. scrollen */
+  padding: 50px; /* Houdt ruimte rondom content */
+  background: #1d2124; /* DONKERGRIJS - Zorgt voor consistentie */
+  color: white;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+
+/* 🔹 Navbar */
+#navbar {
+  position: fixed;
+  top: -80px;
+  width: 100%;
+  background: rgba(29, 33, 36, 0.9);
+  text-align: center;
+  padding: 10px 0;
+  transition: top 0.4s ease-in-out, background 0.3s ease-in-out;
+  z-index: 1000;
+}
+
+#navbar.scrolled {
+  top: 0;
+  background: rgba(29, 33, 36, 1);
+}
+
+/* 🔹 Navigatieknop */
+.nav-toggle-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.nav-icon {
+  font-size: 1.8rem;
+}
+
+/* 🔹 Navigatiemenu */
+.nav-menu {
+  background: #1d2124;
+  border-radius: 10px;
+  width: 220px;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: none;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+#mobileNav.show {
+  display: block;
+  opacity: 1;
+  transform: translateX(-50%) translateY(5px);
+}
+
+/* 🔹 Op mobiel de max-height weghalen zodat alles goed wordt weergegeven */
+@media (max-width: 768px) {
+  .section-content {
+    max-height: none; /* Zorgt ervoor dat het niet afgekapt wordt */
+  }
 }
 
 /* 🔹 Cards styling */
@@ -70,128 +153,4 @@ body, html {
   padding: 20px;
   border-radius: 8px;
   max-width: 90%;
-}
-
-/* 🔹 Responsiviteit voor kleinere schermen */
-/*
-@media (max-width: 768px) {
-  .outer-card {
-    padding: 10px;
-  }
-  .inner-card {
-    max-width: 95%;
-  }
-}
-*/
-/* 🔹 Navbar standaard verborgen op de hero-sectie */
-#navbar {
-  position: fixed;
-  top: -80px; /* Verberg navbar boven beeld */
-  width: 100%;
-  background: rgba(29, 33, 36, 0.9);
-  text-align: center;
-  padding: 10px 0;
-  transition: top 0.4s ease-in-out, background 0.3s ease-in-out;
-  z-index: 1000;
-}
-
-/* 🔹 Navbar verschijnt bij scrollen */
-#navbar.scrolled {
-  top: 0;
-  background: rgba(29, 33, 36, 1);
-}
-
-/* 🔹 De "The Mona" knop in het midden met icoon */
-.nav-toggle-btn {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 1.5rem;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-}
-
-.nav-icon {
-  font-size: 1.8rem;
-}
-
-/* 🔹 Navigatiemenu styling */
-.nav-menu {
-  background: #1d2124;
-  border-radius: 10px;
-  width: 220px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-  position: absolute;
-  top: 100%; /* Zet menu direct onder de knop */
-  left: 50%;
-  transform: translateX(-50%);
-  display: none;
-  opacity: 0;
-  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-}
-
-/* 🔹 Toon menu bij klik */
-#mobileNav.show {
-  display: block;
-  opacity: 1;
-  transform: translateX(-50%) translateY(5px);
-}
-
-/* 🔹 Navigatielinks */
-.nav-link {
-  display: block;
-  color: white;
-  padding: 10px;
-  text-decoration: none;
-  text-align: center;
-  font-weight: bold;
-}
-
-/* 🔹 Extra aanpassingen voor grotere schermen */
-@media (min-width: 992px) {
-  .nav-menu {
-    width: 240px;
-  }
-}
-
-
-/* **/
-
-/* 🔹 Snap scroll blijft actief, maar content kan scrollen als nodig */
-section {
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
-  overflow: hidden; /* Voorkomt dat de sectie buiten beeld gaat */
-}
-
-/* 🔹 Als de content te groot is, maak het binnen de sectie scrollbaar */
-.section-content {
-  max-height: 90vh; /* Zorgt ervoor dat de navbar en padding blijven zichtbaar */
-  overflow-y: auto; /* Scroll alleen binnen de sectie indien nodig */
-  padding: 20px;
-  box-sizing: border-box;
-}
-
-/* 🔹 Extra: Verberg de scrollbar voor een clean effect (optioneel) */
-.section-content::-webkit-scrollbar {
-  display: none; /* Verbergt de scrollbar in Chrome, Safari */
-}
-
-/* 🔹 Op mobiel toestaan dat de sectie flexibeler is */
-@media (max-width: 768px) {
-  section {
-    height: auto; /* Sectie kan groter worden als nodig */
-    min-height: 100vh; /* Maar blijft minimaal een hele viewport hoog */
-  }
-  .section-content {
-    max-height: none; /* Geen beperking op mobiel */
-  }
 }
