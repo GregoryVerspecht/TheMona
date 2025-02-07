@@ -5,12 +5,13 @@ body, html {
   padding: 0;
   font-family: Arial, sans-serif;
   scroll-behavior: smooth;
+  
 }
 
 /* 🔹 Snap scrolling (alleen op desktop) */
 @media (min-width: 768px) {
   html {
-    scroll-snap-type: y mandatory;
+    scroll-snap-type: y proximity;
   }
   .section {
     scroll-snap-align: start;
@@ -26,8 +27,15 @@ body, html {
   text-align: center;
   overflow: hidden; /* Scroll weg */
   padding: 80px 50px 50px 50px; /* Voegt extra ruimte toe bovenaan */
+  scroll-snap-align: start;
 }
 
+/* Voorkom dat het scroll-snap effect wordt geforceerd op de footer */
+.end-buffer {
+  height: 5vh; /* Geeft extra ruimte zodat je niet terugveert */
+  background: transparent; /* Onzichtbare buffer */
+  scroll-snap-align: none; /* Uitschakelen voor deze sectie */
+}
 
 /* 🔹 Hero-sectie */
 #home {
@@ -60,7 +68,9 @@ body, html {
   color: white;
   border-radius: 10px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  
 }
+
 
 
 /* 🔹 Navbar */
