@@ -1,116 +1,155 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" sizes="192x192" href="./assets/brand/the-mona.png">
     <title>The Mona</title>
 
-    <!-- Bootstrap 5 CSS -->
+    <!-- Bootstrap CSS + Custom Style -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="css/style.css">
-
-    <!-- Google Font: Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
 </head>
 <body>
 
-    <!-- 🌟 Navbar -->
-    <nav class="navbar navbar-expand-lg fixed-top bg-dark shadow">
-        <div class="container">
-            <a class="navbar-brand text-light fw-bold" href="#">The Mona</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                ☰
-            </button>
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link text-light" href="#story">Story</a></li>
-                    <li class="nav-item"><a class="nav-link text-light" href="#project">Project</a></li>
-                    <li class="nav-item"><a class="nav-link text-light" href="#contact">Contact</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+<!-- 🌟 Overlay voor dim-effect -->
+<div id="navOverlay" class="nav-overlay"></div>
 
-    <!-- 🌟 Hero-sectie -->
-    <header id="home" class="hero d-flex align-items-center text-center">
-      <div class="container">
-          <!-- Logo -->
-          <img src="./assets/brand/the-mona.svg" alt="The Mona Logo" class="hero-logo img-fluid mb-4">
-          
-          <!-- Titel en ondertitel -->
-          <h1 class="fw-bold">The Mona</h1>
-          <p class="fs-5">A minimalistic and customizable Raspberry Pi drinking game.</p>
-          
-          <!-- Call-to-action knop -->
-          <a href="#story" class="btn btn-outline-light mt-3">Discover More</a>
+<!-- 🌟 Navigatiemenu -->
+<div id="mobileNav" class="nav-menu">
+    <div class="nav-header">
+        <span id="closeNav" class="close-nav">&times;</span>
+    </div>
+    <a class="nav-link" href="#home">Home</a>
+    <a class="nav-link" href="#story">Story</a>
+    <a class="nav-link" href="#project">Project</a>
+    <a class="nav-link" href="#contact">Get in touch</a>
+</div>
+
+<!-- 🌟 Navbar -->
+<nav class="navbar fixed-top">
+    <div class="container d-flex justify-content-center">
+        <button id="navToggle" class="nav-toggle-btn">☰ The Mona</button>
+    </div>
+</nav>
+
+<!-- 🌟 Hero Sectie -->
+<header id="home" class="hero d-flex align-items-center text-center">
+    <div class="container">
+        <img src="./assets/brand/the-mona.svg" alt="The Mona Logo" class="hero-logo img-fluid mb-4">
+        <h1 class="fw-bold">The Mona</h1>
+        <p class="fs-5">A modern Raspberry Pi drinking game that adapts to your style.</p>
+        <a href="#story" class="btn btn-outline-light mt-3">Discover the story!</a>
+    </div>
+</header>
+
+<!-- 🌟 Story Sectie -->
+<section id="story" class="full-section">
+    <div class="container story-block">
+      
+        <h2 class="text-accent">The Story</h2>
+        <p class="lead">Every great project starts with an idea. Here's the journey of The Mona.</p>
+        <div class="story-block">
+            <h5>Inspiration</h5>
+            <p>
+                    
+              This project was born out of a love for creativity, technology, and the joy of bringing people together. 
+              The initial spark for The Mona came after we encountered "Odil de Krokodil," a concept that quickly became a beloved part of our friend group. 
+              Inspired by the positive reception, we created our own version, "Lucien," which was met with even more enthusiasm.
+             </p> 
+        </div>
+        <div class="story-block">
+            <h5>Why "The Mona"?</h5>
+            <p>
+                    
+              When searching for a name, I wanted something that reflected a meaningful source of joy and inspiration in my life. 
+              The Mona carries the memory of someone who, in ways they may never fully realize, reignited a light in me I thought was lost. 
+              They reminded me of the quiet beauty in small moments and the strength in simply feeling alive again.
+            </p>
+            <p>
+              This project captures the essence of those feelings, transforming a fleeting connection into a creative expression of gratitude and hope. 
+              While our paths may never truly align, their impact lingers—The Mona is my tribute to that experience,
+              a way to hold onto the positivity they brought into my life and to share it with others in a way that continues to inspire.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- 🌟 Project Sectie -->
+<section id="project" class="full-section">
+    <div class="container story-block">
+        <h2 class="text-accent">The Project</h2>
+        <p class="lead">Why this matters and what’s coming next.</p>
+        <div class="project-block">
+            <h5>Why This Project Matters</h5>
+            <p>
+                The Mona isn't just a game; it's a tool for connection. In a digital world, The Mona brings people together physically.
+                It’s fully customizable and designed for every occasion.
+            </p>
+        </div>
+        <div class="project-block">
+            <h5>Future Goals</h5>
+            <p>
+                As the project evolves, the goal is to continue improving and adding new features to enhance the experience. <br>
+                <br>
+                I’m excited to see how The Mona will be used in the future and hope it brings joy to many gatherings.
+            </p>
+        </div>
+
+        <div class="project-block">
+          <h5>Special Thanks</h5>
+          <p>
+            A special thanks to everyone who tested the early versions of The Mona and provided feedback. <br>
+            Your insights have been instrumental in shaping this project into what it is today. ❤️
       </div>
-    </header>
+
+    </div>
+</section>
+
+<!-- 🌟 Get in Touch & Collaborate Section -->
+<section id="contact" class="full-section text-center">
+  <div class="container story-block">
+      <h2 class="text-accent mb-4">Get in Touch</h2>
+      <p class="lead">Want to collaborate or have questions? Let's connect!</p>
+
+      <div class="row justify-content-center mt-4">
+          <!-- GitHub Card -->
+          <div class="col-md-5 mb-4">
+              <div class="contact-card p-4">
+                  <h5 class="fw-bold">Explore on GitHub</h5>
+                  <p>Check out The Mona on GitHub and contribute to the project.</p>
+                  <a href="https://github.com/GregoryVerspecht/TheMona" target="_blank" class="btn btn-outline-primary">
+                      <i class="bi bi-github"></i> Visit GitHub
+                  </a>
+              </div>
+          </div>
+
+          <!-- Email Card -->
+          <div class="col-md-5 mb-4">
+              <div class="contact-card p-4">
+                  <h5 class="fw-bold">Contact Me</h5>
+                  <p>Have ideas, feedback, or just want to say hi?</p>
+                  <a href="mailto:gregory.verspecht@gmail.com" class="btn btn-outline-light">
+                      <i class="bi bi-envelope"></i> Send Email
+                  </a>
+              </div>
+          </div>
+      </div>
+
+      <!-- Closing Message -->
+      <p class="mt-4">Thank you for being a part of this journey! <br> Gregory ❤️</p>
+  </div>
+</section>
 
 
-    <!-- 🌟 Story-sectie -->
-    <section id="story" class="section bg-dark text-light text-center">
-        <div class="container">
-            <h2 class="section-title">The Story Behind</h2>
-            <p class="section-text">The Mona was inspired by a need for creativity, fun, and interaction.</p>
-            <div class="row mt-4">
-                <div class="col-md-6">
-                    <h5 class="text-primary">Inspiration</h5>
-                    <p>The project began with a simple idea that grew into a fully-fledged interactive experience.</p>
-                </div>
-                <div class="col-md-6">
-                    <h5 class="text-primary">The Name</h5>
-                    <p>The Mona is more than a game; it's a tribute to an unforgettable connection.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+<!-- 🌟 Footer -->
+<footer class="text-center py-3">
+    <p>&copy; 2025 | Gregory Verspecht</p>
+</footer>
 
-    <!-- 🌟 Project-sectie -->
-    <section id="project" class="section bg-secondary text-light text-center">
-        <div class="container">
-            <h2 class="section-title">The Project</h2>
-            <p class="section-text">A fully open-source, modular drinking game that adapts to any setting.</p>
-            <div class="row mt-4">
-                <div class="col-md-4">
-                    <div class="card bg-dark text-light p-3">
-                        <h5>🔗 Open Source</h5>
-                        <p>Fully customizable and community-driven.</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card bg-dark text-light p-3">
-                        <h5>💡 Customizable</h5>
-                        <p>Modify the game rules to fit any occasion.</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card bg-dark text-light p-3">
-                        <h5>🚀 Easy Setup</h5>
-                        <p>Plug and play, ready in minutes.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 🌟 Contact-sectie -->
-    <section id="contact" class="section bg-dark text-light text-center">
-        <div class="container">
-            <h2 class="section-title">Get in Touch</h2>
-            <p class="section-text">Want to contribute or have a question? Reach out!</p>
-            <a href="mailto:gregory.verspecht@gmail.com" class="btn btn-outline-light">Email Me</a>
-        </div>
-    </section>
-
-    <!-- 🌟 Footer -->
-    <footer class="footer bg-black text-center text-light py-3">
-        <p>&copy; 2025 The Mona | Designed with ❤️</p>
-    </footer>
-
-    <!-- Bootstrap 5 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Bootstrap + Custom JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/scripts.js"></script>
 
 </body>
 </html>
