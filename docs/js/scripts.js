@@ -8,7 +8,6 @@ document.addEventListener("DOMContentLoaded", function () {
     window.addEventListener("scroll", function () {
         let scrollPosition = window.scrollY;
 
-        // Navbar tonen/verbergen afhankelijk van scrollpositie
         if (scrollPosition > 50) {
             navbar.classList.add("scrolled");
         } else {
@@ -31,7 +30,6 @@ document.addEventListener("DOMContentLoaded", function () {
     navToggle.addEventListener("click", function () {
         mobileNav.classList.toggle("show");
 
-        // Voorkomen dat de pagina scrollt wanneer menu open is
         if (mobileNav.classList.contains("show")) {
             document.body.style.overflow = "hidden";
         } else {
@@ -51,14 +49,13 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".nav-link").forEach(link => {
         link.addEventListener("click", function (event) {
             event.preventDefault();
-            let targetId = this.getAttribute("href"); // Gebruik href in plaats van data-target
+            let targetId = this.getAttribute("href");
             let targetSection = document.querySelector(targetId);
 
             if (targetSection) {
                 targetSection.scrollIntoView({ behavior: "smooth" });
             }
 
-            // Menu sluiten na klikken
             mobileNav.classList.remove("show");
             document.body.style.overflow = "";
         });
