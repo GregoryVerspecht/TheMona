@@ -255,3 +255,12 @@ footer {
   font-weight: bold;
 
 }
+
+
+/* custom */
+
+.bg-dark-container {
+  background: #1a1a1a;
+  padding: 20px; /* Optioneel: ruimte binnen de container */
+  border-radius: 10px; /* Optioneel: afgeronde hoeken */
+}
