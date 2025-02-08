@@ -105,3 +105,14 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+
+document.addEventListener("DOMContentLoaded", function() {
+    function updateScrollMargin() {
+        let navbarHeight = document.querySelector(".navbar").offsetHeight;
+        document.documentElement.style.setProperty('--navbar-height', `${navbarHeight}px`);
+    }
+
+    // Update de hoogte direct en bij vensterresizing
+    updateScrollMargin();
+    window.addEventListener("resize", updateScrollMargin);
+});
