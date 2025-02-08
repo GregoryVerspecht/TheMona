@@ -1,34 +1,37 @@
-/* 🔹 Algemene instellingen */
-body, html {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
-  scroll-behavior: smooth;
+/* 🌑 Algemene stijl */
+body {
+  font-family: 'Inter', sans-serif;
+  background: #121212;
+  color: #E0E0E0;
 }
 
-/* 🔹 Secties */
-.section {
-  min-height: 100vh;
+/* 🌟 Navbar */
+.navbar {
+  background: rgba(18, 18, 18, 0.9);
+  padding: 15px;
+  backdrop-filter: blur(10px);
+}
+
+.navbar-toggler {
+  border: none;
+  background: none;
+  color: white;
+}
+
+/* 🌟 Hero-sectie met achtergrond */
+.hero {
+  height: 100vh;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   text-align: center;
-  padding: 50px 5vw;
-}
-
-.end-buffer {
-  height: 10vh;
-  background: transparent;
-}
-
-/* 🔹 Hero-sectie */
-#home {
   background: url("../assets/images/background.jpeg") center/cover no-repeat;
   position: relative;
 }
 
-#home .overlay {
+/* Donkere overlay voor betere leesbaarheid */
+.hero::before {
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -37,101 +40,63 @@ body, html {
   background: rgba(0, 0, 0, 0.6);
 }
 
+/* Zorg ervoor dat de content boven de overlay blijft */
+.hero .container {
+  position: relative;
+  z-index: 2;
+}
+
+/* Logo stijl */
 .hero-logo {
-  width: 500px;
-  max-width: 80%;
+  max-width: 200px;
   height: auto;
+  filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.3)); /* Subtiele schaduw */
 }
 
-/* 🔹 Navbar */
-#navbar {
-  position: fixed;
-  top: -80px;
-  width: 100%;
-  background: rgba(29, 33, 36, 0.9);
-  text-align: center;
-  padding: 10px 0;
-  transition: top 0.4s ease-in-out, background 0.3s ease-in-out;
-  z-index: 1000;
-}
-
-#navbar.scrolled {
-  top: 0;
-  background: rgba(29, 33, 36, 1);
-}
-
-/* 🔹 Navigatieknop */
-.nav-toggle-btn {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 1.5rem;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-}
-
-.nav-icon {
-  font-size: 1.8rem;
-}
-
-/* 🔹 Navigatiemenu */
-.nav-menu {
-  background: #1d2124;
-  border-radius: 10px;
-  width: 220px;
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  display: none;
-  opacity: 0;
-  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-}
-
-#mobileNav.show {
-  display: block;
-  opacity: 1;
-  transform: translateX(-50%) translateY(5px);
-}
-
-/* 🔹 Responsive fixes */
-@media (max-width: 768px) {
-  .section-content {
-    max-width: 95%;
-    margin: 0 auto;
-    padding-left: 5vw;
-    padding-right: 5vw;
-  }
-}
-
-@media (max-width: 500px) {
-  .section-content {
-    max-width: 95%;
-    padding-left: 5vw;
-    padding-right: 5vw;
-  }
-}
-
-/* 🔹 Dynamische tekstgrootte */
-h1 {
+/* Titel en ondertitel */
+.hero h1 {
   font-size: clamp(2rem, 5vw, 3.5rem);
+  color: white;
 }
 
-h2 {
-  font-size: clamp(1.8rem, 4vw, 3rem);
-  margin-bottom: 20px;
-}
-
-h5 {
-  font-size: clamp(1.2rem, 2.5vw, 1.5rem);
-  margin-top: 30px;
-}
-
-p {
+.hero p {
   font-size: clamp(1rem, 2vw, 1.2rem);
-  line-height: 1.6;
+  color: #E0E0E0;
+}
+
+
+/* 🌟 Secties */
+.section {
+  padding: 80px 5%;
+  text-align: center;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  color: white;
   margin-bottom: 20px;
+}
+
+.section-text {
+  font-size: 1.2rem;
+  color: #B0B0B0;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* 🌟 Cards */
+.card {
+  border: none;
+  transition: transform 0.2s;
+  border-radius: 10px;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+/* 🌟 Footer */
+.footer {
+  background: #121212;
+  border-top: 1px solid #333;
 }

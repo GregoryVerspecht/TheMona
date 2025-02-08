@@ -1,63 +1,11 @@
 document.addEventListener("DOMContentLoaded", function () {
-    let hasScrolled = false;
-    let navbar = document.getElementById("navbar");
-    let mobileNav = document.getElementById("mobileNav");
-    let navToggle = document.getElementById("navToggle");
-
-    // 🔹 Navbar effect bij scrollen
+    let navbar = document.querySelector(".navbar");
+    
     window.addEventListener("scroll", function () {
-        let scrollPosition = window.scrollY;
-
-        if (scrollPosition > 50) {
+        if (window.scrollY > 50) {
             navbar.classList.add("scrolled");
         } else {
             navbar.classList.remove("scrolled");
         }
-
-        // Automatische scroll naar "Story" bij eerste kleine scroll
-        if (!hasScrolled && scrollPosition > 10) {
-            hasScrolled = true;
-            let storySection = document.getElementById("story");
-            if (storySection) {
-                setTimeout(() => {
-                    storySection.scrollIntoView({ behavior: "smooth" });
-                }, 150);
-            }
-        }
-    });
-
-    // 🔹 Openen en sluiten van het mobiele menu
-    navToggle.addEventListener("click", function () {
-        mobileNav.classList.toggle("show");
-
-        if (mobileNav.classList.contains("show")) {
-            document.body.style.overflow = "hidden";
-        } else {
-            document.body.style.overflow = "";
-        }
-    });
-
-    // 🔹 Sluit het menu als je ergens anders klikt
-    document.addEventListener("click", function (event) {
-        if (!mobileNav.contains(event.target) && !navToggle.contains(event.target)) {
-            mobileNav.classList.remove("show");
-            document.body.style.overflow = "";
-        }
-    });
-
-    // 🔹 Smooth scroll naar secties en sluit menu na klik
-    document.querySelectorAll(".nav-link").forEach(link => {
-        link.addEventListener("click", function (event) {
-            event.preventDefault();
-            let targetId = this.getAttribute("href");
-            let targetSection = document.querySelector(targetId);
-
-            if (targetSection) {
-                targetSection.scrollIntoView({ behavior: "smooth" });
-            }
-
-            mobileNav.classList.remove("show");
-            document.body.style.overflow = "";
-        });
     });
 });
