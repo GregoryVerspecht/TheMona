@@ -101,7 +101,7 @@ body, html {
   
 }
 
-.story-block h5, .project-block h5 {
+.story-block h5, .project-block h5 .text-start h5 {
   font-size: 1.5rem;
   font-weight: 700;
   color: #e0e0e0;
@@ -109,7 +109,7 @@ body, html {
   
 }
 
-.story-block p, .project-block p {
+.story-block p, .project-block p ,.text-start p {
   font-size: 1.1rem;
   color: #b0b0b0;
 }
@@ -297,6 +297,30 @@ footer {
 
 .bg-dark-container {
   background: #1a1a1a;
-  padding: 20px; /* Optioneel: ruimte binnen de container */
-  border-radius: 0px; /* Optioneel: afgeronde hoeken */
+  padding: 30px;
+  border-radius: 0px; 
+}
+
+.bg-dark-container-alternate {
+  background: #2a2a2a;
+  padding: 30px;
+  border-radius: 0px; 
+}
+
+/* Listgroups */
+.custom-text-listgroup {
+  color: #e0e0e0; /* Algemene tekstkleur voor de lijst */
+}
+
+.custom-text-listgroup .list-group-item {
+  color: #e0e0e0; /* Zorgt ervoor dat alle tekst binnen de lijstgroep-items de juiste kleur krijgt */
+}
+
+.custom-text-listgroup i {
+  color: #e0e0e0; /* Iconen in een aparte accentkleur */
+}
+
+.custom-text-listgroup strong {
+  color: #e0e0e0;
+  font-weight: bold;
 }
