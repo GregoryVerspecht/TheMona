@@ -41,6 +41,10 @@ body, html {
   max-width: 600px;
 }
 
+.pictures {
+  max-width: 200px;
+}
+
 /* 🌟 Algemene stijl voor fullscreen secties */
 .full-section {
   scroll-margin-top: var(--navbar-height);
