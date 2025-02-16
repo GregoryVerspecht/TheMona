@@ -231,7 +231,7 @@ footer {
 /* 🌟 Contact Sectie */
 #contact {
   padding: 80px 0;
-  background: #1a1a1a;
+  background: #2a2a2a;
   border-radius: 0px;
 }
 
@@ -334,4 +334,29 @@ footer {
 /* BLOG */ 
 .blog {
   padding-top: 60px; /* Zorgt ervoor dat de content niet onder de navbar zit */
+}
+
+/* 🌟 Contact Sectie */
+#blog-sec {
+  padding: 80px 0;
+  background: #1a1a1a;
+  border-radius: 0px;
+}
+
+.blog-sec-card {
+  background: #232323;
+  border-radius: 10px;
+  text-align: center;
+  padding: 30px;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.blog-sec-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.2);
+}
+
+.blog-sec-card h5 {
+  color: #ffffff;
+  margin-bottom: 15px;
 }
