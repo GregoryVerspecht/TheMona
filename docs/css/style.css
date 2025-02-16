@@ -8,8 +8,9 @@ body, html {
   color: #E0E0E0;
   scroll-behavior: smooth;
   text-align: center;
-  
+
 }
+
 
 /* 🌟 Hero */
 .hero {
@@ -327,4 +328,10 @@ footer {
 .custom-text-listgroup strong {
   color: #e0e0e0;
   font-weight: bold;
+}
+
+
+/* BLOG */ 
+.blog {
+  padding-top: 60px; /* Zorgt ervoor dat de content niet onder de navbar zit */
 }
