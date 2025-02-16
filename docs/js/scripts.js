@@ -10,25 +10,27 @@ document.addEventListener("DOMContentLoaded", function () {
         navOverlay.classList.remove("show");
     }
 
-    navToggle.addEventListener("click", function () {
-        mobileNav.classList.add("show");
-        navOverlay.classList.add("show");
-    });
+    if (navToggle && closeNav && mobileNav && navOverlay) {
+        navToggle.addEventListener("click", function () {
+            mobileNav.classList.add("show");
+            navOverlay.classList.add("show");
+        });
 
-    closeNav.addEventListener("click", closeMenu);
-    navOverlay.addEventListener("click", closeMenu);
+        closeNav.addEventListener("click", closeMenu);
+        navOverlay.addEventListener("click", closeMenu);
 
-    // Sluit navigatie bij klikken op een menu-item
-    navLinks.forEach(link => {
-        link.addEventListener("click", closeMenu);
-    });
+        // Sluit navigatie bij klikken op een menu-item
+        navLinks.forEach(link => {
+            link.addEventListener("click", closeMenu);
+        });
 
-    // Sluit menu als gebruiker buiten het menu klikt
-    document.addEventListener("click", function (event) {
-        if (!mobileNav.contains(event.target) && !navToggle.contains(event.target)) {
-            closeMenu();
-        }
-    });
+        // Sluit menu als gebruiker buiten het menu klikt
+        document.addEventListener("click", function (event) {
+            if (!mobileNav.contains(event.target) && !navToggle.contains(event.target)) {
+                closeMenu();
+            }
+        });
+    }
 });
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -43,9 +45,8 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Activeer de functie bij scrollen
     window.addEventListener("scroll", revealSections);
-    revealSections(); // Direct uitvoeren bij laden van de pagina
+    revealSections();
 });
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -84,7 +85,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Scroll event listeners
     window.addEventListener("scroll", () => {
         revealSections();
         markActiveSection();
@@ -92,12 +92,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
     revealSections();
     markActiveSection();
+});
 
-    // Smooth scrolling effect bij klikken op een nav-link
+document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll('.nav-link').forEach(link => {
         link.addEventListener("click", function (e) {
+            let target = this.getAttribute("href");
+
+            if (!target.startsWith("#")) {
+                return;
+            }
+
             e.preventDefault();
-            let targetId = this.getAttribute("href").substring(1);
+            let targetId = target.substring(1);
             let targetSection = document.getElementById(targetId);
             if (targetSection) {
                 targetSection.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -106,13 +113,12 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     function updateScrollMargin() {
         let navbarHeight = document.querySelector(".navbar").offsetHeight;
         document.documentElement.style.setProperty('--navbar-height', `${navbarHeight}px`);
     }
 
-    // Update de hoogte direct en bij vensterresizing
     updateScrollMargin();
     window.addEventListener("resize", updateScrollMargin);
 });
