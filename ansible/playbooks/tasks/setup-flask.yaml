@@ -1,0 +1,31 @@
+
+- name: Deploy Flask application
+  copy:
+    src: ../../src/dev/
+    dest: /home/mona/the-mona/
+    owner: mona
+    group: mona
+    mode: '0755'
+
+- name: Create systemd service for Flask app
+  copy:
+    dest: /etc/systemd/system/the-mona.service
+    content: |
+      [Unit]
+      Description=The Mona Flask App
+      After=network.target
+
+      [Service]
+      ExecStart=/home/mona/flask_venv/bin/python /home/mona/the-mona/app/app.py
+      Restart=always
+      User=mona
+      Group=mona
+
+      [Install]
+      WantedBy=multi-user.target
+
+- name: Enable and start Flask service
+  service:
+    name: the-mona
+    state: started
+    enabled: true

@@ -1,0 +1,52 @@
+- name: Complete Raspberry Pi Setup
+  hosts: raspberrypi
+  become: true
+
+  tasks:
+ 
+    - name: Configure basic network settings
+      include_tasks: tasks/setup-network.yaml
+
+    - name: Install required software and tools
+      include_tasks: tasks/setup-software.yaml
+
+    - name: Configure WiFi hotspot
+      include_tasks: tasks/setup-hotspot.yaml
+
+    - name: Deploy Flask web application
+      include_tasks: tasks/setup-flask.yaml
+      #include_tasks: tasks/setup-flask-prod.yaml
+
+    - name: Configure mqtt server
+      include_tasks: tasks/setup-mqtt-broker.yaml   
+
+  handlers:
+    - name: Restart wpa_supplicant
+      service:
+        name: wpa_supplicant
+        state: restarted
+
+    - name: Restart dhcpcd
+      service:
+        name: dhcpcd
+        state: restarted
+
+    - name: Restart hostapd
+      service:
+        name: hostapd
+        state: restarted
+
+    - name: Restart dnsmasq
+      service:
+        name: dnsmasq
+        state: restarted
+
+    - name: Restart Mosquitto
+      service:
+        name: mosquitto
+        state: restarted
+
+    - name: Restart Networking
+      service:
+        name: dhcpcd
+        state: restarted
