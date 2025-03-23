@@ -8,6 +8,6 @@ import tailwind from '@astrojs/tailwind';
 export default defineConfig({
   integrations: [tailwind(), react()],
   site: 'https://gregoryverspecht.github.io/',
-  base: './the-mona',
+  //base: '/the-mona',
 
 });
