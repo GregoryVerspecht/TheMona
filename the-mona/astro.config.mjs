@@ -7,7 +7,7 @@ import tailwind from '@astrojs/tailwind';
 // https://astro.build/config
 export default defineConfig({
   integrations: [tailwind(), react()],
-  output: 'static',
-  site: 'https://the-mona.gv-tech.eu',
+  site: 'https://gregoryverspecht.github.io/',
+  base: 'TheMona/the-mona',
 
 });
