@@ -7,7 +7,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "deploy": "astro build && npx gh-pages -d dist -b prod"
+    "deploy": "echo 'Use GitHub Actions to deploy to Pages 😊 --> changes in prod is a trigger'"
+
   },
   "dependencies": {
     "@astrojs/react": "^4.2.1",
