@@ -17,6 +17,12 @@
     animation: animateGlow 10s ease infinite;
     border-radius: inherit;
   }
+
+  .backface-hidden {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+  
   
   @keyframes animateGlow {
     0% {
