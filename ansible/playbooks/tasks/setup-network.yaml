@@ -1,0 +1,32 @@
+- name: Set static IP for Ethernet and WiFi
+  copy:
+    dest: /etc/dhcpcd.conf
+    content: |
+      interface eth0
+          static ip_address=192.168.1.69/24
+          static routers=192.168.1.1
+          static domain_name_servers=8.8.8.8 8.8.4.4
+
+      interface wlan0
+          static ip_address=192.168.69.1/24
+          nohook wpa_supplicant
+  notify: Restart dhcpcd
+
+- name: Set Wi-Fi country to BE (Belgium)
+  copy:
+    dest: /etc/wpa_supplicant/wpa_supplicant.conf
+    content: |
+      country=BE
+      ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+      update_config=1
+  notify: Restart wpa_supplicant
+
+- name: Ensure permissions for wpa_supplicant.conf
+  file:
+    path: /etc/wpa_supplicant/wpa_supplicant.conf
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Unblock Wi-Fi using rfkill
+  command: rfkill unblock wlan

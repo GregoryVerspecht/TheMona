@@ -1,0 +1,362 @@
+/* 🌑 Algemene Stijl */
+body, html {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  background-color: #0d0d0d;
+  color: #E0E0E0;
+  scroll-behavior: smooth;
+  text-align: center;
+
+}
+
+
+/* 🌟 Hero */
+.hero {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background: url("../assets/images/background.jpeg") center/cover no-repeat;
+  position: relative;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.hero .container {
+  position: relative;
+  z-index: 2;
+}
+
+.hero-logo {
+  max-width: 600px;
+}
+
+.pictures {
+  max-width: 200px;
+}
+
+/* 🌟 Algemene stijl voor fullscreen secties */
+.full-section {
+  scroll-margin-top: var(--navbar-height);
+  position: relative;
+  min-height: 100vh;  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 50px;
+  background: #1D1D1D;
+  border-radius: 0px;
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  scroll-snap-align: start;
+  scroll-snap-type: y mandatory;
+}
+
+.full-section.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 🌟 Donkere overlay */
+.full-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+
+}
+
+/* 🌟 Sectie Titels */
+
+.section h2 {
+  font-size: 3rem;
+  font-weight: 700;
+  
+  letter-spacing: 1px;
+  background: linear-gradient(to right, #ffffff, #b3b3b3);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* 🌟 Story & Project Blocks */
+.story-block, .project-block {
+  max-width: 800px;
+  margin: 30px auto;
+  padding: 30px;
+  background: #232323;
+  border-radius: 0px;
+  text-align: center;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
+  
+  color: #e0e0e0;
+  
+}
+
+.story-block h5, .project-block h5 .text-start h5 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #e0e0e0;
+  
+  
+}
+
+.story-block p, .project-block p ,.text-start p {
+  font-size: 1.1rem;
+  color: #b0b0b0;
+}
+
+.story-block:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.2);
+}
+
+.project-block:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* 🔹 Navbar */
+.navbar {
+  background: rgba(20, 20, 20, 0.95);
+  padding: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  z-index: 1000; /* Lager dan de nav-menu */
+}
+
+/* 🔹 Navigatiebutton */
+.nav-toggle-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* 🔹 Navigatiemenu */
+.nav-menu {
+  position: fixed;
+  top: 0;
+  left: -260px;
+  width: 250px;
+  height: 100%;
+  background: #181818;
+  box-shadow: 3px 0 10px rgba(0, 0, 0, 0.5);
+  transition: left 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  padding-top: 20px;
+  z-index: 1200;
+}
+
+.nav-menu .nav-link {
+  font-size: 1.3rem;
+  padding: 15px 20px;
+  color: #B0B0B0;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease-in-out;
+  scroll-margin-top: var(--navbar-height);
+}
+
+.nav-menu .nav-link:hover {
+  color: #ffffff;
+}
+
+/* 🔹 Open menu */
+.nav-menu.show {
+  left: 0;
+}
+
+/* 🔹 Navigatie overlay */
+.nav-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-in-out;
+  z-index: 1000;
+}
+
+.nav-overlay.show {
+  opacity: 1;
+  visibility: visible;
+}
+.nav-overlay {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out;
+}
+
+.nav-overlay.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* 🔹 Sluitknop */
+.close-nav {
+  font-size: 2rem;
+  color: white;
+  cursor: pointer;
+  text-align: right;
+  padding: 10px 20px;
+  display: block;
+}
+
+/* 🌟 Footer */
+footer {
+  background: #181818;
+  padding: 20px;
+  font-size: 0.9rem;
+}
+
+/* 🌟 Contact Sectie */
+#contact {
+  padding: 80px 0;
+  background: #2a2a2a;
+  border-radius: 0px;
+}
+
+.contact-card {
+  background: #232323;
+  border-radius: 10px;
+  text-align: center;
+  padding: 30px;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.contact-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.2);
+}
+
+.contact-card h5 {
+  color: #ffffff;
+  margin-bottom: 15px;
+}
+
+/* 🌟 Knoppen */
+.btn-outline-primary {
+  color: #B0B0B0;
+  border-color: #B0B0B0;
+}
+
+.btn-outline-primary:hover {
+  background: #B0B0B0;
+  color: black;
+}
+
+.btn-outline-light {
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+.btn-outline-light:hover {
+  background: white;
+  color: black;
+}
+
+.full-section::before, .hero::before {
+  display: none;
+}
+
+.text-accent {
+  text-transform: uppercase;
+  color: #e0e0e0;
+  font-weight: bold;
+  display: inline-block;
+  position: relative;
+  font-size: 2rem;
+  font-weight: bold;
+
+}
+
+.text-accent-box {
+  color: #b0b0b0;
+  display: inline-block;
+  position: relative;
+  font-size: 2rem;
+  font-weight: bold;
+  transition: transform 0.3s ease-in-out;
+}
+
+/* custom */
+
+.bg-dark-container {
+  background: #1a1a1a;
+  padding: 30px;
+  border-radius: 0px; 
+}
+
+.bg-dark-container-alternate {
+  background: #2a2a2a;
+  padding: 30px;
+  border-radius: 0px; 
+}
+
+/* Listgroups */
+.custom-text-listgroup {
+  color: #e0e0e0; /* Algemene tekstkleur voor de lijst */
+}
+
+.custom-text-listgroup .list-group-item {
+  color: #e0e0e0; /* Zorgt ervoor dat alle tekst binnen de lijstgroep-items de juiste kleur krijgt */
+}
+
+.custom-text-listgroup i {
+  color: #e0e0e0; /* Iconen in een aparte accentkleur */
+}
+
+.custom-text-listgroup strong {
+  color: #e0e0e0;
+  font-weight: bold;
+}
+
+
+/* BLOG */ 
+.blog {
+  padding-top: 60px; /* Zorgt ervoor dat de content niet onder de navbar zit */
+}
+
+/* 🌟 Contact Sectie */
+#blog-sec {
+  padding: 80px 0;
+  background: #1a1a1a;
+  border-radius: 0px;
+}
+
+.blog-sec-card {
+  background: #232323;
+  border-radius: 10px;
+  text-align: center;
+  padding: 30px;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.blog-sec-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.2);
+}
+
+.blog-sec-card h5 {
+  color: #ffffff;
+  margin-bottom: 15px;
+}

@@ -1,0 +1,74 @@
+---
+- name: Deploy project to Raspberry Pi
+  hosts: raspberrypi
+  become: true
+  tasks:
+    - name: Maak een directory op de Raspberry Pi
+      file:
+        path: /home/mona/the-mona
+        state: directory
+        mode: '0755'
+
+    - name: Stel de eigenaar en groep in voor de map
+      file:
+        path: /home/mona/the-mona
+        state: directory
+        owner: mona
+        group: mona
+        mode: '0755'
+
+    - name: Kopieer projectbestanden naar de Raspberry Pi
+      copy:
+        src: ../../src/dev/
+        dest: /home/mona/the-mona/
+        owner: mona
+        group: mona
+        mode: '0755'
+
+    - name: Maak systemd-servicebestand aan
+      copy:
+        dest: /etc/systemd/system/the-mona.service
+        content: |
+          [Unit]
+          Description=The Mona
+          After=network.target
+
+          [Service]
+          User=mona
+          WorkingDirectory=/home/mona/the-mona
+          ExecStart=/home/mona/the-mona/.venv/bin/python /home/mona/the-mona/app/app.py
+          Restart=always
+
+          [Install]
+          WantedBy=multi-user.target
+      become: true
+
+    - name: Herlaad systemd om de nieuwe service te herkennen
+      command: systemctl daemon-reload
+      become: true
+
+    - name: Schakel de service in zodat deze bij opstart start
+      systemd:
+        name: the-mona
+        enabled: true
+        state: started
+      become: true
+
+    - name: Maak een virtuele omgeving aan
+      command: python3 -m venv /home/mona/the-mona/.venv
+      args:
+        creates: /home/mona/the-mona/.venv
+
+    - name: Installeer Python-afhankelijkheden
+      pip:
+        requirements: /home/mona/the-mona/requirements.txt
+        virtualenv: /home/mona/the-mona/.venv
+        virtualenv_command: python3 -m venv
+
+    - name: Herstart the-mona service
+      systemd:
+        name: the-mona
+        state: restarted
+      become: true
+
+        
