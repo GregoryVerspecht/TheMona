@@ -14,6 +14,8 @@ module.exports = {
         'slide-up': 'slideUp 0.5s ease-in-out',
         'spin-slow': 'rotate 30s linear infinite',
         'gradient-move': 'gradientMove 10s ease infinite',
+        'gradient-move-slow': 'gradient-move-slow 8s ease infinite',
+        'gradient-move-fast': 'gradient-move-fast 4s ease-in-out infinite',
       },
       keyframes: {
         fadeIn: {
@@ -34,6 +36,15 @@ module.exports = {
           '0%': { backgroundPosition: '0% 50%' },
           '50%': { backgroundPosition: '100% 50%' },
           '100%': { backgroundPosition: '0% 50%' },
+        },
+
+        'gradient-move-slow': {
+          '0%, 100%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
+        },
+        'gradient-move-fast': {
+          '0%, 100%': { backgroundPosition: '100% 0%' },
+          '50%': { backgroundPosition: '0% 100%' },
         },
 
       },

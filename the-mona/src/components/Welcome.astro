@@ -12,12 +12,21 @@ import monaLogo from '../assets/the-mona.svg';
   <main class="relative flex items-center justify-center min-h-screen px-4">
 
     <!-- 🔥 GLOW EFFECT -->
-    <div
-      class="absolute z-0 rounded-3xl blur-3xl opacity-70
-             bg-[linear-gradient(90deg,_#0fffc1,_#7e0fff)]
-             bg-[length:200%_200%] animate-gradient-move
-             w-[90vw] max-w-md h-[70vh] sm:h-[60vh] will-change-transform"
-    ></div>
+<!-- GLOW LAAG 1 -->
+<div
+  class="absolute z-0 rounded-3xl blur-3xl opacity-60 mix-blend-screen
+         bg-[linear-gradient(90deg,_#0fffc1,_#7e0fff)]
+         bg-[length:200%_200%] animate-gradient-move-slow
+         w-[90vw] max-w-md h-[75vh] sm:h-[65vh] will-change-transform"
+/>
+
+<!-- GLOW LAAG 2 -->
+<div
+  class="absolute z-0 rounded-3xl blur-3xl opacity-40 mix-blend-screen
+         bg-[linear-gradient(270deg,_#7e0fff,_#0fffc1)]
+         bg-[length:200%_200%] animate-gradient-move-fast
+         w-[90vw] max-w-md h-[75vh] sm:h-[65vh] will-change-transform"
+/>
 
     <!-- 📦 Kaart met inhoud -->
     <section class="relative z-10 p-10 rounded-2xl bg-gray-800 text-center text-white w-full max-w-sm sm:max-w-md md:max-w-md overflow-hidden">
