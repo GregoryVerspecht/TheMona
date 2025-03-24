@@ -1,36 +1,28 @@
 ---
+import background from '../assets/background.svg';
 import { Image } from 'astro:assets';
 import monaLogo from '../assets/the-mona.svg';
 ---
 
 <div class="relative min-h-screen font-sans overflow-hidden">
 
-  <!-- Achtergrond -->
-  <div class="fixed top-0 left-0 w-full h-full z-[-20] bg-gray-900"></div>
+  <!-- Geanimeerde achtergrondlaag -->
+  <div class="fixed top-0 left-0 w-full h-full z-[-20] bg-gradient-to-br from-gray-900 to-gray-800 "></div>
 
-  <!-- Glow buiten de kaart -->
-  <main class="relative flex items-center justify-center min-h-screen px-4">
+  <!-- Glow box met inhoud -->
+  <main class="flex items-center justify-center min-h-screen px-4">
+    <section class="relative inline-block p-10 rounded-2xl bg-[#231515b3]  text-center text-white w-full max-w-sm sm:max-w-md md:max-w-md">
 
-    <!-- 🔥 GLOW EFFECT -->
-<!-- GLOW LAAG 1 -->
-<div
-  class="absolute z-0 rounded-3xl blur-3xl opacity-60 mix-blend-screen
-         bg-[linear-gradient(90deg,_#0fffc1,_#7e0fff)]
-         bg-[length:200%_200%] animate-gradient-move-slow
-         w-[90vw] max-w-md h-[75vh] sm:h-[65vh] will-change-transform"
-/>
+      <!-- Glow effect achter de content -->
+      <div
+        class="absolute inset-2 sm:inset-4 md:inset-6 z-[-1] rounded-3xl
+              bg-[linear-gradient(90deg,_#0fffc1,_#7e0fff)]
+              bg-[length:200%_200%] animate-gradient-move
+              blur-xl sm:blur-xl md:blur-2xl lg:blur-3xl
+              scale-100 sm:scale-100 md:scale-110 lg:scale-130"
+      ></div>
 
-<!-- GLOW LAAG 2 -->
-<div
-  class="absolute z-0 rounded-3xl blur-3xl opacity-40 mix-blend-screen
-         bg-[linear-gradient(270deg,_#7e0fff,_#0fffc1)]
-         bg-[length:200%_200%] animate-gradient-move-fast
-         w-[90vw] max-w-md h-[75vh] sm:h-[65vh] will-change-transform"
-/>
 
-    <!-- 📦 Kaart met inhoud -->
-    <section class="relative z-10 p-10 rounded-2xl bg-gray-800 text-center text-white w-full max-w-sm sm:max-w-md md:max-w-md overflow-hidden">
-      
       <!-- Logo -->
       <Image
         src={monaLogo}
@@ -45,6 +37,7 @@ import monaLogo from '../assets/the-mona.svg';
         </span>
       </h1>
 
+
       <!-- Subtitel -->
       <h2 class="text-base sm:text-lg md:text-xl lg:text-2xl font-medium md:font-semibold leading-snug tracking-normal mb-6 animate-fade-in delay-[600ms]">
         <span class="bg-clip-text text-transparent bg-white">
@@ -52,7 +45,8 @@ import monaLogo from '../assets/the-mona.svg';
         </span>
       </h2>
 
-      <!-- CTA -->
+
+      <!-- CTA Button -->
       <div class="flex justify-center gap-4 mt-6 flex-wrap animate-fade-in delay-[800ms]">
         <a
           href="#"
@@ -61,7 +55,6 @@ import monaLogo from '../assets/the-mona.svg';
           <button>Discover the story!</button>
         </a>
       </div>
-
     </section>
   </main>
 </div>
