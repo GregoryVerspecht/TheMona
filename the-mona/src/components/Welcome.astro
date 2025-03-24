@@ -14,13 +14,20 @@ import monaLogo from '../assets/the-mona.svg';
     <section class="relative inline-block p-10 rounded-2xl bg-[#231515b3] shadow-inner shadow-black text-center text-white w-full max-w-sm sm:max-w-md md:max-w-xl">
 
       <!-- Glow effect achter de content -->
-      <div class="absolute top-0 left-0 right-0 bottom-0 m-auto w-full h-full z-[-1] blur-3xl rounded-2xl scale-[1.3] bg-[linear-gradient(90deg,_#0fffc1,_#7e0fff)] bg-[length:200%_200%] animate-gradient-move"></div>
+      <div
+        class="absolute inset-2 sm:inset-4 md:inset-6 z-[-1] rounded-2xl
+              bg-[linear-gradient(90deg,_#0fffc1,_#7e0fff)]
+              bg-[length:200%_200%] animate-gradient-move
+              blur-xl sm:blur-2xl md:blur-3xl
+              scale-100 sm:scale-105 md:scale-110"
+      ></div>
+
 
       <!-- Logo -->
       <Image
         src={monaLogo}
         alt="The Mona."
-        class="mx-auto mb-8 w-auto h-auto animate-fade-in delay-[200ms]"
+        class="mx-auto mb-6 w-full h-auto"
       />
 
       <!-- Titel -->
