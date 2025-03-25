@@ -90,7 +90,8 @@ module.exports = {
         'mona': "linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab)",
         'mona-alt': "linear-gradient(-45deg, #23d5ab, #23a6d5, #e73c7e, #ee7752)",
         'mona-glow-smooth': 'radial-gradient(ellipse at center, #0fffc1, #7e0fff, #ff00d4, #00ff94)',
-        'mona-glow-linear': 'linear-gradient(270deg, #0fffc1, #7e0fff, #ff00d4, #00ff94)',
+        'mona-glow-linear': 'linear-gradient(270deg, #0fffc1, rgba(15,255,193,0), #7e0fff, rgba(126,15,255,0), #ff00d4, rgba(255,0,212,0), #00ff94, rgba(0,255,148,0))',
+        'mona-glow-fix': 'radial-gradient(ellipse at center, rgba(15,255,193,0.4), rgba(126,15,255,0.2), rgba(15,255,193,0))',
       },
     },
     backgroundSize: {
