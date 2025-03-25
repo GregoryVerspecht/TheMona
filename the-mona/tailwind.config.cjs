@@ -16,7 +16,8 @@ module.exports = {
         'gradient-move': 'gradientMove 10s ease infinite',
         'gradient-move-slow': 'gradient-move-slow 8s ease infinite',
         'gradient-move-fast': 'gradient-move-fast 4s ease-in-out infinite',
-        'glow-shift': 'pulse-glow 4s ease infinite, color-shift-glow 12s ease infinite',
+        'glow-shift': 'pulse-glow 6s ease-in-out infinite, color-shift-glow 12s ease-in-out infinite',
+
       },
       keyframes: {
         fadeIn: {
@@ -48,19 +49,29 @@ module.exports = {
           '50%': { backgroundPosition: '0% 100%' },
         },
         'color-shift-glow': {
-  '0%': {
-    backgroundImage: 'radial-gradient(circle, rgba(0, 255, 224, 0.4) 0%, rgba(125, 0, 255, 0.3) 40%, rgba(255, 0, 212, 0.2) 65%, rgba(0, 255, 148, 0.1) 85%, transparent 100%)',
-  },
-  '33%': {
-    backgroundImage: 'radial-gradient(circle, rgba(255, 0, 212, 0.4) 0%, rgba(0, 255, 224, 0.3) 40%, rgba(125, 0, 255, 0.2) 65%, rgba(0, 255, 148, 0.1) 85%, transparent 100%)',
-  },
-  '66%': {
-    backgroundImage: 'radial-gradient(circle, rgba(125, 0, 255, 0.4) 0%, rgba(0, 255, 148, 0.3) 40%, rgba(0, 255, 224, 0.2) 65%, rgba(255, 0, 212, 0.1) 85%, transparent 100%)',
-  },
-  '100%': {
-    backgroundImage: 'radial-gradient(circle, rgba(0, 255, 224, 0.4) 0%, rgba(125, 0, 255, 0.3) 40%, rgba(255, 0, 212, 0.2) 65%, rgba(0, 255, 148, 0.1) 85%, transparent 100%)',
-  },
-}
+          '0%': {
+            backgroundImage: 'radial-gradient(ellipse at 50% 60%, rgba(0, 255, 224, 0.15), rgba(125, 0, 255, 0.1), transparent)',
+          },
+          '25%': {
+            backgroundImage: 'radial-gradient(ellipse at 40% 40%, rgba(255, 0, 212, 0.15), rgba(0, 255, 224, 0.1), transparent)',
+          },
+          '50%': {
+            backgroundImage: 'radial-gradient(ellipse at 60% 50%, rgba(125, 0, 255, 0.15), rgba(0, 255, 148, 0.1), transparent)',
+          },
+          '75%': {
+            backgroundImage: 'radial-gradient(ellipse at 45% 55%, rgba(0, 255, 148, 0.15), rgba(255, 0, 212, 0.1), transparent)',
+          },
+          '100%': {
+            backgroundImage: 'radial-gradient(ellipse at 50% 60%, rgba(0, 255, 224, 0.15), rgba(125, 0, 255, 0.1), transparent)',
+          },
+
+          'smooth-glow': {
+            '0%':   { backgroundPosition: '0% 50%' },
+            '50%':  { backgroundPosition: '100% 50%' },
+            '100%': { backgroundPosition: '0% 50%' },
+          },
+        }
+
 
 
       },
@@ -77,6 +88,7 @@ module.exports = {
       backgroundImage: {
         'mona': "linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab)",
         'mona-alt': "linear-gradient(-45deg, #23d5ab, #23a6d5, #e73c7e, #ee7752)",
+        'mona-glow-smooth': 'radial-gradient(ellipse at center, #0fffc1, #7e0fff, #ff00d4, #00ff94)',
       },
     },
     backgroundSize: {
