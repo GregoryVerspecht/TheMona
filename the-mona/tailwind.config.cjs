@@ -17,7 +17,7 @@ module.exports = {
         'gradient-move-slow': 'gradient-move-slow 8s ease infinite',
         'gradient-move-fast': 'gradient-move-fast 4s ease-in-out infinite',
         'glow-shift': 'pulse-glow 6s ease-in-out infinite, color-shift-glow 12s ease-in-out infinite',
-        'smooth-glow': 'smooth-glow 20s ease-in-out ',
+        'smooth-glow': 'smooth-glow 20s ease-in-out infinite',
 
       },
       keyframes: {
@@ -90,6 +90,7 @@ module.exports = {
         'mona': "linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab)",
         'mona-alt': "linear-gradient(-45deg, #23d5ab, #23a6d5, #e73c7e, #ee7752)",
         'mona-glow-smooth': 'radial-gradient(ellipse at center, #0fffc1, #7e0fff, #ff00d4, #00ff94)',
+        'mona-glow-linear': 'linear-gradient(270deg, #0fffc1, #7e0fff, #ff00d4, #00ff94)',
       },
     },
     backgroundSize: {
