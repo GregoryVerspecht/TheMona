@@ -17,6 +17,7 @@ module.exports = {
         'gradient-move-slow': 'gradient-move-slow 8s ease infinite',
         'gradient-move-fast': 'gradient-move-fast 4s ease-in-out infinite',
         'glow-shift': 'pulse-glow 6s ease-in-out infinite, color-shift-glow 12s ease-in-out infinite',
+        'smooth-glow': 'smooth-glow 20s ease-in-out infinite',
 
       },
       keyframes: {
@@ -64,13 +65,13 @@ module.exports = {
           '100%': {
             backgroundImage: 'radial-gradient(ellipse at 50% 60%, rgba(0, 255, 224, 0.15), rgba(125, 0, 255, 0.1), transparent)',
           },
-
+        },
           'smooth-glow': {
             '0%':   { backgroundPosition: '0% 50%' },
             '50%':  { backgroundPosition: '100% 50%' },
             '100%': { backgroundPosition: '0% 50%' },
           },
-        }
+        
 
 
 
