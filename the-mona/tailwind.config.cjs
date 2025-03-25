@@ -17,7 +17,8 @@ module.exports = {
         'gradient-move-slow': 'gradient-move-slow 8s ease infinite',
         'gradient-move-fast': 'gradient-move-fast 4s ease-in-out infinite',
         'glow-shift': 'pulse-glow 6s ease-in-out infinite, color-shift-glow 12s ease-in-out infinite',
-        'smooth-glow': 'smooth-glow 20s ease-in-out infinite',
+        
+        'mono-color-glow': 'mono-color-glow 16s ease-in-out infinite',
 
       },
       keyframes: {
@@ -72,6 +73,23 @@ module.exports = {
             '100%': { backgroundPosition: '0% 50%' },
           },
         
+          'mono-color-glow': {
+  '0%': {
+    backgroundColor: 'rgba(15, 255, 193, 0.3)', // aqua
+  },
+  '25%': {
+    backgroundColor: 'rgba(126, 15, 255, 0.3)', // paars
+  },
+  '50%': {
+    backgroundColor: 'rgba(255, 0, 212, 0.3)', // roze
+  },
+  '75%': {
+    backgroundColor: 'rgba(0, 255, 148, 0.3)', // groen
+  },
+  '100%': {
+    backgroundColor: 'rgba(15, 255, 193, 0.3)', // terug naar aqua
+  },
+},
 
 
 
@@ -100,6 +118,8 @@ module.exports = {
   #0fffc1 100%, rgba(15,255,193,0) 100%)',
 
       },
+      
+
     },
     backgroundSize: {
       '200': '200% 200%',
