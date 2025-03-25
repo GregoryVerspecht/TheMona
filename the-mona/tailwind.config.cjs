@@ -16,6 +16,7 @@ module.exports = {
         'gradient-move': 'gradientMove 10s ease infinite',
         'gradient-move-slow': 'gradient-move-slow 8s ease infinite',
         'gradient-move-fast': 'gradient-move-fast 4s ease-in-out infinite',
+        'glow-shift': 'pulse-glow 4s ease infinite, color-shift-glow 12s ease infinite',
       },
       keyframes: {
         fadeIn: {
@@ -46,6 +47,21 @@ module.exports = {
           '0%, 100%': { backgroundPosition: '100% 0%' },
           '50%': { backgroundPosition: '0% 100%' },
         },
+        'color-shift-glow': {
+  '0%': {
+    backgroundImage: 'radial-gradient(circle, rgba(0, 255, 224, 0.4) 0%, rgba(125, 0, 255, 0.3) 40%, rgba(255, 0, 212, 0.2) 65%, rgba(0, 255, 148, 0.1) 85%, transparent 100%)',
+  },
+  '33%': {
+    backgroundImage: 'radial-gradient(circle, rgba(255, 0, 212, 0.4) 0%, rgba(0, 255, 224, 0.3) 40%, rgba(125, 0, 255, 0.2) 65%, rgba(0, 255, 148, 0.1) 85%, transparent 100%)',
+  },
+  '66%': {
+    backgroundImage: 'radial-gradient(circle, rgba(125, 0, 255, 0.4) 0%, rgba(0, 255, 148, 0.3) 40%, rgba(0, 255, 224, 0.2) 65%, rgba(255, 0, 212, 0.1) 85%, transparent 100%)',
+  },
+  '100%': {
+    backgroundImage: 'radial-gradient(circle, rgba(0, 255, 224, 0.4) 0%, rgba(125, 0, 255, 0.3) 40%, rgba(255, 0, 212, 0.2) 65%, rgba(0, 255, 148, 0.1) 85%, transparent 100%)',
+  },
+}
+
 
       },
       colors: {
