@@ -92,6 +92,13 @@ module.exports = {
         'mona-glow-smooth': 'radial-gradient(ellipse at center, #0fffc1, #7e0fff, #ff00d4, #00ff94)',
         'mona-glow-linear': 'linear-gradient(270deg, #0fffc1, rgba(15,255,193,0), #7e0fff, rgba(126,15,255,0), #ff00d4, rgba(255,0,212,0), #00ff94, rgba(0,255,148,0))',
         'mona-glow-fix': 'radial-gradient(ellipse at center, rgba(15,255,193,0.4), rgba(126,15,255,0.2), rgba(15,255,193,0))',
+        'mona-glow-safari': 'linear-gradient(270deg, \
+  #0fffc1 0%, rgba(15,255,193,0) 0%, \
+  #7e0fff 25%, rgba(126,15,255,0) 25%, \
+  #ff00d4 50%, rgba(255,0,212,0) 50%, \
+  #00ff94 75%, rgba(0,255,148,0) 75%, \
+  #0fffc1 100%, rgba(15,255,193,0) 100%)',
+
       },
     },
     backgroundSize: {
