@@ -14,8 +14,10 @@
     filter: blur(40px);
     background: linear-gradient(90deg, #0fffc1, #7e0fff);
     background-size: 200% 200%;
-    animation: animateGlow 10s ease infinite;
+    animation: animateGlow 10s linear infinite;
     border-radius: inherit;
+    transform: translate(-50%, -50%);
+    transform-origin: center;
   }
 
   .backface-hidden {
@@ -25,14 +27,11 @@
   
   
   @keyframes animateGlow {
-    0% {
-      background-position: 0% 50%;
+    from {
+      transform: translate(-50%, -50%) rotate(0deg);
     }
-    50% {
-      background-position: 100% 50%;
-    }
-    100% {
-      background-position: 0% 50%;
+    to {
+      transform: translate(-50%, -50%) rotate(360deg);
     }
   }
   
