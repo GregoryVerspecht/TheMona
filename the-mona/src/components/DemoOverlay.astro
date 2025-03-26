@@ -1,0 +1,32 @@
+---
+// Geen props nodig
+---
+<style>
+    .demo-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      background: radial-gradient(ellipse at center, #0fffc1, #7e0fff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0 }
+      to { opacity: 1 }
+    }
+    </style>
+    
+    <div class="demo-overlay" id="demoOverlay">
+      <div class="text-white text-center max-w-lg p-6 bg-black bg-opacity-50 rounded-xl">
+        <h2 class="text-3xl font-bold mb-4">The Mona Demo</h2>
+        <p class="mb-6">Hier komt je demo zoals in CodePen.</p>
+        <button
+          class="bg-white text-black px-4 py-2 rounded hover:opacity-80 transition"
+          onclick="document.getElementById('demoOverlay').remove()"
+        >Sluiten</button>
+      </div>
+    </div>
+    

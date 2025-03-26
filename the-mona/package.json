@@ -8,14 +8,14 @@
     "preview": "astro preview",
     "astro": "astro",
     "deploy": "echo 'Use GitHub Actions to deploy to Pages 😊 --> changes in prod is a trigger'"
-
   },
   "dependencies": {
     "@astrojs/react": "^4.2.1",
+    "@tailwindcss/nesting": "^0.0.0-insiders.565cd3e",
     "@tailwindcss/vite": "^4.0.14",
     "@types/react": "^19.0.12",
     "@types/react-dom": "^19.0.4",
-    "astro": "^5.5.3",
+    "astro": "^5.5.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tailwind": "^4.0.0",
@@ -26,9 +26,10 @@
     "@tailwindcss/forms": "0.5.5",
     "@tailwindcss/postcss": "4.0.0",
     "@tailwindcss/typography": "0.5.10",
-    "autoprefixer": "^10.4.20",
+    "autoprefixer": "^10.4.21",
     "gh-pages": "^6.3.0",
     "postcss": "^8.5.2",
+    "postcss-nesting": "^13.0.1",
     "tailwindcss": "3.3.3"
   }
 }
