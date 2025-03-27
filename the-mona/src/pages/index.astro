@@ -1,14 +1,135 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import "../styles/tailwind.css";
+import background from '../assets/background.svg';
+import { Image } from 'astro:assets';
+import monaLogo from '../assets/the-mona.svg';
 
+//import Header from "@/components/Header.astro";
+//import Footer from "@/components/Footer.astro";
 
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		
+		<meta name="generator" content={Astro.generator} />
+		<meta name="theme-color" content="#111827">
+		<title>The Mona</title>
+		    <!-- Meta Tags SEO -->
+			<meta
+			name="description"
+			content="The mona - One press away from unforgettable fun!"
+		  />
+		  <meta name="robots" content="index, follow" />
+		  <meta
+			name="keywords"
+			content="The Mona, Mona, drinking game,"
+		  />
+	</head>
+	<body class="bg-gray-900 text-white">
+		<slot />
+	</body>
+</html>
 
-<Layout>
-	<Welcome />
-</Layout>
+<style>
+	html,
+	body {
+		margin: 0;
+		width: 100%;
+		height: 100%;
+	}
+	@keyframes animateGlow {
+    from {
+      transform: translate(-50%, -50%) rotate(0deg);
+    }
+    to {
+      transform: translate(-50%, -50%) rotate(360deg);
+    }
+  }
+  
+ 
+    .gloweffect {
+      position: absolute;
+      inset: -10.0rem; /* vergelijkbaar met -inset-6 */
+      z-index: -1;
+      border-radius: inherit;
+      animation: mono-color-glow 16s ease-in-out infinite;
+      filter: blur(24px);
+      opacity: 0.6;
+      will-change: transform;
+      
+    }
+  
+  
+  @keyframes mono-color-glow {
+    0% {
+      background-color: rgba(15, 255, 193, 0.3);
+    }
+    25% {
+      background-color: rgba(126, 15, 255, 0.3);
+    }
+    50% {
+      background-color: rgba(255, 0, 212, 0.3);
+    }
+    75% {
+      background-color: rgba(0, 255, 148, 0.3);
+    }
+    100% {
+      background-color: rgba(15, 255, 193, 0.3);
+    }
+  }
+</style>
+<body class="bg-gray-900">
+<div class="relative min-h-screen font-sans overflow-hidden">
 
+	<!-- Geanimeerde achtergrondlaag -->
+	<div class="fixed top-0 left-0 w-full h-full z-[-20] bg-gray-900 "></div>
+   
+	<!-- Glow box met inhoud -->
+	<main class="flex items-center justify-center min-h-screen px-4">
+  
+	  <section class="relative inline-block p-10 rounded-2xl bg-[#231515b4]  text-center text-white w-full max-w-sm sm:max-w-md md:max-w-md">
+  
+		<!-- GLOWS -->
+		<div class="gloweffect">  
+		</div>
+		<!-- Logo -->
+		<Image
+		  src={monaLogo}
+		  alt="The Mona."
+		  class="mx-auto mb-6 w-full h-auto"
+		/>
+  
+		<!-- Titel -->
+		<h1 class="text-3xl sm:text-5xl md:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight mb-6 animate-fade-in delay-[400ms]">
+		  <span class="bg-clip-text text-transparent bg-mona bg-[length:200%_200%] animate-gradient-move">
+			The Mona
+		  </span>
+		</h1>
+  
+  
+		<!-- Subtitel -->
+		<h2 class="text-sm sm:text-lg md:text-lg lg:text-2xl font-medium md:font-semibold leading-snug tracking-normal mb-6 animate-fade-in delay-[600ms]">
+		  <span class="bg-clip-text text-transparent bg-white">
+			One press away from unforgettable fun!
+		  </span>
+		</h2>
+  
+  
+		<!-- CTA Button -->
+		<div class="flex justify-center gap-4 mt-6 flex-wrap animate-fade-in delay-[800ms]">
+		  <a
+			href="/demo"
+			
+			class="flex items-center gap-2 px-4 py-2 rounded-lg text-white shadow-md hover:opacity-90 transition bg-mona-alt bg-[length:200%_200%] animate-gradient-move"
+		  >
+			<button>Discover the story!</button>
+		  </a>
+		</div>
+	  </section>
+	</main>
+  </div>
+</body>
