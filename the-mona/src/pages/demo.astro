@@ -16,33 +16,42 @@ import { Image } from 'astro:assets';
 
      
 
-      .mic-shadow {
+      .mic{
         width: 400px;
-        height: 400px;
+        height: 300px;
         position: absolute;
         top: 50%;
         left: 50%;
-        border-radius: 100%;
         z-index: 1;
-        box-shadow: 
-          10px -55px 30px 15px #823ca6,
-          24px -10px 47px 10px #aab3d2,
-          -21px -25px 97px 10px #5acee3,
-          51px 5px 17px 10px #1b7d8f,
-          3px 2px 77px 10px #f30bf5;
-        animation: shadow-rotate 1.5s linear infinite;
+        box-shadow:
+          0 0 60px 20px #823ca6,
+          10px 10px 80px 20px #aab3d2,
+          -10px -10px 80px 20px #5acee3,
+          0 0 60px 10px #f30bf5;
+        animation: mono-color-glow 2s linear infinite;
         transform: translate(-50%, -50%);
         transform-origin: center;
       }
 
-      @keyframes shadow-rotate {
-        from {
-          transform: translate(-50%, -50%) rotate(0deg);
-        }
-        to {
-          transform: translate(-50%, -50%) rotate(360deg);
-        }
-      }
+      @keyframes mono-color-glow {
+    0% {
+      background-color: rgba(15, 255, 193, 0.3);
+    }
+    25% {
+      background-color: rgba(126, 15, 255, 0.3);
+    }
+    50% {
+      background-color: rgba(255, 0, 212, 0.3);
+    }
+    75% {
+      background-color: rgba(0, 255, 148, 0.3);
+    }
+    100% {
+      background-color: rgba(15, 255, 193, 0.3);
+    }
+  }
+        
+      
     </style>
   </head>
 
