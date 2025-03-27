@@ -17,8 +17,8 @@ module.exports = {
         'gradient-move-slow': 'gradient-move-slow 8s ease infinite',
         'gradient-move-fast': 'gradient-move-fast 4s ease-in-out infinite',
         'glow-shift': 'pulse-glow 6s ease-in-out infinite, color-shift-glow 12s ease-in-out infinite',
+
         
-        'mono-color-glow': 'mono-color-glow 16s ease-in-out infinite',
 
       },
       keyframes: {
@@ -50,46 +50,9 @@ module.exports = {
           '0%, 100%': { backgroundPosition: '100% 0%' },
           '50%': { backgroundPosition: '0% 100%' },
         },
-        'color-shift-glow': {
-          '0%': {
-            backgroundImage: 'radial-gradient(ellipse at 50% 60%, rgba(0, 255, 224, 0.15), rgba(125, 0, 255, 0.1), transparent)',
-          },
-          '25%': {
-            backgroundImage: 'radial-gradient(ellipse at 40% 40%, rgba(255, 0, 212, 0.15), rgba(0, 255, 224, 0.1), transparent)',
-          },
-          '50%': {
-            backgroundImage: 'radial-gradient(ellipse at 60% 50%, rgba(125, 0, 255, 0.15), rgba(0, 255, 148, 0.1), transparent)',
-          },
-          '75%': {
-            backgroundImage: 'radial-gradient(ellipse at 45% 55%, rgba(0, 255, 148, 0.15), rgba(255, 0, 212, 0.1), transparent)',
-          },
-          '100%': {
-            backgroundImage: 'radial-gradient(ellipse at 50% 60%, rgba(0, 255, 224, 0.15), rgba(125, 0, 255, 0.1), transparent)',
-          },
-        },
-          'smooth-glow': {
-            '0%':   { backgroundPosition: '0% 50%' },
-            '50%':  { backgroundPosition: '100% 50%' },
-            '100%': { backgroundPosition: '0% 50%' },
-          },
-        
-          'mono-color-glow': {
-  '0%': {
-    backgroundColor: 'rgba(15, 255, 193, 0.3)', // aqua
-  },
-  '25%': {
-    backgroundColor: 'rgba(126, 15, 255, 0.3)', // paars
-  },
-  '50%': {
-    backgroundColor: 'rgba(255, 0, 212, 0.3)', // roze
-  },
-  '75%': {
-    backgroundColor: 'rgba(0, 255, 148, 0.3)', // groen
-  },
-  '100%': {
-    backgroundColor: 'rgba(15, 255, 193, 0.3)', // terug naar aqua
-  },
-},
+
+
+
 
 
 
@@ -108,14 +71,7 @@ module.exports = {
         'mona': "linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab)",
         'mona-alt': "linear-gradient(-45deg, #23d5ab, #23a6d5, #e73c7e, #ee7752)",
         'mona-glow-smooth': 'radial-gradient(ellipse at center, #0fffc1, #7e0fff, #ff00d4, #00ff94)',
-        'mona-glow-linear': 'linear-gradient(270deg, #0fffc1, rgba(15,255,193,0), #7e0fff, rgba(126,15,255,0), #ff00d4, rgba(255,0,212,0), #00ff94, rgba(0,255,148,0))',
-        'mona-glow-fix': 'radial-gradient(ellipse at center, rgba(15,255,193,0.4), rgba(126,15,255,0.2), rgba(15,255,193,0))',
-        'mona-glow-safari': 'linear-gradient(270deg, \
-  #0fffc1 0%, rgba(15,255,193,0) 0%, \
-  #7e0fff 25%, rgba(126,15,255,0) 25%, \
-  #ff00d4 50%, rgba(255,0,212,0) 50%, \
-  #00ff94 75%, rgba(0,255,148,0) 75%, \
-  #0fffc1 100%, rgba(15,255,193,0) 100%)',
+
 
       },
       
