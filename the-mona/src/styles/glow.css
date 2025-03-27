@@ -5,11 +5,11 @@
 /* 🌬️ Pulse animatie voor subtiele ademende glow */
 @keyframes mono-soft-pulse {
   0%, 100% {
-    opacity: 0.4;
+    opacity: 0.2;
     transform: scale(1);
   }
   50% {
-    opacity: 0.7;
+    opacity: 0.8;
     transform: scale(1.05); /* heel lichtjes groter */
   }
 }
@@ -17,13 +17,13 @@
 @layer utilities {
   .gloweffect {
     position: absolute;
-    inset: -1.5rem; /* of -6 voor Tailwind consistentie */
+    inset: -1.1rem; /* of -6 voor Tailwind consistentie */
     z-index: -1;
     border-radius: inherit;
-    background-color: rgba(126, 15, 255, 0.3); /* zacht paars glow */
-    filter: blur(48px); /* breder uitgesmeerde glow */
-    opacity: 0.4;
+    background-color: rgba(0, 255, 200, 0.3); 
+    filter: blur(20px); 
+    opacity: 0.;
     will-change: transform, opacity;
-    animation: mono-soft-pulse 5s ease-in-out infinite;
+    animation: mono-soft-pulse 4s ease-in-out infinite;
   }
 }
