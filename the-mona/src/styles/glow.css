@@ -6,12 +6,12 @@
 @keyframes mono-soft-pulse {
   0%, 100% {
     opacity: 0.2;
-    transform: scale(0.9);
+    transform: scale(1.0);
 
   }
   50% {
     opacity: 0.8;
-    transform: scale(1.1); /* heel lichtjes groter */
+    transform: scale(1.0); /* heel lichtjes groter */
 
   }
 }
@@ -19,14 +19,14 @@
 @layer utilities {
   .gloweffect {
     position: absolute;
-    inset: -0.5rem; /* of -6 voor Tailwind consistentie */
+    inset: -0.5rem; 
     z-index: -1;
     border-radius: inherit;
-   /* background-color: rgba(0, 255, 200, 0.3); */
+
     background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
     filter: blur(50px); 
     opacity: 0.2;
     will-change: transform, opacity;
-    animation: mono-soft-pulse 4s ease-in-out infinite;
+    animation: mono-soft-pulse 5s ease-in-out infinite;
   }
 }
