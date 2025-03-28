@@ -7,22 +7,25 @@
   0%, 100% {
     opacity: 0.2;
     transform: scale(0.9);
+
   }
   50% {
     opacity: 0.8;
-    transform: scale(1.0); /* heel lichtjes groter */
+    transform: scale(1.1); /* heel lichtjes groter */
+
   }
 }
 
 @layer utilities {
   .gloweffect {
     position: absolute;
-    inset: -1.0rem; /* of -6 voor Tailwind consistentie */
+    inset: -0.5rem; /* of -6 voor Tailwind consistentie */
     z-index: -1;
     border-radius: inherit;
-    background-color: rgba(0, 255, 200, 0.3); 
-    filter: blur(20px); 
-    opacity: 0.;
+   /* background-color: rgba(0, 255, 200, 0.3); */
+    background: linear-gradient(-45deg, #23d5ab, #23a6d5, #e73c7e, #ee7752);
+    filter: blur(50px); 
+    opacity: 0.2;
     will-change: transform, opacity;
     animation: mono-soft-pulse 4s ease-in-out infinite;
   }
