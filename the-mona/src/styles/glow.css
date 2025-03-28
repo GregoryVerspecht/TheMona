@@ -23,7 +23,7 @@
     z-index: -1;
     border-radius: inherit;
    /* background-color: rgba(0, 255, 200, 0.3); */
-    background: linear-gradient(-45deg, #23d5ab, #23a6d5, #e73c7e, #ee7752);
+    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
     filter: blur(50px); 
     opacity: 0.2;
     will-change: transform, opacity;
