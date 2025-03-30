@@ -1,0 +1,24 @@
+---
+import { Astronav, MenuItems, MenuIcon, Dropdown, DropdownItems, DropdownSubmenu } from "astro-navbar";
+---
+
+<div>
+  <Astronav>
+    <div class="flex justify-between">
+      <a>Your Logo</a>
+      <MenuIcon class="w-4 h-4 text-gray-800" />
+    </div>
+    <!--
+    // add `hidden` class by default for mobile
+    // `lg:flex` is to make it visible in desktop
+    // You may use custom CSS instead.
+    -->
+    <MenuItems class="hidden lg:flex">
+      <ul>
+        <li>Home</li>
+        <li>Demo</li>
+
+      </ul>
+    </MenuItems>
+  </Astronav>
+</div>
