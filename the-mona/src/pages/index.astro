@@ -1,6 +1,9 @@
 ---
 import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
+import Astronav from '~/components/navbar.astro';
+import { StickyHeader} from "astro-navbar";
+
 
 
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
@@ -8,5 +11,18 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout>
+  <StickyHeader
+    class="sticky top-0 border-b z-20 transition-all"
+    scrollY={50}
+    defaultClass="py-5 border-transparent"
+    activeClass="py-2 bg-white/80 border-gray-200 backdrop-blur-lg"
+  >
+    <Astronav closeOnClick>...
+		
+      <!-- Navigation -->
+    </Astronav>
+  </StickyHeader>
 	<Welcome />
 </Layout>
+
+
