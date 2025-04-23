@@ -1,41 +1,24 @@
 ---
 // src/pages/index.astro
 import Glowcard from '~/components/glowcard.astro';
+import Card from '~/components/card.astro';
 import "../styles/glow.css";
 import background from '../assets/background.svg';
 import { Image } from 'astro:assets';
 import monaLogo from '../assets/the-mona.svg';
+
 ---
 
 <Glowcard>
-  <!-- Logo -->
-  <Image
-    src={monaLogo}
-    alt="The Mona."
-    class="mx-auto mb-6 w-full h-auto animate-fade-in delay-[600ms]"
-  />
+  <Image src={monaLogo} alt="The Mona." class="mx-auto mb-6 w-full h-auto" />
 
-  <!-- Titel -->
-  <h1 class="text-3xl sm:text-3xl md:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight mb-6 animate-fade-in delay-[600ms]">
-    <span class="bg-clip-text text-transparent bg-mona bg-[length:200%_200%] animate-gradient-move">
-      The Mona
-    </span>
+  <h1 class="text-5xl font-extrabold mb-6">
+    <span class="bg-clip-text text-transparent bg-mona bg-[length:200%_200%] animate-gradient-move">The Mona</span>
   </h1>
 
-  <!-- Subtitel -->
-  <h2 class="text-sm sm:text-sm md:text-md lg:text-2xl font-medium md:font-semibold leading-snug tracking-normal mb-6 animate-fade-in delay-[600ms]">
-    <span class="bg-clip-text text-transparent bg-white">
-      One press away from unforgettable fun!
-    </span>
-  </h2>
+  <p class="text-lg font-medium mb-6">One press away from unforgettable fun!</p>
 
-  <!-- CTA -->
-  <div class="flex justify-center gap-4 mt-6 flex-wrap animate-fade-in delay-[800ms]">
-    <a
-      href="/demo"
-      class="flex items-center gap-2 px-4 py-2 rounded-lg text-white shadow-md hover:opacity-90 transition bg-mona-alt bg-[length:200%_200%] animate-gradient-move"
-    >
-      <button>Discover the story!</button>
-    </a>
-  </div>
+  <a href="/demo" class="px-4 py-2 rounded-lg bg-mona-alt text-white hover:opacity-90 transition">
+    Discover the story!
+  </a>
 </Glowcard>
