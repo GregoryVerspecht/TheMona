@@ -1,0 +1,21 @@
+---
+import background from '../assets/background.svg';
+import { Image } from 'astro:assets';
+import monaLogo from '../assets/the-mona.svg';
+import "../styles/glow.css";
+---
+
+  <!-- Glow box met inhoud -->
+  <div class="flex items-center justify-center min-h-screen px-8 ">
+
+    <section class="relative inline-block p-10 rounded-2xl bg-slate-900  text-center text-white w-full max-w-sm sm:max-w-md md:max-w-md ">
+
+      <!-- GLOWS -->
+      <div class="gloweffect">  
+      </div>
+
+            <!-- Dynamische inhoud -->
+    <slot />
+      
+    </section>
+  </div>
