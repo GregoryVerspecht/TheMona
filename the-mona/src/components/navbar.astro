@@ -4,12 +4,12 @@ import { Image } from 'astro:assets';
 import monaLogo from '../assets/the-mona.svg';
 ---
 
-<header class="lg:flex p-5 gap-5">
+<header class="lg:flex p-10 gap-10">
     <Astronav>
       <div class="flex w-full items-center justify-between">
         
         <!-- Linkerkant: logo + tekst -->
-        <a href="#" class="flex items-center space-x-2">
+        <a href="#" class="flex items-center space-x-5">
           <Image
             src={monaLogo}
             alt="The Mona."
@@ -31,7 +31,7 @@ import monaLogo from '../assets/the-mona.svg';
           <MenuItems class="hidden lg:flex ml-4">
             <ul class="flex flex-col lg:flex-row lg:gap-5">
               <li><a href="/">Home</a></li>
-              <li><a href="/demo">Demo</a></li>
+              <li><a href="/demo-page">Demo</a></li>
               <li>
                 <Dropdown class="group">
                   <button class="flex items-center">
