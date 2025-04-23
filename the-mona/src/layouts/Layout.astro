@@ -35,6 +35,10 @@ const { title = "The Mona" } = Astro.props;
 
 			<!-- iOS homescreen -->
 			<link rel="apple-touch-icon" href="/icons/icon-192.png" sizes="192x192" />
+			<!-- iOS Safari specifiek -->
+			<meta name="apple-mobile-web-app-capable" content="yes" />
+			<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+			<meta name="apple-mobile-web-app-title" content="The Mona" />
 
 			<!-- Android en PWA -->
 			<link rel="manifest" href="/manifest.webmanifest" />
