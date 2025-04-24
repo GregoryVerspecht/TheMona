@@ -1,8 +1,14 @@
 ---
-import Welcome from '../components/Welcome.astro';
+
 import Layout from '../layouts/Layout.astro';
 import Astronav from '~/components/navbar.astro';
 import { StickyHeader} from "astro-navbar";
+import Glowcard from '~/components/glowcard.astro';
+import "../styles/glow.css";
+import background from '../assets/background.svg';
+import { Image } from 'astro:assets';
+import monaLogo from '../assets/the-mona.svg';
+import "../styles/glow.css";
 
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
@@ -10,7 +16,21 @@ import { StickyHeader} from "astro-navbar";
 
 <Layout>
 
-<Welcome>
+    <!-- navbar in layout -->
+    <Glowcard>
+        <Image src={monaLogo} alt="The Mona." class="mx-auto mb-6 w-full h-auto" />
+      
+        <h1 class="text-5xl font-extrabold mb-6">
+          <span class="bg-clip-text text-transparent bg-mona bg-[length:200%_200%] animate-gradient-move">The Mona</span>
+        </h1>
+      
+        <p class="text-lg font-medium mb-6">One press away from unforgettable fun!</p>
+      
+        <a href="/demo" class="px-4 py-2 rounded-lg bg-mona-alt text-white hover:opacity-90 transition bg-[length:200%_200%] animate-gradient-move">
+          Discover more!
+        </a>
+        
+    </Glowcard>
 
 </Layout>
 
