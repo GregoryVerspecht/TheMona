@@ -8,6 +8,7 @@ import "../styles/glow.css";
 import background from '../assets/background.svg';
 import { Image } from 'astro:assets';
 import monaLogo from '../assets/the-mona.svg';
+import "../styles/glow.css";
 
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
@@ -25,9 +26,10 @@ import monaLogo from '../assets/the-mona.svg';
       
         <p class="text-lg font-medium mb-6">One press away from unforgettable fun!</p>
       
-        <a href="/demo" class="px-4 py-2 rounded-lg bg-mona-alt text-white hover:opacity-90 transition">
+        <a href="/demo" class="px-4 py-2 rounded-lg bg-mona-alt text-white hover:opacity-90 transition bg-[length:200%_200%] animate-gradient-move">
           Discover more!
         </a>
+        
     </Glowcard>
 
 </Layout>
