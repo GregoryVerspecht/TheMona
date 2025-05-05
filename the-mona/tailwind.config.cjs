@@ -1,3 +1,7 @@
+import defaultTheme from 'tailwindcss/defaultTheme';
+import plugin from 'tailwindcss/plugin';
+import typographyPlugin from '@tailwindcss/typography';
+
 const colors = require('tailwindcss/colors');
 
 module.exports = {
@@ -9,6 +13,19 @@ module.exports = {
       padding: '2rem',
     },
     extend: {
+      colors: {
+        primary: 'var(--aw-color-primary)',
+        secondary: 'var(--aw-color-secondary)',
+        accent: 'var(--aw-color-accent)',
+        default: 'var(--aw-color-text-default)',
+        muted: 'var(--aw-color-text-muted)',
+      },
+      fontFamily: {
+        sans: ['var(--aw-font-sans, ui-sans-serif)', ...defaultTheme.fontFamily.sans],
+        serif: ['var(--aw-font-serif, ui-serif)', ...defaultTheme.fontFamily.serif],
+        heading: ['var(--aw-font-heading, ui-sans-serif)', ...defaultTheme.fontFamily.sans],
+      },
+
       animation: {
         'fade-in': 'fadeIn 0.5s ease-in-out forwards',
         'slide-up': 'slideUp 0.5s ease-in-out',
@@ -17,11 +34,14 @@ module.exports = {
         'gradient-move-slow': 'gradient-move-slow 8s ease infinite',
         'gradient-move-fast': 'gradient-move-fast 4s ease-in-out infinite',
         'glow-shift': 'pulse-glow 6s ease-in-out infinite, color-shift-glow 12s ease-in-out infinite',
-
-        
+        fade: 'fadeInUp 1s both',
 
       },
       keyframes: {
+        fadeInUp: {
+          '0%': { opacity: 0, transform: 'translateY(2rem)' },
+          '100%': { opacity: 1, transform: 'translateY(0)' },
+        },
         fadeIn: {
           '0%': { opacity: '0' },
           '100%': { opacity: '1' },
@@ -82,7 +102,10 @@ module.exports = {
     },
   },
   plugins: [
-    require('@tailwindcss/typography'),
-    require('@tailwindcss/forms')({ strategy: 'class' }),
+    typographyPlugin,
+    plugin(({ addVariant }) => {
+      addVariant('intersect', '&:not([no-intersect])');
+    }),
   ],
+  darkMode: 'class',
 };
