@@ -1,5 +1,7 @@
 ---
 import "../styles/tailwind.css";
+import Header from '~/components/widgets/Header.astro';
+import { headerData, footerData } from '~/navigation';
 import monaLogo from '../assets/the-mona.svg';
 import Astronav from '~/components/navbar.astro';
 //import Header from "@/components/Header.astro";
@@ -49,10 +51,9 @@ const { title = "The Mona" } = Astro.props;
 	</head>
 	<body class="bg-gray-900 text-white">
 
-			<Astronav closeOnClick>...
-				
-			  <!-- Navigation -->
-			</Astronav>
+		<slot name="header">
+			<Header {...headerData} isSticky   />
+		  </slot>
 		
 
 		<main id="main-content" class="relative grid items-center justify-center">
@@ -61,11 +62,11 @@ const { title = "The Mona" } = Astro.props;
 		  
 	<script type="module">
 			function updateMainHeight() {
-			  const navbar = document.getElementById("navbar");
+			  const header = document.getElementById("header");
 			  const main = document.getElementById("fullscreen");
 		  
-			  if (navbar && main) {
-				const navHeight = navbar.offsetHeight;
+			  if (header && main) {
+				const navHeight = header.offsetHeight;
 				main.style.minHeight = `calc(100vh - ${navHeight}px)`;
 				
 			  }
@@ -73,6 +74,7 @@ const { title = "The Mona" } = Astro.props;
 		  
 			window.addEventListener("load", updateMainHeight);
 			window.addEventListener("resize", updateMainHeight);
+			
 			
 		  </script>
 				

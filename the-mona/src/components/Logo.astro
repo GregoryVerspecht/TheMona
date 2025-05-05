@@ -1,0 +1,20 @@
+---
+import monaLogo from '../assets/the-mona.svg';
+import { Image } from 'astro:assets';
+---
+
+<span
+  class="flex items-center ml-2 rtl:ml-0 rtl:mr-2 text-2xl md:text-xl font-bold whitespace-nowrap"
+>
+  <Image
+    src={monaLogo}
+    alt="The Mona."
+    width={40}
+    height={40}
+    class="mb-1 mr-2"
+  />
+  <span class="bg-clip-text text-transparent bg-mona bg-[length:200%_200%] animate-gradient-move">
+    The Mona
+  </span>
+</span>
+
