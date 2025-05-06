@@ -15,8 +15,6 @@ import astrowind from './vendor/integration';
 
 import { readingTimeRemarkPlugin, responsiveTablesRehypePlugin, lazyImagesRehypePlugin } from './src/utils/frontmatter';
 
-import solid from '@astrojs/solid-js';
-
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const hasExternalScripts = false;
@@ -30,7 +28,6 @@ export default defineConfig({
     tailwind({
       applyBaseStyles: false,
     }),
-    solid(),
     sitemap(),
     mdx(),
     icon({
@@ -90,6 +87,4 @@ export default defineConfig({
       },
     },
   },
-  
 });
-

@@ -1,5 +1,5 @@
 {
-  "extends": "astro/tsconfigs/strict",
+  "extends": "astro/tsconfigs/base",
   "compilerOptions": {
     "strictNullChecks": true,
     "allowJs": true,
@@ -9,14 +9,13 @@
         "the-mona/src/*"
       ]
     },
-    "jsx": "react-jsx",
-    "jsxImportSource": "react"
+
   },
   "include": [
     ".astro/types.d.ts",
     "**/*"
   ],
   "exclude": [
-    "dist"
+    "dist/"
   ]
 }
