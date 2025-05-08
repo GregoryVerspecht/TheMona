@@ -1,8 +1,7 @@
 import defaultTheme from 'tailwindcss/defaultTheme';
 import plugin from 'tailwindcss/plugin';
 import typographyPlugin from '@tailwindcss/typography';
-
-const colors = require('tailwindcss/colors');
+import colors from 'tailwindcss/colors';
 
 module.exports = {
   darkMode: 'class',
