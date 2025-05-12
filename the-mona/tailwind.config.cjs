@@ -76,13 +76,7 @@ module.exports = {
 
 
       },
-      colors: {
-        primary: '#FF6F61',
-        secondary: '#6B5B95',
-        darkbg: '#1A1A1A',
-        lightbg: '#F4F4F4',
-        slate: colors.slate, 
-      },
+
       boxShadow: {
         'xl-dark': '0 20px 25px -5px rgba(255, 255, 255, 0.1), 0 8px 10px -6px rgba(255, 255, 255, 0.1)',
       },
@@ -106,5 +100,4 @@ module.exports = {
       addVariant('intersect', '&:not([no-intersect])');
     }),
   ],
-  darkMode: 'class',
 };
