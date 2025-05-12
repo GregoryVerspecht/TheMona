@@ -3,36 +3,24 @@ import { getPermalink, getBlogPermalink, getAsset } from './utils/permalinks';
 export const headerData = {
   links: [
    
+        {
+          text: 'Features',
+          href: '#',
+        },
+                {
+          text: 'Story',
+          href: '#',
+        },
     {
-      text: 'Pages',
+      text: 'Game',
       links: [
         {
-          text: 'Features (Anchor Link)',
-          href: getPermalink('/#features'),
+          text: 'Overview',
+          href: getPermalink('/#eatures'),
         },
         {
-          text: 'Services',
+          text: 'Gamemodes',
           href: getPermalink('/services'),
-        },
-        {
-          text: 'Pricing',
-          href: getPermalink('/pricing'),
-        },
-        {
-          text: 'About us',
-          href: getPermalink('/about'),
-        },
-        {
-          text: 'Contact',
-          href: getPermalink('/contact'),
-        },
-        {
-          text: 'Terms',
-          href: getPermalink('/terms'),
-        },
-        {
-          text: 'Privacy policy',
-          href: getPermalink('/privacy'),
         },
       ],
     },
