@@ -1,0 +1,104 @@
+---
+//import "../styles/tailwind.css";
+import '~/assets/styles/tailwind.css';
+import Header from '~/components/widgets/Header.astro';
+import { headerData, footerData } from '~/navigation';
+import monaLogo from '../assets/the-mona.svg';
+import Astronav from '~/components/navbar.astro';
+//import Header from "@/components/Header.astro";
+//import Footer from "@/components/Footer.astro";
+
+
+import type { MetaData } from '~/types';
+
+export interface Props {
+  metadata?: MetaData;
+}
+
+const { metadata } = Astro.props;
+
+---
+
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		
+		<meta name="generator" content={Astro.generator} />
+		<meta name="theme-color" content="#111827">
+		<title>{metadata?.title}</title>
+		    <!-- Meta Tags SEO -->
+			<meta
+			name="description"
+			content="The mona - One press away from unforgettable fun!"
+		  />
+		  <meta name="robots" content="index, follow" />
+		  <meta
+			name="keywords"
+			content="The Mona, Mona, drinking game,"
+		  />
+
+			<!-- Tabblad -->
+			<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+			<!-- iOS homescreen -->
+			<link rel="apple-touch-icon" href="/icons/icon-192.png" sizes="192x192" />
+			<!-- iOS Safari specifiek -->
+			<meta name="apple-mobile-web-app-capable" content="yes" />
+			<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+			<meta name="apple-mobile-web-app-title" content="The Mona" />
+
+			<!-- Android en PWA -->
+			<meta name="mobile-web-app-capable" content="yes" />
+			<link rel="manifest" href="/manifest.webmanifest" />
+			<meta name="theme-color" content="#111827" />
+
+
+	</head>
+	<body class="bg-gray-900 text-white">
+
+		<slot name="header">
+			<Header {...headerData} isSticky showToggleTheme/>
+		  </slot>
+		
+
+		<main id="main-content" class="relative grid items-center justify-center">
+			<slot />
+		</main>
+		  
+	<script type="module">
+			function updateMainHeight() {
+			  const header = document.getElementById("header");
+			  const main = document.getElementById("fullscreen");
+		  
+			  if (header && main) {
+				const navHeight = header.offsetHeight;
+				main.style.minHeight = `calc(100vh - ${navHeight}px)`;
+				
+			  }
+			}
+		  
+			window.addEventListener("load", updateMainHeight);
+			window.addEventListener("resize", updateMainHeight);
+			
+			
+		  </script>
+				
+	</body>
+	
+</html>
+
+<style>
+	html,
+	body {
+		margin: 0;
+		width: 100%;
+		height: 100%;
+		overflow: auto;
+		
+	}
+
+</style>

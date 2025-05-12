@@ -1,93 +1,44 @@
 ---
-import "../styles/tailwind.css";
-import monaLogo from '../assets/the-mona.svg';
-import Astronav from '~/components/navbar.astro';
-//import Header from "@/components/Header.astro";
-//import Footer from "@/components/Footer.astro";
+import '~/assets/styles/tailwind.css';
 
-const { title = "The Mona" } = Astro.props;
+import { I18N } from 'astrowind:config';
+
+import CommonMeta from '~/components/common/CommonMeta.astro';
+import Favicons from '~/components/Favicons.astro';
+import CustomStyles from '~/components/CustomStyles.astro';
+import ApplyColorMode from '~/components/common/ApplyColorMode.astro';
+import Metadata from '~/components/common/Metadata.astro';
+import BasicScripts from '~/components/common/BasicScripts.astro';
+
+// Comment the line below to disable View Transitions
+import { ClientRouter } from 'astro:transitions';
+
+import type { MetaData as MetaDataType } from '~/types';
+
+export interface Props {
+  metadata?: MetaDataType;
+}
+
+const { metadata = {} } = Astro.props;
+const { language, textDirection } = I18N;
 ---
 
-
 <!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		
-		<meta name="generator" content={Astro.generator} />
-		<meta name="theme-color" content="#111827">
-		<title>{title}</title>
-		    <!-- Meta Tags SEO -->
-			<meta
-			name="description"
-			content="The mona - One press away from unforgettable fun!"
-		  />
-		  <meta name="robots" content="index, follow" />
-		  <meta
-			name="keywords"
-			content="The Mona, Mona, drinking game,"
-		  />
+<html lang={language} dir={textDirection} class="2xl:text-[20px]">
+  <head>
+    <CommonMeta />
+    <Favicons />
+    <CustomStyles />
+    <ApplyColorMode />
+    <Metadata {...metadata} />
 
-			<!-- Tabblad -->
-			<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <!-- Comment the line below to disable View Transitions -->
+    <ClientRouter fallback="swap" />
+  </head>
 
-			<!-- iOS homescreen -->
-			<link rel="apple-touch-icon" href="/icons/icon-192.png" sizes="192x192" />
-			<!-- iOS Safari specifiek -->
-			<meta name="apple-mobile-web-app-capable" content="yes" />
-			<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-			<meta name="apple-mobile-web-app-title" content="The Mona" />
+  <body class="antialiased text-default bg-page tracking-tight">
+    <slot />
 
-			<!-- Android en PWA -->
-			<meta name="mobile-web-app-capable" content="yes" />
-			<link rel="manifest" href="/manifest.webmanifest" />
-			<meta name="theme-color" content="#111827" />
-
-
-	</head>
-	<body class="bg-gray-900 text-white">
-
-			<Astronav closeOnClick>...
-				
-			  <!-- Navigation -->
-			</Astronav>
-		
-
-		<main id="main-content" class="relative grid items-center justify-center">
-			<slot />
-		</main>
-		  
-	<script type="module">
-			function updateMainHeight() {
-			  const navbar = document.getElementById("navbar");
-			  const main = document.getElementById("fullscreen");
-		  
-			  if (navbar && main) {
-				const navHeight = navbar.offsetHeight;
-				main.style.minHeight = `calc(100vh - ${navHeight}px)`;
-				
-			  }
-			}
-		  
-			window.addEventListener("load", updateMainHeight);
-			window.addEventListener("resize", updateMainHeight);
-			
-		  </script>
-				
-	</body>
-	
+    <BasicScripts />
+  </body>
 </html>
-
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-		overflow: auto;
-		
-	}
-
-</style>
