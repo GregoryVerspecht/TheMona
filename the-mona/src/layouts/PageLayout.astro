@@ -19,7 +19,7 @@ const { metadata } = Astro.props;
   <slot name="header">
     <Header {...headerData}/>
   </slot>
-  <main>
+  <main id="main-content" class="relative grid items-center justify-center">
     <slot />
   </main>
 

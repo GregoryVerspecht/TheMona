@@ -138,6 +138,21 @@ import { UI } from 'astrowind:config';
         ticking = true;
       }
     });
+
+    // Center main
+      function updateMainHeight() {
+        const header = document.getElementById("header");
+        const main = document.getElementById("fullscreen");
+
+        if (header && main) {
+          const navHeight = header.offsetHeight;
+          main.style.minHeight = `calc(100vh - ${navHeight}px)`;
+        }
+      }
+
+      updateMainHeight();
+      window.addEventListener("resize", updateMainHeight);
+
   };
   const onPageShow = function () {
     document.documentElement.classList.add('motion-safe:scroll-smooth');
