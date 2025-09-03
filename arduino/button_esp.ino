@@ -10,36 +10,13 @@
 // ========= Auto-ID generatie =========
 // Kies één van deze methodes:
 
-// METHODE 1: Gebruik laatste 2 bytes van MAC adres (meest gebruikelijk)
+// Gebruik laatste 2 bytes van MAC adres
 String getESPId() {
   uint8_t mac[6];
   WiFi.macAddress(mac);
   // Laatste 2 bytes van MAC → hex string
   return String(mac[4], HEX) + String(mac[5], HEX);
 }
-
-// METHODE 2: Gebruik Chip ID (uniek per ESP8266)
-/*
-String getESPId() {
-  return String(ESP.getChipId());
-}
-*/
-
-// METHODE 3: Gebruik Flash Chip ID
-/*
-String getESPId() {
-  return String(ESP.getFlashChipId());
-}
-*/
-
-// METHODE 4: Korte versie van MAC (alleen laatste byte)
-/*
-String getESPId() {
-  uint8_t mac[6];
-  WiFi.macAddress(mac);
-  return String(mac[5]);
-}
-*/
 
 // Globale variabelen
 String ESP_ID;        // Wordt runtime bepaald
