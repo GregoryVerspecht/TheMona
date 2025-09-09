@@ -21,6 +21,8 @@ String getESPId() {
 // Globale variabelen
 String ESP_ID;        // Wordt runtime bepaald
 int ESP_NUMBER;       // Voor backwards compatibility
+// ========= Time / Uptime =========
+unsigned long bootTime = 0;  // wordt in setup() gezet
 
 // ========= Wi-Fi =========
 const char* ssid     = "The-Mona";
@@ -32,10 +34,12 @@ WiFiClient espClient;
 PubSubClient client(espClient);
 
 // Topics
-const char* TOPIC_CMD          = "neopixel/set";
-const char* TOPIC_REQ_STATUS   = "esp/request_status";
-const char* TOPIC_BTN_STATUS   = "esp/status";
-const char* TOPIC_LED_STATUS   = "neopixel/status";
+const char* TOPIC_CMD           = "neopixel/set";
+const char* TOPIC_REQ_STATUS    = "esp/request_status";
+const char* TOPIC_BTN_STATUS    = "esp/status";
+const char* TOPIC_LED_STATUS    = "neopixel/status";
+const char* TOPIC_DISCOVERY     = "esp/discovery";
+const char* TOPIC_HEARTBEAT     = "esp/heartbeat";
 
 // ========= NeoPixel =========
 #define PIN D4
