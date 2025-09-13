@@ -1,0 +1,6 @@
+body { font-family: system-ui, sans-serif; margin: 1.5rem; }
+header { margin-bottom: 1rem; }
+nav a { margin-right: .75rem; }
+table { border-collapse: collapse; }
+td, th { border: 1px solid #ddd; padding: .4rem .6rem; }
+button { padding: .4rem .8rem; }

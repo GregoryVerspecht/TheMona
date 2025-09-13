@@ -6,6 +6,22 @@
       "name": "Development server",
       "request": "launch",
       "type": "node-terminal"
+    },
+    {
+    "name": "The Mona: Run",
+    "type": "debugpy",
+    "request": "launch",
+    "module": "apps.main",
+    "cwd": "${workspaceFolder}\\the-mona-app",   // <— belangrijk!
+    "justMyCode": true,
+    "env": {
+      "ENV": "dev",
+      "LOG_LEVEL": "DEBUG",
+      "MQTT_HOST": "localhost",
+      "MQTT_PORT": "1883",
+      "WEB_PORT": "8080"
     }
+}
+
   ]
 }

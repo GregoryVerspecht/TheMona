@@ -1,1 +1,1 @@
-# makes this a package
+from .loader import settings  # re-export

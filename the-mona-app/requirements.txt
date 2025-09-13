@@ -1,5 +1,11 @@
 fastapi
 uvicorn[standard]
-pydantic
-pyyaml
+jinja2
 paho-mqtt
+pydantic>=2
+pydantic-settings
+python-dotenv
+pyyaml
+websockets
+pygame
+python-json-logger

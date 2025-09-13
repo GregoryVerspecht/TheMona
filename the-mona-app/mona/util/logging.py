@@ -1,6 +1,11 @@
 import logging
+import sys
+from pythonjsonlogger import jsonlogger
 
 def setup_logging(level: str = "INFO"):
-    logging.basicConfig(level=getattr(logging, level.upper(), logging.INFO),
-                        format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
-    return logging.getLogger("mona")
+    logger = logging.getLogger()
+    logger.setLevel(level.upper())
+    handler = logging.StreamHandler(sys.stdout)
+    formatter = jsonlogger.JsonFormatter("%(asctime)s %(levelname)s %(name)s %(message)s")
+    handler.setFormatter(formatter)
+    logger.handlers = [handler]

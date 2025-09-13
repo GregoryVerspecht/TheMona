@@ -1,5 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
 <h2>Home</h2>
-<p>Welkom bij The Mona.</p>
+<p>Status: {{ status.state }} | Mode: {{ status.mode or "-" }}</p>
+<form method="post" action="/api/game/start" onsubmit="return postJson(this, {mode: 'ReactionRace'});">
+  <button>Start ReactionRace</button>
+</form>
+<form method="post" action="/api/game/stop" onsubmit="return postJson(this, {});">
+  <button>Stop</button>
+</form>
 {% endblock %}

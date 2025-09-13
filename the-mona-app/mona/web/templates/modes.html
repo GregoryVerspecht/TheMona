@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Modes</h2>
+<p>Huidige status: {{ status.state }} ({{ status.mode or "-" }})</p>
+<ul>
+  {% for m in modes %}
+    <li>
+      <form method="post" action="/api/game/start" onsubmit="return postJson(this, {mode: '{{ m }}'})">
+        <button>Start {{ m }}</button>
+      </form>
+    </li>
+  {% endfor %}
+</ul>
+{% endblock %}
