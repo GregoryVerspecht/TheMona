@@ -23,6 +23,7 @@ async def main():
     await engine.start()
 
     app = create_app(settings, engine, mqtt, audio)
+   
     await audio.set_volume(5)
     await audio.play_sfx("sea_shanty_2",)  # startup sound
     server = uvicorn.Server(
