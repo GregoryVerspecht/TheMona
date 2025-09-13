@@ -1,4 +1,6 @@
+# apps/main.py
 import asyncio
+import os
 import signal
 import uvicorn
 
@@ -27,21 +29,44 @@ async def main():
 
     stop_event = asyncio.Event()
 
-    def _stop():
-        stop_event.set()
-
-    loop = asyncio.get_event_loop()
-    for sig in (signal.SIGINT, signal.SIGTERM):
-        loop.add_signal_handler(sig, _stop)
+    # Cross-platform shutdown:
+    if os.name != "nt":
+        # Unix: netjes via add_signal_handler
+        loop = asyncio.get_running_loop()
+        for sig in (signal.SIGINT, signal.SIGTERM):
+            loop.add_signal_handler(sig, stop_event.set)
+    else:
+        # Windows: fallback via standaard signal.signal + thread-safe set
+        def _win_stop(*_args):
+            # mag vanuit signal handler: zet event thread-safe
+            try:
+                loop = asyncio.get_running_loop()
+                loop.call_soon_threadsafe(stop_event.set)
+            except RuntimeError:
+                stop_event.set()
+        signal.signal(signal.SIGINT, _win_stop)
+        # SIGBREAK bestaat niet altijd, dus conditioneel
+        if hasattr(signal, "SIGBREAK"):
+            signal.signal(signal.SIGBREAK, _win_stop)
 
     web_task = asyncio.create_task(server.serve())
-    await stop_event.wait()
 
-    await engine.stop()
-    await mqtt.stop()
-    await audio.stop()
-    web_task.cancel()
+    try:
+        await stop_event.wait()  # wacht op Ctrl+C / stop
+    except KeyboardInterrupt:
+        pass
+    finally:
+        # graceful shutdown
+        await engine.stop()
+        await mqtt.stop()
+        await audio.stop()
+        # uvicorn stoppen
+        if not web_task.done():
+            web_task.cancel()
+            with contextlib.suppress(asyncio.CancelledError):
+                await web_task
 
 
 if __name__ == "__main__":
+    import contextlib
     asyncio.run(main())
