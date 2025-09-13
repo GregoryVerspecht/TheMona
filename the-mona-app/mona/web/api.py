@@ -5,6 +5,13 @@ from fastapi.templating import Jinja2Templates
 
 from mona.mqtt.models import CmdRgb, CmdFlash
 
+from pydantic import BaseModel, Field
+import os  # voor _key helper
+
+def _key(name: str) -> str:
+    base, _ = os.path.splitext(name)
+    return base.strip().lower()
+
 def create_app(cfg, engine, mqtt, audio) -> FastAPI:
     app = FastAPI(title="The Mona")
 
@@ -76,5 +83,48 @@ def create_app(cfg, engine, mqtt, audio) -> FastAPI:
     async def api_audio_play(body: dict):
         await audio.play_sfx(body.get("name", "success"))
         return {"ok": True}
+    
+        # ---------- Audio API: extra ----------
+    class SfxPlayIn(BaseModel):
+        name: str = Field(..., example="success")
+
+    class SfxStopIn(BaseModel):
+        name: str | None = Field(None, description="laat leeg om alles te stoppen")
+        fade_ms: int = Field(200, ge=0, le=10000)
+
+    class VolumeIn(BaseModel):
+        volume: int = Field(..., ge=0, le=100, example=75)
+
+    @app.get("/api/audio/list")
+    async def api_audio_list():
+        return {"sounds": await audio.list_sounds()}
+
+    @app.get("/api/audio/status")
+    async def api_audio_status():
+        return await audio.status()
+
+    @app.get("/api/audio/volume")
+    async def api_audio_volume_get():
+        return {"volume": await audio.get_volume()}
+
+    @app.post("/api/audio/volume")
+    async def api_audio_volume_set(body: VolumeIn):
+        await audio.set_volume(body.volume)
+        return {"ok": True, "volume": body.volume}
+
+    @app.post("/api/audio/sfx/play")
+    async def api_audio_sfx_play(body: SfxPlayIn):
+        await audio.play_sfx(_key(body.name))
+        return {"ok": True, "played": _key(body.name)}
+
+    @app.post("/api/audio/sfx/stop")
+    async def api_audio_sfx_stop(body: SfxStopIn):
+        await audio.stop_sfx(_key(body.name) if body.name else None, fade_ms=body.fade_ms)
+        return {
+            "ok": True,
+            "stopped": "all" if body.name is None else _key(body.name),
+            "fade_ms": body.fade_ms
+        }
+
 
     return app
