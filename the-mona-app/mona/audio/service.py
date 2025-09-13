@@ -14,16 +14,30 @@ class AudioService:
         try:
             pygame.mixer.init()
             self._ready = True
-            # preload basic sounds if present
             self._sounds = {}
+
             base = os.path.join(os.path.dirname(__file__), "sfx")
-            for name in ("success", "fail"):
-                path = os.path.join(base, f"{name}.wav")
-                if os.path.exists(path):
-                    self._sounds[name] = pygame.mixer.Sound(path)
+            os.makedirs(base, exist_ok=True)
+
+            for fn in os.listdir(base):
+                if not fn.lower().endswith((".wav", ".ogg", ".mp3")):
+                    continue
+                path = os.path.join(base, fn)
+                if not os.path.isfile(path):
+                    continue
+
+                # sleutel = bestandsnaam zonder extensie, lowercase
+                key = os.path.splitext(fn)[0].lower()
+
+                try:
+                    self._sounds[key] = pygame.mixer.Sound(path)
+                except Exception as e:
+                    log.warning(f"Kon sound {fn} niet laden: {e}")
+
             log.info({"msg": "audio ready", "sounds": list(self._sounds)})
         except Exception:
             log.exception("audio init failed")
+
 
     async def stop(self):
         try:
