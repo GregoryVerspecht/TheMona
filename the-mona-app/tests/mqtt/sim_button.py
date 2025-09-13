@@ -5,7 +5,8 @@ import paho.mqtt.client as mqtt
 parser = argparse.ArgumentParser()
 parser.add_argument("--host", default="localhost")
 parser.add_argument("--port", type=int, default=1883)
-parser.add_argument("--id", default="btn1")
+parser.add_argument("--id", default="btn100")
+
 args = parser.parse_args()
 
 cid = f"sim-{args.id}"
@@ -22,7 +23,7 @@ pub(f"{prefix}/buttons/{args.id}/status", {
 }, retain=True)
 
 # heartbeat + press loop
-for i in range(5):
+for i in range(50):
     ts = int(time.time())
     pub(f"{prefix}/buttons/{args.id}/heartbeat", {"ts": ts}, retain=False, qos=0)
     time.sleep(1)
