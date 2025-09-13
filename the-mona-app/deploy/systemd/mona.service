@@ -1,0 +1,12 @@
+[Unit]
+Description=The Mona
+After=network.target
+
+[Service]
+WorkingDirectory=%h/the-mona
+ExecStart=/usr/bin/python3 apps/main.py
+Restart=on-failure
+User=%i
+
+[Install]
+WantedBy=multi-user.target

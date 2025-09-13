@@ -1,7 +1,7 @@
 # init-tree.ps1
 # Maak projectstructuur voor "the-mona"
 
-$root = "the-mona"
+$root = "the-mona-app"
 
 $dirs = @(
   "apps",
