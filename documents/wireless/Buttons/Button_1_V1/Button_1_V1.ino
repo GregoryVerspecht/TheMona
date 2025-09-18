@@ -3,241 +3,234 @@
 #include <Adafruit_NeoPixel.h>
 #include <ArduinoJson.h>
 
-// **Uniek nummer per ESP**
-#define ESP_NUMBER 1  // Verander per ESP
+// ====== CONFIG ======
+const char* WIFI_SSID = "The-Mona";
+const char* WIFI_PASS = "mona1234";
+const char* MQTT_HOST = "192.168.69.69";
+const uint16_t MQTT_PORT = 1883;
 
-// **Wi-Fi instellingen**
-const char* ssid = "The-Mona";
-const char* password = "mona1234";
-
-// **MQTT Broker instellingen**
-const char* mqtt_server = "192.168.69.69";
-
-#define MQTT_MAX_PACKET_SIZE 256
-WiFiClient espClient;
-PubSubClient client(espClient);
-
-// **Neopixel Instellingen**
 #define PIN D4
 #define NUMPIXELS 7
+#define BUTTON D1                // knop naar GND, intern pull-up
+#define HEARTBEAT_MS 15000
+#define DEBOUNCE_MS 80
+
+// ====== GLOBALS ======
+WiFiClient espClient;
+PubSubClient mqtt(espClient);
 Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 
-// **Drukknop (NO Contact)**
-#define BUTTON D1  // Knop tussen D1 en GND
-bool buttonState = false;
-int brightness = 255;  // Standaard helderheid (0-255)
-int batteryLevel = 100; // Voor toekomstige batterijstatus
+char deviceId[16];               // bijv "btn1" of chipid
+char tp_status[64];
+char tp_hb[64];
+char tp_events[64];
+char tp_cmd_rgb[64];
+char tp_cmd_flash[64];
+char tp_cmd_rgb_all[64];
 
-// **Wi-Fi setup**
-void setup_wifi() {
-  delay(10);
-  Serial.begin(115200);
-  Serial.println("\n📡 Verbinden met WiFi...");
-  WiFi.begin(ssid, password);
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
-  }
-  Serial.println("\n✅ WiFi Verbonden!");
+unsigned long lastHeartbeat = 0;
+unsigned long lastButtonChange = 0;
+bool lastButtonState = HIGH;     // pull-up: HIGH = niet ingedrukt
+int brightness = 255;
+
+// ====== HELPERS ======
+String colorToHex(uint8_t r, uint8_t g, uint8_t b) {
+  char buf[8];
+  snprintf(buf, sizeof(buf), "#%02X%02X%02X", r, g, b);
+  return String(buf);
 }
 
-// **MQTT Callback: ontvangt LED-updates en statusverzoeken**
-void callback(char* topic, byte* payload, unsigned int length) {
-  Serial.print("📩 MQTT bericht ontvangen op topic: ");
-  Serial.println(topic);
+void neopixelSetAll(uint8_t r, uint8_t g, uint8_t b, int bright=-1) {
+  if (bright >= 0) { brightness = constrain(bright, 0, 255); pixels.setBrightness(brightness); }
+  for (int i=0;i<NUMPIXELS;i++) pixels.setPixelColor(i, pixels.Color(r,g,b));
+  pixels.show();
+}
 
-  char message[length + 1];
-  strncpy(message, (char*)payload, length);
-  message[length] = '\0';
+void neopixelClear() {
+  pixels.clear(); pixels.show();
+}
 
-  Serial.println("📜 Bericht: ");
-  Serial.println(message);
+// ====== MQTT PUBLISHES ======
+void pub_json(const char* topic, const JsonDocument& doc, bool retain=false, int qos=1) {
+  char buf[256];
+  size_t n = serializeJson(doc, buf, sizeof(buf));
+  mqtt.publish(topic, buf, retain);
+}
 
-  // **JSON-parsing**
+void publish_status(bool online) {
   StaticJsonDocument<256> doc;
-  DeserializationError error = deserializeJson(doc, message);
-  if (error) {
-    Serial.println("❌ JSON parsing mislukt!");
-    return;
-  }
-
-  // **Controleer of het bericht voor deze ESP is**
-  if (doc.containsKey("id") && doc["id"] != ESP_NUMBER) {
-    Serial.println("⏩ Bericht is niet voor deze ESP!");
-    return;
-  }
-
-  // **Controleer of het een statusverzoek is**
-  if (String(topic) == "esp/request_status") {
-    sendStatusUpdate();
-    return;
-  }
-
-  // **Controleer of alle LEDs moeten veranderen**
-  if (doc.containsKey("led")) {
-    const char* ledCommand = doc["led"];
-
-    if (strcmp(ledCommand, "ON") == 0) {
-      int r = doc["r"];
-      int g = doc["g"];
-      int b = doc["b"];
-      if (doc.containsKey("brightness")) {
-        brightness = doc["brightness"];
-        pixels.setBrightness(brightness);
-      }
-      pixels.fill(pixels.Color(r, g, b));
-      pixels.show();
-      Serial.println("🔆 Alle LEDs AAN gezet!");
-      sendLedStatus("ON");
-      return;
-    }
-
-    if (strcmp(ledCommand, "OFF") == 0) {
-      pixels.clear();
-      pixels.show();
-      Serial.println("💡 Alle LEDs UIT gezet!");
-      sendLedStatus("OFF");
-      return;
-    }
-  }
-
-  // **Lees LED-instellingen**
-  int led = doc["led"];
-  int r = doc["r"];
-  int g = doc["g"];
-  int b = doc["b"];
-  if (doc.containsKey("brightness")) {
-    brightness = doc["brightness"];
-    pixels.setBrightness(brightness);
-  }
-
-  // **Pas een specifieke LED aan**
-  if (led >= 0 && led < NUMPIXELS) {
-    pixels.setPixelColor(led, pixels.Color(r, g, b));
-    pixels.show();
-    Serial.printf("🔹 LED %d aangepast!\n", led);
-  }
-
-  // **Bevestiging terugsturen**
-  sendLedStatus("UPDATE");
+  doc["online"] = online;
+  doc["fw"] = "1.0.0";
+  JsonArray caps = doc.createNestedArray("capabilities");
+  caps.add("rgb");
+  caps.add("press");
+  doc["mac"] = WiFi.macAddress();
+  pub_json(tp_status, doc, /*retain=*/true);
 }
 
-// **Herstel MQTT verbinding indien verbroken**
-void reconnect() {
-  while (!client.connected()) {
-    Serial.print("🔌 Verbinden met MQTT...");
-    if (client.connect(String(ESP_NUMBER).c_str())) {  
-      Serial.println("✅ Verbonden met MQTT!");
-      client.subscribe("neopixel/set");  
-      client.subscribe("esp/request_status");  // ✅ Luistert naar statusverzoeken
-      sendConnectedMessage();
+void publish_heartbeat() {
+  StaticJsonDocument<64> doc;
+  doc["ts"] = (long) (millis()/1000);
+  pub_json(tp_hb, doc, false, 0);
+}
+
+void publish_press_event() {
+  StaticJsonDocument<128> doc;
+  doc["type"] = "press";
+  doc["ts"] = (long) (millis()/1000);
+  pub_json(tp_events, doc, false, 1);
+}
+
+// ====== MQTT CALLBACK ======
+void handle_cmd_rgb(const JsonDocument& doc) {
+  const char* hex = doc["color"] | "#FFFFFF";
+  String s(hex);
+  // parse #RRGGBB
+  uint8_t r=255,g=255,b=255;
+  if (s.length()==7 && s[0]=='#') {
+    r = strtoul(s.substring(1,3).c_str(), NULL, 16);
+    g = strtoul(s.substring(3,5).c_str(), NULL, 16);
+    b = strtoul(s.substring(5,7).c_str(), NULL, 16);
+  }
+  const char* mode = doc["mode"] | "solid";
+  int duration = doc["duration_ms"] | 500;
+
+  if (strcmp(mode,"solid")==0) {
+    neopixelSetAll(r,g,b);
+    if (duration>0) { delay(duration); neopixelClear(); }
+  } else if (strcmp(mode,"pulse")==0) {
+    // eenvoudige pulse: aan/uit 2x
+    for (int i=0;i<2;i++){ neopixelSetAll(r,g,b); delay(duration/2); neopixelClear(); delay(duration/2); }
+  } else {
+    neopixelSetAll(r,g,b);
+  }
+}
+
+void handle_cmd_flash(const JsonDocument& doc) {
+  const char* hex = doc["color"] | "#FF0000";
+  String s(hex);
+  uint8_t r=255,g=0,b=0;
+  if (s.length()==7 && s[0]=='#') {
+    r = strtoul(s.substring(1,3).c_str(), NULL, 16);
+    g = strtoul(s.substring(3,5).c_str(), NULL, 16);
+    b = strtoul(s.substring(5,7).c_str(), NULL, 16);
+  }
+  int times = doc["times"] | 3;
+  int period = doc["period_ms"] | 200;
+
+  for (int i=0;i<times;i++){
+    neopixelSetAll(r,g,b);
+    delay(period/2);
+    neopixelClear();
+    delay(period/2);
+  }
+}
+
+void mqtt_callback(char* topic, byte* payload, unsigned int len) {
+  // broadcast all?
+  bool isAll = (strcmp(topic, tp_cmd_rgb_all) == 0);
+
+  // parse json
+  StaticJsonDocument<256> doc;
+  DeserializationError err = deserializeJson(doc, payload, len);
+  if (err) { Serial.println(F("JSON parse error")); return; }
+
+  // process
+  if (strcmp(topic, tp_cmd_rgb) == 0 || isAll) {
+    handle_cmd_rgb(doc);
+  } else if (strcmp(topic, tp_cmd_flash) == 0) {
+    handle_cmd_flash(doc);
+  }
+}
+
+// ====== WIFI/MQTT CONNECT ======
+void wifi_connect() {
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(WIFI_SSID, WIFI_PASS);
+  Serial.print(F("WiFi verbinden"));
+  while (WiFi.status() != WL_CONNECTED) { delay(300); Serial.print("."); }
+  Serial.print(F("\nWiFi OK, IP=")); Serial.println(WiFi.localIP());
+}
+
+void mqtt_connect() {
+  // LWT: markeer offline op status retained
+  StaticJsonDocument<64> lwt;
+  lwt["online"] = false;
+  char willPayload[64];
+  serializeJson(lwt, willPayload, sizeof(willPayload));
+
+  mqtt.setServer(MQTT_HOST, MQTT_PORT);
+  mqtt.setCallback(mqtt_callback);
+  while (!mqtt.connected()) {
+    Serial.print(F("MQTT verbinden... "));
+    // client id uniek maken
+    char cid[24]; snprintf(cid, sizeof(cid), "btn-%s", deviceId);
+    if (mqtt.connect(cid, nullptr, nullptr, tp_status, /*qos*/1, /*retain*/true, willPayload)) {
+      Serial.println(F("OK"));
+      mqtt.subscribe(tp_cmd_rgb, 1);
+      mqtt.subscribe(tp_cmd_flash, 1);
+      mqtt.subscribe(tp_cmd_rgb_all, 1);
+      publish_status(true); // online=true retained
     } else {
-      Serial.print("❌ Fout, rc=");
-      Serial.println(client.state());
-      Serial.println("⏳ Wachten 5 sec...");
-      delay(5000);
+      Serial.print(F("fail rc=")); Serial.println(mqtt.state());
+      delay(2000);
     }
   }
 }
 
+// ====== SETUP/LOOP ======
 void setup() {
   Serial.begin(115200);
-  setup_wifi();
 
-  client.setServer(mqtt_server, 1883);
-  client.setCallback(callback);
+  // device id opbouwen (gebruik chip id of ESP_NUMBER)
+  uint32_t chip = ESP.getChipId();
+  snprintf(deviceId, sizeof(deviceId), "btn%u", (unsigned)(chip & 0xFF)); // kort id; pas aan naar wens
+
+  // topics maken
+  snprintf(tp_status, sizeof(tp_status),   "the-mona/buttons/%s/status",    deviceId);
+  snprintf(tp_hb, sizeof(tp_hb),           "the-mona/buttons/%s/heartbeat", deviceId);
+  snprintf(tp_events, sizeof(tp_events),   "the-mona/buttons/%s/events",    deviceId);
+  snprintf(tp_cmd_rgb, sizeof(tp_cmd_rgb), "the-mona/buttons/%s/cmd/rgb",   deviceId);
+  snprintf(tp_cmd_flash,sizeof(tp_cmd_flash),"the-mona/buttons/%s/cmd/flash",deviceId);
+  snprintf(tp_cmd_rgb_all,sizeof(tp_cmd_rgb_all),"the-mona/buttons/all/cmd/rgb");
 
   pixels.begin();
   pixels.clear();
   pixels.setBrightness(brightness);
 
-  // **Drukknop instellen met interne pull-up weerstand**
   pinMode(BUTTON, INPUT_PULLUP);
+
+  wifi_connect();
+  mqtt_connect();
+  neopixelSetAll(0, 16, 0, 50); // klein groen tikje bij start
+  delay(150);
+  neopixelClear();
 }
 
 void loop() {
-  if (!client.connected()) {
-    reconnect();
-  }
-  client.loop();
+  if (!mqtt.connected()) mqtt_connect();
+  mqtt.loop();
 
-  // **Drukknop controleren**
-  if (digitalRead(BUTTON) == LOW && !buttonState) {
-    buttonState = true;
-    Serial.println("🎛️ Knop ingedrukt!");
-    sendButtonPress();
-    blinkRed(5000);  // 🔴 Knipperen voor 5 seconden
-  } else if (digitalRead(BUTTON) == HIGH) {
-    buttonState = false;
+  // heartbeat
+  unsigned long now = millis();
+  if (now - lastHeartbeat >= HEARTBEAT_MS) {
+    lastHeartbeat = now;
+    publish_heartbeat();
   }
-}
 
-// **Knipperfunctie: LEDS knipperen rood voor X milliseconden**
-void blinkRed(int duration) {
-  unsigned long startTime = millis();
-  bool state = false;
-  
-  while (millis() - startTime < duration) {
-    if (state) {
-      pixels.fill(pixels.Color(255, 0, 0));  // Rood aan
-    } else {
-      pixels.clear();  // Uit
+  // debounced button
+  bool cur = digitalRead(BUTTON);
+  if (cur != lastButtonState) {
+    lastButtonChange = now;
+    lastButtonState = cur;
+  }
+  if ((now - lastButtonChange) > DEBOUNCE_MS) {
+    // LOW = pressed
+    static bool prevPressed = false;
+    bool pressed = (cur == LOW);
+    if (pressed && !prevPressed) {
+      publish_press_event();
     }
-    pixels.show();
-    state = !state;
-    delay(500);  // 🔴 Knippert elke 500ms
+    prevPressed = pressed;
   }
-
-  pixels.clear();  // LEDs weer uitzetten na knipperen
-  pixels.show();
-}
-
-// **Functie om knopstatus + LED-status naar MQTT te sturen**
-void sendButtonPress() {
-  Serial.println("📡 Knopstatus verzenden...");
-  StaticJsonDocument<128> doc;
-  doc["id"] = ESP_NUMBER;
-  doc["event"] = "PRESSED";
-
-  char buffer[128];
-  serializeJson(doc, buffer);
-  client.publish("esp/status", buffer);
-}
-
-// **Functie om LED-status naar MQTT te sturen**
-void sendLedStatus(const char* eventType) {
-  Serial.println("📡 LED-status verzenden...");
-  StaticJsonDocument<128> doc;
-  doc["id"] = ESP_NUMBER;
-  doc["event"] = eventType;
-  doc["brightness"] = brightness;
-
-  char buffer[128];
-  serializeJson(doc, buffer);
-  client.publish("neopixel/status", buffer);
-}
-
-// **Functie om bij opstart te melden dat de ESP verbonden is**
-void sendConnectedMessage() {
-  Serial.println("📡 Versturen: ESP verbonden");
-  StaticJsonDocument<128> doc;
-  doc["id"] = ESP_NUMBER;
-  doc["status"] = "connected";
-
-  char buffer[128];
-  serializeJson(doc, buffer);
-  client.publish("esp/status", buffer);
-}
-
-// **Functie om status op aanvraag te verzenden**
-void sendStatusUpdate() {
-  Serial.println("📡 Versturen: ESP status update");
-  StaticJsonDocument<128> doc;
-  doc["id"] = ESP_NUMBER;
-  doc["status"] = "connected";
-  doc["battery"] = batteryLevel;  // ❗ Voor toekomstige updates (bijv. batterijstatus)
-
-  char buffer[128];
-  serializeJson(doc, buffer);
-  client.publish("esp/status", buffer);
 }

@@ -11,7 +11,7 @@ class AppCfg(BaseModel):
     log_level: str = "INFO"
 
 class MqttCfg(BaseModel):
-    host: str = "localhost"
+    host: str = "the-mona.local"
     port: int = 1883
     username: str | None = None
     password: str | None = None

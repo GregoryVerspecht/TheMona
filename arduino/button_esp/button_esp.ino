@@ -1,321 +1,236 @@
 #include <ESP8266WiFi.h>
-
-// Vergroot MQTT packet size (zet dit vóór PubSubClient.h!)
-#define MQTT_MAX_PACKET_SIZE 512
 #include <PubSubClient.h>
-
 #include <Adafruit_NeoPixel.h>
 #include <ArduinoJson.h>
 
-// ========= Auto-ID generatie =========
-// Kies één van deze methodes:
+// ====== CONFIG ======
+const char* WIFI_SSID = "The-Mona";
+const char* WIFI_PASS = "mona1234";
+const char* MQTT_HOST = "192.168.69.69";
+const uint16_t MQTT_PORT = 1883;
 
-// Gebruik laatste 2 bytes van MAC adres
-String getESPId() {
-  uint8_t mac[6];
-  WiFi.macAddress(mac);
-  // Laatste 2 bytes van MAC → hex string
-  return String(mac[4], HEX) + String(mac[5], HEX);
-}
-
-// Globale variabelen
-String ESP_ID;        // Wordt runtime bepaald
-int ESP_NUMBER;       // Voor backwards compatibility
-// ========= Time / Uptime =========
-unsigned long bootTime = 0;  // wordt in setup() gezet
-
-// ========= Wi-Fi =========
-const char* ssid     = "The-Mona";
-const char* password = "mona1234";
-
-// ========= MQTT =========
-const char* mqtt_server = "192.168.69.69";
-WiFiClient espClient;
-PubSubClient client(espClient);
-
-// Topics
-const char* TOPIC_CMD           = "neopixel/set";
-const char* TOPIC_REQ_STATUS    = "esp/request_status";
-const char* TOPIC_BTN_STATUS    = "esp/status";
-const char* TOPIC_LED_STATUS    = "neopixel/status";
-const char* TOPIC_DISCOVERY     = "esp/discovery";
-const char* TOPIC_HEARTBEAT     = "esp/heartbeat";
-
-// ========= NeoPixel =========
 #define PIN D4
 #define NUMPIXELS 7
+#define BUTTON D1                // knop naar GND, intern pull-up
+#define HEARTBEAT_MS 15000
+#define DEBOUNCE_MS 80
+
+// ====== GLOBALS ======
+WiFiClient espClient;
+PubSubClient mqtt(espClient);
 Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
+
+char deviceId[16];               // bijv "btn1" of chipid
+char tp_status[64];
+char tp_hb[64];
+char tp_events[64];
+char tp_cmd_rgb[64];
+char tp_cmd_flash[64];
+char tp_cmd_rgb_all[64];
+
+unsigned long lastHeartbeat = 0;
+unsigned long lastButtonChange = 0;
+bool lastButtonState = HIGH;     // pull-up: HIGH = niet ingedrukt
 int brightness = 255;
 
-// ========= Drukknop =========
-#define BUTTON D1
-bool buttonLatched = false;
-const unsigned long DEBOUNCE_MS = 80;
-unsigned long lastPressMs = 0;
-
-// ========= Status =========
-int batteryLevel = 100;
-
-// ========= Wi-Fi =========
-void setup_wifi() {
-  delay(10);
-  Serial.begin(115200);
-  Serial.println("\n📡 Verbinden met WiFi...");
-  WiFi.begin(ssid, password);
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(400);
-    Serial.print(".");
-  }
-  Serial.print("\n✅ WiFi Verbonden! IP: ");
-  Serial.println(WiFi.localIP());
-  
-  // Genereer uniek ESP ID na WiFi verbinding
-  ESP_ID = getESPId();
-  ESP_NUMBER = ESP_ID.toInt(); // Voor backwards compatibility
-  
-  Serial.print("🆔 ESP ID: ");
-  Serial.println(ESP_ID);
-  Serial.print("🔢 ESP NUMBER: ");
-  Serial.println(ESP_NUMBER);
-  
-  // Print MAC adres voor debugging
-  Serial.print("📶 MAC Adres: ");
-  Serial.println(WiFi.macAddress());
+// ====== HELPERS ======
+String colorToHex(uint8_t r, uint8_t g, uint8_t b) {
+  char buf[8];
+  snprintf(buf, sizeof(buf), "#%02X%02X%02X", r, g, b);
+  return String(buf);
 }
 
-// ========= Helpers =========
-bool isCmdForMeOrBroadcast(const JsonVariant& idField) {
-  if (idField.isNull()) return true;
-  
-  // Check zowel string als int versie van ons ID
-  if (idField.is<int>()) {
-    return idField.as<int>() == ESP_NUMBER;
-  }
-  if (idField.is<const char*>()) {
-    const char* s = idField.as<const char*>();
-    return (strcmp(s, "ALL") == 0 || strcmp(s, ESP_ID.c_str()) == 0);
-  }
-  return false;
-}
-
-void setAllRGB(uint8_t r, uint8_t g, uint8_t b) {
-  pixels.fill(pixels.Color(r, g, b));
+void neopixelSetAll(uint8_t r, uint8_t g, uint8_t b, int bright=-1) {
+  if (bright >= 0) { brightness = constrain(bright, 0, 255); pixels.setBrightness(brightness); }
+  for (int i=0;i<NUMPIXELS;i++) pixels.setPixelColor(i, pixels.Color(r,g,b));
   pixels.show();
 }
 
-void publishJson(const char* topic, JsonDocument& doc) {
-  char buffer[256];
-  size_t n = serializeJson(doc, buffer, sizeof(buffer));
-  client.publish(topic, buffer, n);
+void neopixelClear() {
+  pixels.clear(); pixels.show();
 }
 
-// ========= MQTT Callback =========
-void callback(char* topic, byte* payload, unsigned int length) {
-  Serial.print("📩 MQTT op topic: ");
-  Serial.println(topic);
+// ====== MQTT PUBLISHES ======
+void pub_json(const char* topic, const JsonDocument& doc, bool retain=false, int qos=1) {
+  char buf[256];
+  size_t n = serializeJson(doc, buf, sizeof(buf));
+  mqtt.publish(topic, buf, retain);
+}
 
-  static char msg[MQTT_MAX_PACKET_SIZE];
-  unsigned int n = min(length, (unsigned int) (sizeof(msg) - 1));
-  memcpy(msg, payload, n);
-  msg[n] = '\0';
-  Serial.println("📜 Payload:");
-  Serial.println(msg);
+void publish_status(bool online) {
+  StaticJsonDocument<256> doc;
+  doc["online"] = online;
+  doc["fw"] = "1.0.0";
+  JsonArray caps = doc.createNestedArray("capabilities");
+  caps.add("rgb");
+  caps.add("press");
+  doc["mac"] = WiFi.macAddress();
+  pub_json(tp_status, doc, /*retain=*/true);
+}
 
-  StaticJsonDocument<512> doc;
-  DeserializationError err = deserializeJson(doc, msg);
-  if (err) {
-    Serial.print("❌ JSON parsing mislukt: ");
-    Serial.println(err.c_str());
-    return;
+void publish_heartbeat() {
+  StaticJsonDocument<64> doc;
+  doc["ts"] = (long) (millis()/1000);
+  pub_json(tp_hb, doc, false, 0);
+}
+
+void publish_press_event() {
+  StaticJsonDocument<128> doc;
+  doc["type"] = "press";
+  doc["ts"] = (long) (millis()/1000);
+  pub_json(tp_events, doc, false, 1);
+}
+
+// ====== MQTT CALLBACK ======
+void handle_cmd_rgb(const JsonDocument& doc) {
+  const char* hex = doc["color"] | "#FFFFFF";
+  String s(hex);
+  // parse #RRGGBB
+  uint8_t r=255,g=255,b=255;
+  if (s.length()==7 && s[0]=='#') {
+    r = strtoul(s.substring(1,3).c_str(), NULL, 16);
+    g = strtoul(s.substring(3,5).c_str(), NULL, 16);
+    b = strtoul(s.substring(5,7).c_str(), NULL, 16);
   }
+  const char* mode = doc["mode"] | "solid";
+  int duration = doc["duration_ms"] | 500;
 
-  if (String(topic) == TOPIC_REQ_STATUS) {
-    if (!isCmdForMeOrBroadcast(doc["id"])) {
-      Serial.println("⏩ Statusrequest niet voor deze ESP.");
-      return;
-    }
-    sendStatusUpdate();
-    return;
-  }
-
-  if (String(topic) != TOPIC_CMD) return;
-
-  if (!isCmdForMeOrBroadcast(doc["id"])) {
-    Serial.println("⏩ Command niet voor deze ESP.");
-    return;
-  }
-
-  // Brightness
-  if (doc.containsKey("brightness")) {
-    int br = doc["brightness"].as<int>();
-    br = constrain(br, 0, 255);
-    brightness = br;
-    pixels.setBrightness(brightness);
-  }
-
-  // LED commands
-  if (doc.containsKey("led") && doc["led"].is<const char*>()) {
-    const char* ledCmd = doc["led"].as<const char*>();
-    if (strcmp(ledCmd, "ON") == 0) {
-      int r = doc["r"] | 0;
-      int g = doc["g"] | 0;
-      int b = doc["b"] | 0;
-      setAllRGB(r, g, b);
-      Serial.println("🔆 Alle LEDs AAN gezet!");
-      sendLedStatus("ON");
-      return;
-    } else if (strcmp(ledCmd, "OFF") == 0) {
-      pixels.clear();
-      pixels.show();
-      Serial.println("💡 Alle LEDs UIT gezet!");
-      sendLedStatus("OFF");
-      return;
-    }
-  }
-
-  if (doc.containsKey("led") && doc["led"].is<int>()) {
-    int idx = doc["led"].as<int>();
-    if (idx >= 0 && idx < NUMPIXELS) {
-      int r = doc["r"] | 0;
-      int g = doc["g"] | 0;
-      int b = doc["b"] | 0;
-      pixels.setPixelColor(idx, pixels.Color(r, g, b));
-      pixels.show();
-      Serial.printf("🔹 LED %d aangepast!\n", idx);
-      sendLedStatus("UPDATE");
-    }
+  if (strcmp(mode,"solid")==0) {
+    neopixelSetAll(r,g,b);
+    if (duration>0) { delay(duration); neopixelClear(); }
+  } else if (strcmp(mode,"pulse")==0) {
+    // eenvoudige pulse: aan/uit 2x
+    for (int i=0;i<2;i++){ neopixelSetAll(r,g,b); delay(duration/2); neopixelClear(); delay(duration/2); }
+  } else {
+    neopixelSetAll(r,g,b);
   }
 }
 
-// ========= MQTT (re)connect =========
-void reconnect() {
-  while (!client.connected()) {
-    Serial.print("🔌 Verbinden met MQTT...");
-    String clientId = String("esp8266-") + ESP_ID;  // Gebruik auto-generated ID
-    if (client.connect(clientId.c_str())) {
-      Serial.println("✅ Verbonden met MQTT!");
-      client.subscribe(TOPIC_CMD);
-      client.subscribe(TOPIC_REQ_STATUS);
-      sendConnectedMessage();
+void handle_cmd_flash(const JsonDocument& doc) {
+  const char* hex = doc["color"] | "#FF0000";
+  String s(hex);
+  uint8_t r=255,g=0,b=0;
+  if (s.length()==7 && s[0]=='#') {
+    r = strtoul(s.substring(1,3).c_str(), NULL, 16);
+    g = strtoul(s.substring(3,5).c_str(), NULL, 16);
+    b = strtoul(s.substring(5,7).c_str(), NULL, 16);
+  }
+  int times = doc["times"] | 3;
+  int period = doc["period_ms"] | 200;
+
+  for (int i=0;i<times;i++){
+    neopixelSetAll(r,g,b);
+    delay(period/2);
+    neopixelClear();
+    delay(period/2);
+  }
+}
+
+void mqtt_callback(char* topic, byte* payload, unsigned int len) {
+  // broadcast all?
+  bool isAll = (strcmp(topic, tp_cmd_rgb_all) == 0);
+
+  // parse json
+  StaticJsonDocument<256> doc;
+  DeserializationError err = deserializeJson(doc, payload, len);
+  if (err) { Serial.println(F("JSON parse error")); return; }
+
+  // process
+  if (strcmp(topic, tp_cmd_rgb) == 0 || isAll) {
+    handle_cmd_rgb(doc);
+  } else if (strcmp(topic, tp_cmd_flash) == 0) {
+    handle_cmd_flash(doc);
+  }
+}
+
+// ====== WIFI/MQTT CONNECT ======
+void wifi_connect() {
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(WIFI_SSID, WIFI_PASS);
+  Serial.print(F("WiFi verbinden"));
+  while (WiFi.status() != WL_CONNECTED) { delay(300); Serial.print("."); }
+  Serial.print(F("\nWiFi OK, IP=")); Serial.println(WiFi.localIP());
+}
+
+void mqtt_connect() {
+  // LWT: markeer offline op status retained
+  StaticJsonDocument<64> lwt;
+  lwt["online"] = false;
+  char willPayload[64];
+  serializeJson(lwt, willPayload, sizeof(willPayload));
+
+  mqtt.setServer(MQTT_HOST, MQTT_PORT);
+  mqtt.setCallback(mqtt_callback);
+  while (!mqtt.connected()) {
+    Serial.print(F("MQTT verbinden... "));
+    // client id uniek maken
+    char cid[24]; snprintf(cid, sizeof(cid), "btn-%s", deviceId);
+    if (mqtt.connect(cid, nullptr, nullptr, tp_status, /*qos*/1, /*retain*/true, willPayload)) {
+      Serial.println(F("OK"));
+      mqtt.subscribe(tp_cmd_rgb, 1);
+      mqtt.subscribe(tp_cmd_flash, 1);
+      mqtt.subscribe(tp_cmd_rgb_all, 1);
+      publish_status(true); // online=true retained
     } else {
-      Serial.print("❌ Fout, rc=");
-      Serial.println(client.state());
-      Serial.println("⏳ Wachten 5 sec...");
-      delay(5000);
+      Serial.print(F("fail rc=")); Serial.println(mqtt.state());
+      delay(2000);
     }
   }
 }
 
-// ========= Setup/Loop =========
+// ====== SETUP/LOOP ======
 void setup() {
   Serial.begin(115200);
-  setup_wifi();
 
-  client.setServer(mqtt_server, 1883);
-  client.setCallback(callback);
+  // device id opbouwen (gebruik chip id of ESP_NUMBER)
+  uint32_t chip = ESP.getChipId();
+  snprintf(deviceId, sizeof(deviceId), "btn%u", (unsigned)(chip & 0xFF)); // kort id; pas aan naar wens
+
+  // topics maken
+  snprintf(tp_status, sizeof(tp_status),   "the-mona/buttons/%s/status",    deviceId);
+  snprintf(tp_hb, sizeof(tp_hb),           "the-mona/buttons/%s/heartbeat", deviceId);
+  snprintf(tp_events, sizeof(tp_events),   "the-mona/buttons/%s/events",    deviceId);
+  snprintf(tp_cmd_rgb, sizeof(tp_cmd_rgb), "the-mona/buttons/%s/cmd/rgb",   deviceId);
+  snprintf(tp_cmd_flash,sizeof(tp_cmd_flash),"the-mona/buttons/%s/cmd/flash",deviceId);
+  snprintf(tp_cmd_rgb_all,sizeof(tp_cmd_rgb_all),"the-mona/buttons/all/cmd/rgb");
 
   pixels.begin();
   pixels.clear();
   pixels.setBrightness(brightness);
-  pixels.show();
 
   pinMode(BUTTON, INPUT_PULLUP);
+
+  wifi_connect();
+  mqtt_connect();
+  neopixelSetAll(0, 16, 0, 50); // klein groen tikje bij start
+  delay(150);
+  neopixelClear();
 }
 
 void loop() {
-  if (!client.connected()) {
-    reconnect();
-  }
-  client.loop();
+  if (!mqtt.connected()) mqtt_connect();
+  mqtt.loop();
 
-  bool pressed = (digitalRead(BUTTON) == LOW);
+  // heartbeat
   unsigned long now = millis();
-
-  if (pressed && !buttonLatched && (now - lastPressMs >= DEBOUNCE_MS)) {
-    buttonLatched = true;
-    lastPressMs = now;
-    Serial.println("🎛️ Knop ingedrukt → PRESSED publiceren");
-    sendButtonPress();
-  } else if (!pressed) {
-    buttonLatched = false;
+  if (now - lastHeartbeat >= HEARTBEAT_MS) {
+    lastHeartbeat = now;
+    publish_heartbeat();
   }
-}
 
-// ========= Publish helpers =========
-void sendButtonPress() {
-  StaticJsonDocument<128> doc;
-  doc["id"] = ESP_ID;  // Gebruik string ID
-  doc["mac"] = WiFi.macAddress();  // Extra info voor identificatie
-  doc["event"] = "PRESSED";
-  publishJson(TOPIC_BTN_STATUS, doc);
-}
-
-void sendLedStatus(const char* eventType) {
-  StaticJsonDocument<128> doc;
-  doc["id"] = ESP_ID;
-  doc["mac"] = WiFi.macAddress();
-  doc["event"] = eventType;
-  doc["brightness"] = brightness;
-  publishJson(TOPIC_LED_STATUS, doc);
-}
-
-void sendConnectedMessage() {
-  StaticJsonDocument<128> doc;
-  doc["id"] = ESP_ID;
-  doc["mac"] = WiFi.macAddress();
-  doc["chip_id"] = ESP.getChipId();  // Extra hardware info
-  doc["status"] = "connected";
-  publishJson(TOPIC_BTN_STATUS, doc);
-}
-
-void sendStatusUpdate() {
-  StaticJsonDocument<256> doc;
-  doc["id"] = ESP_ID;
-  doc["mac"] = WiFi.macAddress();
-  doc["chip_id"] = ESP.getChipId();
-  doc["status"] = "connected";
-  doc["battery"] = batteryLevel;
-  doc["uptime"] = millis() - bootTime;
-  doc["free_heap"] = ESP.getFreeHeap();
-  doc["wifi_rssi"] = WiFi.RSSI();
-  publishJson(TOPIC_BTN_STATUS, doc);
-}
-
-void sendDiscoveryResponse() {
-  StaticJsonDocument<512> doc;
-  doc["id"] = ESP_ID;
-  doc["mac"] = WiFi.macAddress();
-  doc["chip_id"] = ESP.getChipId();
-  doc["flash_id"] = ESP.getFlashChipId();
-  doc["ip"] = WiFi.localIP().toString();
-  doc["rssi"] = WiFi.RSSI();
-  doc["uptime"] = millis() - bootTime;
-  doc["free_heap"] = ESP.getFreeHeap();
-  doc["cpu_freq"] = ESP.getCpuFreqMHz();
-  doc["flash_size"] = ESP.getFlashChipRealSize();
-  doc["sdk_version"] = ESP.getSdkVersion();
-  doc["boot_version"] = ESP.getBootVersion();
-  doc["battery"] = batteryLevel;
-  doc["brightness"] = brightness;
-  doc["num_pixels"] = NUMPIXELS;
-  doc["device_type"] = "neopixel_controller";
-  doc["firmware_version"] = "1.0";
-  doc["timestamp"] = millis();
-  
-  publishJson(TOPIC_DISCOVERY, doc);
-  Serial.println("🔍 Discovery response verzonden");
-}
-
-void sendHeartbeat() {
-  StaticJsonDocument<256> doc;
-  doc["id"] = ESP_ID;
-  doc["timestamp"] = millis();
-  doc["uptime"] = millis() - bootTime;
-  doc["free_heap"] = ESP.getFreeHeap();
-  doc["wifi_rssi"] = WiFi.RSSI();
-  doc["battery"] = batteryLevel;
-  doc["status"] = "alive";
-  
-  publishJson(TOPIC_HEARTBEAT, doc);
-  Serial.println("💓 Heartbeat verzonden");
+  // debounced button
+  bool cur = digitalRead(BUTTON);
+  if (cur != lastButtonState) {
+    lastButtonChange = now;
+    lastButtonState = cur;
+  }
+  if ((now - lastButtonChange) > DEBOUNCE_MS) {
+    // LOW = pressed
+    static bool prevPressed = false;
+    bool pressed = (cur == LOW);
+    if (pressed && !prevPressed) {
+      publish_press_event();
+    }
+    prevPressed = pressed;
+  }
 }

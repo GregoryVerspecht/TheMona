@@ -3,7 +3,7 @@ app:
   log_level: "INFO"
 
 mqtt:
-  host: "localhost"
+  host: "the-mona.local"
   port: 1883
   username: ""
   password: ""
