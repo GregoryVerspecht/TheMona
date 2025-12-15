@@ -1,0 +1,34 @@
+---
+
+import Layout from '../layouts/PageLayout.astro';
+import Hero from '~/components/widgets/hero.astro';
+import "~/assets/styles/glow.css";
+import Glowcard from '~/components/glowcard.astro';
+import '~/assets/styles/tailwind.css';
+---
+
+<Layout>
+
+  <!-- navbar in layout -->
+  <Hero>
+  </Hero> 
+
+  <!-- Features -->
+<section class="pt-8">
+    <Glowcard>
+    
+      <h1 class="text-5xl font-extrabold mb-6">
+        <span class="bg-clip-text text-transparent bg-mona bg-[length:200%_200%] animate-gradient-move">Feature 1</span>
+      </h1>
+    
+      <p class="text-lg font-medium mb-6">Feature 1</p>
+    
+      <a href="/demo" class="px-4 py-2 rounded-lg bg-mona-alt text-white hover:opacity-90 transition bg-[length:200%_200%] animate-gradient-move">
+        Feature!
+      </a>
+      
+  </Glowcard>
+</section>
+</Layout>
+
+

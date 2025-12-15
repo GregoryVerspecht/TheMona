@@ -1,0 +1,48 @@
+---
+import { Astronav, MenuItems, MenuIcon,  Dropdown, DropdownItems } from "astro-navbar";
+import { Image } from 'astro:assets';
+import monaLogo from '../assets/the-mona.svg';
+---
+
+<header id="navbar" class="lg:flex p-10 gap-10">
+    <Astronav>
+      <div class="flex w-full items-center justify-between">
+        
+        <!-- Linkerkant: logo + tekst -->
+        <a href="/" class="flex items-center space-x-5">
+          <Image
+            src={monaLogo}
+            alt="The Mona."
+            width={40}
+            height={40}
+            class="mb-1"
+            
+          />
+          <span class="text-lg font-semibold">The Mona</span>
+        </a>
+  
+        <!-- Rechterkant: navigatie of hamburger -->
+        <div class="flex items-center">
+          <!-- Hamburger alleen zichtbaar op mobile -->
+          <div class="block lg:hidden">
+            <MenuIcon class="w-6 h-6 text-gray-800" />
+          </div>
+  
+          <!-- Menu-items alleen zichtbaar op desktop -->
+          <MenuItems class="hidden lg:flex ml-4">
+            <ul class="flex flex-col lg:flex-row lg:gap-5">
+              <li><a href="/">Home</a></li>
+              <li><a href="/demo">Project</a></li>
+              <li><a href="/demo">Story</a></li>
+              <li><a href="/demo">Blog</a></li>
+              <li><a href="/demo">Gamemode</a></li>
+              <li><a href="/demo">Get in touch</a></li>
+
+            </ul>
+          </MenuItems>
+        </div>
+      </div>
+    </Astronav>
+  </header>
+  
+  

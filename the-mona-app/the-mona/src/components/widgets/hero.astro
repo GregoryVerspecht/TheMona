@@ -1,0 +1,25 @@
+---
+import "~/assets/styles/glow.css";
+import Glowcard from '~/components/glowcard.astro';
+import { Image } from 'astro:assets';
+import monaLogo from '~/assets/the-mona.svg';
+
+---
+
+<section id="HERO" class="grid items-center justify-center pt8">
+    <Glowcard>
+        <Image src={monaLogo} alt="The Mona." class="mx-auto mb-6 w-full h-auto" />
+      
+        <h1 class="text-5xl font-extrabold mb-6">
+          <span class="bg-clip-text text-transparent bg-mona bg-[length:200%_200%] animate-gradient-move">The Mona</span>
+        </h1>
+      
+        <p class="text-lg font-medium mb-6">Eén druk op de knop voor onvergetelijk plezier!</p>
+      
+        <a href="/demo" class="px-4 py-2 rounded-lg bg-mona-alt text-white hover:opacity-90 transition bg-[length:200%_200%] animate-gradient-move">
+          Ontdek meer!
+        </a>
+        
+    </Glowcard>
+
+</section>
