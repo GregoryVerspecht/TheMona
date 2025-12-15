@@ -9,8 +9,7 @@ from mona.util.logging import setup_logging
 from mona.mqtt.client import MqttClient
 from mona.game.engine import GameEngine
 from mona.audio.service import AudioService
-from mona.web.api import create_app
-
+from api.app_factory import create_app
 
 async def main():
     setup_logging(settings.app.log_level)

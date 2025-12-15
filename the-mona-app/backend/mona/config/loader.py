@@ -41,7 +41,7 @@ class Settings(BaseSettings):
     game: GameCfg = GameCfg()
 
 def _load_yaml():
-    with open("config.yaml", "r") as f:
+    with open("./config/config.yaml", "r") as f:
         return yaml.safe_load(f)
 
 _yaml = _load_yaml()
