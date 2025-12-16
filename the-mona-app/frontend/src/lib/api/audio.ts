@@ -16,4 +16,8 @@ export const audioApi = {
   setVolume(volume: number) {
     return apiPost("/api/v1/audio/volume", { volume });
   },
+    // VOLUME
+  getVolume() {
+    return apiGet<{ volume: number }>("/api/v1/audio/volume");
+  },
 };
