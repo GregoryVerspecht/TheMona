@@ -26,9 +26,11 @@ import  { apiPost } from "~/lib/api";
       <button data-sfx="sea_shanty_2" class="px-4 py-2 rounded-lg bg-mona text-white hover:opacity-90 transition bg-[length:200%_200%] animate-gradient-move mb-6"> Play Sea Shanty 2</button>  <br>
 
 
-      <div class="flex items-center gap-3 mb-6">
+      <div class="">
+        <p class="text-lg font-medium mb-2">Regel volume:</p>
+        <input id="vol" type="range" min="0" max="100" value="20" class="w-64" /> <br>
         <label class="min-w-[120px]">Volume: <span id="volVal">--</span>%</label>
-        <input id="vol" type="range" min="0" max="100" value="20" class="w-64" />
+        
       </div>
   </Glowcard>
 
