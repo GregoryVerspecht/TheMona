@@ -2,16 +2,12 @@ import { getPermalink, getBlogPermalink, getAsset } from './utils/permalinks';
 
 export const headerData = {
   links: [
-   
-        {
-          text: 'Features',
-          href: '#',
-        },
-                {
-          text: 'Story',
-          href: '#',
-        },
-    {
+           {
+      text: 'Home',
+      href: getPermalink('/'),
+
+    },
+       {
       text: 'Game',
       links: [
         {
@@ -24,7 +20,7 @@ export const headerData = {
         },
       ],
     },
-        {
+    {
       text: 'Dev',
       links: [
         {
@@ -32,36 +28,16 @@ export const headerData = {
           href: getPermalink('/audio'),
         },
         {
-          text: 'Gamemodes',
-          href: getPermalink('/services'),
+          text: 'Buttons',
+          href: getPermalink('/buttons'),
+        },
+                {
+          text: 'API',
+          href: getPermalink('/api'),
         },
       ],
     },
-    {
-      text: 'Blog',
-      links: [
-        {
-          text: 'Blog List',
-          href: getBlogPermalink(),
-        },
-        {
-          text: 'Article',
-          href: getPermalink('get-started-website-with-astro-tailwind-css', 'post'),
-        },
-        {
-          text: 'Article (with MDX)',
-          href: getPermalink('markdown-elements-demo-post', 'post'),
-        },
-        {
-          text: 'Category Page',
-          href: getPermalink('tutorials', 'category'),
-        },
-        {
-          text: 'Tag Page',
-          href: getPermalink('astro', 'tag'),
-        },
-      ],
-    },
+   
 
   ],
 

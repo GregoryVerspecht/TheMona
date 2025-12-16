@@ -88,15 +88,23 @@ class AudioService:
         if "success" in self._sounds:
             self._sounds["success"].play()
 
-    async def play_sfx(self, name: str):
+    async def play_sfx(self, name: str) -> bool:
         if not self._ready:
-            return
+            return False
+
         k = _key(name)
         s = self._sounds.get(k)
-        if s:
-            s.play()
-        else:
+        if not s:
             log.warning(f"SFX '{name}' niet gevonden")
+            return False
+
+        # 🔁 restart gedrag
+        if s.get_num_channels() > 0:
+            s.stop()     # stopt alle lopende kanalen van deze sound
+
+        s.play()
+        return True
+
 
     async def stop_sfx(self, name: str | None = None, fade_ms: int = 200):
         """Stop één sound (alle kanalen waar die speelt) of alles wanneer name=None."""

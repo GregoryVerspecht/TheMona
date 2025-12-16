@@ -10,19 +10,20 @@ import  { apiPost } from "~/lib/api";
 
 <Layout>
 
-<section class="pt-8">
+<section class="pt-8 ">
     <Glowcard>
     
       <h1 class="text-5xl font-extrabold mb-6">
         <span class="bg-clip-text text-transparent bg-mona bg-[length:200%_200%] animate-gradient-move">Audio</span>
       </h1>
+      
+      <p class="text-lg font-medium mb-2">Audio feedback:</p>
       <p id="msg"> Audio: action</p> <br>
-      <p class="text-lg font-medium mb-6">Feature 1 - stop</p>
   
-      <button id="stop" class="px-4 py-2 rounded-lg bg-mona-alt text-white hover:opacity-90 transition bg-[length:200%_200%] animate-gradient-move"> STOP SOUNDS</button> <br>
-      <button data-sfx="success" class="px-4 py-2 rounded-lg bg-mona-alt text-white hover:opacity-90 transition bg-[length:200%_200%] animate-gradient-move"> Play success</button>  <br>
-      <button data-sfx="fail" class="px-4 py-2 rounded-lg bg-mona-alt text-white hover:opacity-90 transition bg-[length:200%_200%] animate-gradient-move"> Play fail</button>  <br>
-      <button data-sfx="sea_shanty_2" class="px-4 py-2 rounded-lg bg-mona-alt text-white hover:opacity-90 transition bg-[length:200%_200%] animate-gradient-move"> Play Sea Shanty 2</button>  <br>
+      <button id="stop" class="px-4 py-2 rounded-lg bg-mona-alt text-white hover:opacity-90 transition bg-[length:200%_200%] animate-gradient-move mb-6"> Stop Sounds</button> <br>
+      <button data-sfx="success" class="px-4 py-2 rounded-lg bg-mona text-white hover:opacity-90 transition bg-[length:200%_200%] animate-gradient-move mb-6"> Play success</button>  <br>
+      <button data-sfx="fail" class="px-4 py-2 rounded-lg bg-mona-alt text-white hover:opacity-90 transition bg-[length:200%_200%] animate-gradient-move mb-6"> Play fail</button>  <br>
+      <button data-sfx="sea_shanty_2" class="px-4 py-2 rounded-lg bg-mona text-white hover:opacity-90 transition bg-[length:200%_200%] animate-gradient-move mb-6"> Play Sea Shanty 2</button>  <br>
 
   </Glowcard>
 
