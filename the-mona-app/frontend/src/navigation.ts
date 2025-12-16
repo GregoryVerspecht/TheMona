@@ -24,7 +24,19 @@ export const headerData = {
         },
       ],
     },
-    
+        {
+      text: 'Dev',
+      links: [
+        {
+          text: 'Audio',
+          href: getPermalink('/audio'),
+        },
+        {
+          text: 'Gamemodes',
+          href: getPermalink('/services'),
+        },
+      ],
+    },
     {
       text: 'Blog',
       links: [

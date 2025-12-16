@@ -23,7 +23,7 @@ async def main():
 
     app = create_app(settings, engine, mqtt, audio)
    
-    await audio.set_volume(5)
+    await audio.set_volume(20)
     await audio.play_sfx("sea_shanty_2",)  # startup sound
     server = uvicorn.Server(
         uvicorn.Config(app, host=settings.web.host, port=settings.web.port, loop="asyncio")

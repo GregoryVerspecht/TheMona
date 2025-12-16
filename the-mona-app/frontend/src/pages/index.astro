@@ -5,33 +5,15 @@ import Hero from '~/components/widgets/hero.astro';
 import "~/assets/styles/glow.css";
 import Glowcard from '~/components/glowcard.astro';
 import '~/assets/styles/tailwind.css';
-import  { apiPost } from "~/lib/api";
+
 ---
 
 <Layout>
 
-  <!-- navbar in layout -->
+  <!-- navbar in layout - navigation.ts -->
   <Hero>
   </Hero> 
 
-  <!-- Features -->
-<section class="pt-8">
-    <Glowcard>
-    
-      <h1 class="text-5xl font-extrabold mb-6">
-        <span class="bg-clip-text text-transparent bg-mona bg-[length:200%_200%] animate-gradient-move">Audio</span>
-      </h1>
-      <p id="msg"> Audio: action</p> <br>
-      <p class="text-lg font-medium mb-6">Feature 1 - stop</p>
-  
-      <button id="stop" class="px-4 py-2 rounded-lg bg-mona-alt text-white hover:opacity-90 transition bg-[length:200%_200%] animate-gradient-move"> STOP SOUNDS</button> <br>
-      <button data-sfx="success" class="px-4 py-2 rounded-lg bg-mona-alt text-white hover:opacity-90 transition bg-[length:200%_200%] animate-gradient-move"> Play success</button>  <br>
-      <button data-sfx="fail" class="px-4 py-2 rounded-lg bg-mona-alt text-white hover:opacity-90 transition bg-[length:200%_200%] animate-gradient-move"> Play fail</button>  <br>
-      <button data-sfx="sea_shanty_2" class="px-4 py-2 rounded-lg bg-mona-alt text-white hover:opacity-90 transition bg-[length:200%_200%] animate-gradient-move"> Play Sea Shanty 2</button>  <br>
 
-  </Glowcard>
-
-</section>
 </Layout>
-<script type="module" src="src/scripts/audio.ts"></script>
 
