@@ -11,11 +11,11 @@ def now_utc() -> datetime:
 class ButtonState:
     id: str
     last_seen: datetime
-    last_event: Optional[str] = None
-    last_press: Optional[datetime] = None
     connected: bool = False
 
-    # state snapshot fields (coming from /state messages)
+    last_event: Optional[str] = None
+    last_press: Optional[datetime] = None
+
     brightness: Optional[int] = None
     flashing: Optional[bool] = None
     flash_interval_ms: Optional[int] = None
@@ -44,7 +44,6 @@ class ButtonRegistry:
             if ev == "PRESSED":
                 st.last_press = now_utc()
 
-            # optional fields
             if "ip" in payload:
                 st.ip = str(payload.get("ip"))
 
@@ -56,7 +55,7 @@ class ButtonRegistry:
                 self._buttons[btn_id] = st
 
             st.last_seen = now_utc()
-            st.connected = True  # state ontvangen => device leeft
+            st.connected = True
 
             if "brightness" in payload:
                 st.brightness = int(payload["brightness"])
@@ -69,14 +68,6 @@ class ButtonRegistry:
             if "ip" in payload:
                 st.ip = str(payload["ip"])
 
-    def mark_disconnected_if_stale(self, stale_seconds: int = 30) -> None:
-        """Optioneel: periodiek stale devices als disconnected markeren."""
-        cutoff = now_utc().timestamp() - stale_seconds
-        with self._lock:
-            for st in self._buttons.values():
-                if st.last_seen.timestamp() < cutoff:
-                    st.connected = False
-
     def list(self) -> list[dict]:
         with self._lock:
             return [self._to_dict(st) for st in self._buttons.values()]
@@ -86,9 +77,14 @@ class ButtonRegistry:
             st = self._buttons.get(btn_id)
             return self._to_dict(st) if st else None
 
+    def list_ids(self, connected_only: bool = True) -> list[str]:
+        with self._lock:
+            if not connected_only:
+                return list(self._buttons.keys())
+            return [k for k, st in self._buttons.items() if st.connected]
+
     def _to_dict(self, st: ButtonState) -> dict:
         d = asdict(st)
-        # datetime → iso string
         d["last_seen"] = st.last_seen.isoformat()
         d["last_press"] = st.last_press.isoformat() if st.last_press else None
         return d

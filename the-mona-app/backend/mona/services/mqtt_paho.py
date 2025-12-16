@@ -17,14 +17,20 @@ class MqttConfig:
     client_id: str = "mona-api"
 
 class PahoMqttService:
+    """
+    Paho draait callbacks in een thread. Wij roepen handlers synchronously aan.
+    De app_factory gebruikt loop.call_soon_threadsafe(...) om async werk te schedulen.
+    """
     def __init__(self, cfg: MqttConfig) -> None:
         self.cfg = cfg
         self._client = mqtt.Client(client_id=cfg.client_id, clean_session=True)
+
         if cfg.username:
             self._client.username_pw_set(cfg.username, cfg.password)
 
-        self._on_event: Optional[Callable[[str, dict], None]] = None
-        self._on_state: Optional[Callable[[str, dict], None]] = None
+        self._on_button_event: Optional[Callable[[str, dict], None]] = None
+        self._on_button_state: Optional[Callable[[str, dict], None]] = None
+        self._on_game_cmd: Optional[Callable[[dict], None]] = None
 
         self._client.on_connect = self._handle_connect
         self._client.on_message = self._handle_message
@@ -32,11 +38,13 @@ class PahoMqttService:
 
     def set_handlers(
         self,
-        on_event: Callable[[str, dict], None],
-        on_state: Callable[[str, dict], None],
+        on_button_event: Callable[[str, dict], None],
+        on_button_state: Callable[[str, dict], None],
+        on_game_cmd: Callable[[dict], None],
     ) -> None:
-        self._on_event = on_event
-        self._on_state = on_state
+        self._on_button_event = on_button_event
+        self._on_button_state = on_button_state
+        self._on_game_cmd = on_game_cmd
 
     def start(self) -> None:
         log.info("MQTT connecting to %s:%s", self.cfg.host, self.cfg.port)
@@ -54,13 +62,13 @@ class PahoMqttService:
         data = json.dumps(payload, separators=(",", ":")).encode("utf-8")
         self._client.publish(topic, data, qos=qos, retain=retain)
 
-    # ---------- callbacks (paho thread) ----------
+    # ---------- callbacks ----------
     def _handle_connect(self, client: mqtt.Client, userdata, flags, rc) -> None:
         if rc == 0:
             log.info("MQTT connected")
-            # subscribe to incoming telemetry
             client.subscribe("mona/buttons/+/event")
             client.subscribe("mona/buttons/+/state")
+            client.subscribe("mona/game/cmd")
         else:
             log.error("MQTT connect failed rc=%s", rc)
 
@@ -74,18 +82,20 @@ class PahoMqttService:
             log.warning("MQTT invalid JSON topic=%s payload=%r", msg.topic, msg.payload[:80])
             return
 
-        # topic: mona/buttons/<id>/event or /state
-        parts = msg.topic.split("/")
-        if len(parts) < 4:
-            return
-        btn_id = parts[2]
-        kind = parts[3]
+        topic = msg.topic
 
-        # route to registry handlers
-        try:
-            if kind == "event" and self._on_event:
-                self._on_event(btn_id, payload)
-            elif kind == "state" and self._on_state:
-                self._on_state(btn_id, payload)
-        except Exception:
-            log.exception("MQTT handler error for %s", msg.topic)
+        # Game commands
+        if topic == "mona/game/cmd":
+            if self._on_game_cmd:
+                self._on_game_cmd(payload)
+            return
+
+        # Buttons telemetry: mona/buttons/<id>/event|state
+        parts = topic.split("/")
+        if len(parts) >= 4 and parts[0] == "mona" and parts[1] == "buttons":
+            btn_id = parts[2]
+            kind = parts[3]
+            if kind == "event" and self._on_button_event:
+                self._on_button_event(btn_id, payload)
+            elif kind == "state" and self._on_button_state:
+                self._on_button_state(btn_id, payload)

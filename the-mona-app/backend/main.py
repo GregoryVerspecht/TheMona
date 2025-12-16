@@ -7,7 +7,7 @@ import uvicorn
 from mona.config.loader import settings
 from mona.util.logging import setup_logging
 from mona.mqtt.client import MqttClient
-from mona.game.engine import GameEngine
+from mona.engine.engine import GameEngine
 from mona.audio.service import AudioService
 from api.app_factory import create_app
 
@@ -19,9 +19,9 @@ async def main():
 
     await mqtt.start()
     await audio.start()
-    await engine.start()
+    await engine.start(GameEngine.GameMode.IDLE)
 
-    app = create_app(settings, engine, mqtt, audio)
+    app = create_app(settings)
    
     await audio.set_volume(20)
     await audio.play_sfx("sea_shanty_2",)  # startup sound

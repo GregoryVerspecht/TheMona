@@ -1,16 +1,28 @@
 from fastapi import APIRouter, Depends
-from api.deps import get_engine, get_cfg
-from schemas.game import GameStartIn
+from pydantic import BaseModel
+from typing import Any, Dict, Optional
+from api.deps import get_engine
 
-router = APIRouter(prefix="/game")
+router = APIRouter(prefix="/game", tags=["game"])
+
+class GameStartIn(BaseModel):
+    game: str
+    params: Optional[Dict[str, Any]] = None
+
+@router.get("/games")
+async def games(engine=Depends(get_engine)):
+    return {"games": engine.list_games()}
+
+@router.get("/status")
+async def status(engine=Depends(get_engine)):
+    return engine.status()
 
 @router.post("/start")
-async def start_game(body: GameStartIn, cfg = Depends(get_cfg), engine = Depends(get_engine)):
-    mode = body.mode or cfg.game.default_mode
-    await engine.start_mode(mode, body.params)
-    return engine.get_status()
+async def start(body: GameStartIn, engine=Depends(get_engine)):
+    await engine.start(body.game, body.params or {})
+    return {"ok": True}
 
 @router.post("/stop")
-async def stop_game(engine = Depends(get_engine)):
-    await engine.stop_mode()
-    return engine.get_status()
+async def stop(engine=Depends(get_engine)):
+    await engine.stop()
+    return {"ok": True}
