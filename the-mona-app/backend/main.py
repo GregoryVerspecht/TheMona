@@ -19,7 +19,6 @@ async def main():
 
     await mqtt.start()
     await audio.start()
-    await engine.start(GameEngine.GameMode.IDLE)
 
     app = create_app(settings)
    
