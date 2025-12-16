@@ -12,3 +12,6 @@ def get_mqtt(request: Request):
 
 def get_audio(request: Request):
     return request.app.state.audio
+
+def get_registry(request: Request):
+    return request.app.state.registry
