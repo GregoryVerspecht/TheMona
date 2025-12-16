@@ -26,11 +26,12 @@ async def set_volume(body: VolumeIn, audio = Depends(get_audio)):
     await audio.set_volume(body.volume)
     return {"ok": True, "volume": body.volume}
 
+# router
 @router.post("/sfx/play")
 async def play_sfx(body: SfxPlayIn, audio = Depends(get_audio)):
-    name = _key(body.name)
-    await audio.play_sfx(name)
-    return {"ok": True, "played": name}
+    played = await audio.play_sfx(body.name)
+    return {"ok": True, "played": played}
+
 
 @router.post("/sfx/stop")
 async def stop_sfx(body: SfxStopIn, audio = Depends(get_audio)):
