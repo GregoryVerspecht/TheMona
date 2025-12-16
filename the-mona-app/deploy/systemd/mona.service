@@ -1,0 +1,16 @@
+[Unit]
+Description=The Mona - game engine + web + mqtt
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/opt/the-mona
+Environment="ENV=prod"
+ExecStart=/opt/the-mona/.venv/bin/python -m apps.main
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

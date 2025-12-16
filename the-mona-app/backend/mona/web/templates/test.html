@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Test hardware</h2>
+<table>
+  <tr><th>ID</th><th>Online</th><th>Acties</th></tr>
+  {% for d in devices %}
+  <tr>
+    <td>{{ d.id }}</td>
+    <td>{{ "✅" if d.online else "❌" }}</td>
+    <td>
+      <form onsubmit="return postJson(this, {color:'#00FF00',mode:'solid',duration_ms:500})" action="/api/buttons/{{ d.id }}/rgb" method="post">
+        <button>RGB groen</button>
+      </form>
+      <form onsubmit="return postJson(this, {color:'#FF0000',times:3,period_ms:200})" action="/api/buttons/{{ d.id }}/flash" method="post">
+        <button>Flash rood</button>
+      </form>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+<form onsubmit="return postJson(this, {color:'#0000FF',mode:'solid',duration_ms:400})" action="/api/buttons/all/rgb" method="post">
+  <button>All → blauw</button>
+</form>
+{% endblock %}

@@ -1,0 +1,16 @@
+{
+  "css.customData": ["./vscode.tailwind.json"],
+  "eslint.validate": ["javascript", "javascriptreact", "astro", "typescript", "typescriptreact"],
+  "files.associations": {
+    "*.yaml": "home-assistant"
+  },
+  "prettier.documentSelectors": ["**/*.astro"],
+  "[astro]": {
+    "editor.defaultFormatter": "astro-build.astro-vscode"
+  },
+  "yaml.schemas": {
+    "./.vscode/astrowind/config-schema.json": "/src/config.yaml"
+  },
+  "eslint.useFlatConfig": true,
+  "liveServer.settings.port": 5576
+}

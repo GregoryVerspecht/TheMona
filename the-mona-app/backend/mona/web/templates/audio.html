@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Audio</h2>
+<p>Service: {{ "verbonden" if connected else "niet klaar" }}</p>
+<form method="post" action="/api/audio/test-tone" onsubmit="return postJson(this, {})">
+  <button>Test tone</button>
+</form>
+<form method="post" action="/api/audio/play" onsubmit="return postJson(this, {name:'success'})">
+  <button>Play success</button>
+</form>
+<form method="post" action="/api/audio/play" onsubmit="return postJson(this, {name:'fail'})">
+  <button>Play fail</button>
+</form>
+<form method="post" action="/api/audio/play" onsubmit="return postJson(this, {name:'sea_shanty_2'})">
+  <button>Play Sea Shanty 2</button>
+</form>
+<form method="post" action="/api/audio/play" onsubmit="return postJson(this, {name:'lizard-button'})">
+  <button>Play LIZARD</button>
+</form>
+<form method="post" action="/api/audio/sfx/stop" onsubmit="return postJson(this, {name:''})">
+  <button>STOP SOUNDS</button>
+</form>
+{% endblock %}
