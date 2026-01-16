@@ -5,7 +5,7 @@ export const headerData = {
    
         {
           text: 'Features',
-          href: '#',
+          href: '/features/features',
         },
                 {
           text: 'Story',
@@ -16,11 +16,11 @@ export const headerData = {
       links: [
         {
           text: 'Overview',
-          href: getPermalink('/#eatures'),
+          href: getPermalink('/game-overview'),
         },
         {
           text: 'Gamemodes',
-          href: getPermalink('/services'),
+          href: getPermalink('/gamemodes'),
         },
       ],
     },
