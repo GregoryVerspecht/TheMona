@@ -9,7 +9,7 @@ export const headerData = {
         },
                 {
           text: 'Story',
-          href: '#',
+          href: getPermalink('/story/story'),
         },
     {
       text: 'Game',

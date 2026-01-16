@@ -1,6 +1,6 @@
 ---
 
-import Layout from '../layouts/PageLayout.astro';
+import Layout from '~/layouts/PageLayout.astro';
 import Hero from '~/components/widgets/hero.astro';
 import "~/assets/styles/glow.css";
 import Glowcard from '~/components/glowcard.astro';
@@ -13,24 +13,52 @@ import '~/assets/styles/tailwind.css';
   <Hero>
   </Hero> 
 
-  <!-- Features 
-<section class="pt-8">
-    <Glowcard>
-    
-      <h1 class="text-5xl font-extrabold mb-6">
-        <span class="bg-clip-text text-transparent bg-mona bg-[length:200%_200%] animate-gradient-move">Feature 1</span>
-      </h1>
-    
-      <p class="text-lg font-medium mb-6">Feature 1</p>
-    
-      <a href="/demo" class="px-4 py-2 rounded-lg bg-mona-alt text-white hover:opacity-90 transition bg-[length:200%_200%] animate-gradient-move">
-        Featureeee!
-      </a>
+  <!-- SPECIAL THANKS -->
+<!-- SPECIAL THANKS -->
+<section class="pt-10">
+  <Glowcard>
+    <div class="special-thanks space-y-6 text-center">
       
-  </Glowcard>
 
+
+      <h2 class="text-5xl font-extrabold">
+        <span class="bg-clip-text text-transparent bg-mona bg-[length:200%_200%] animate-gradient-move">
+          Special thanks
+        </span>
+      </h2>
+
+            <!-- Catchphrase -->
+      <p class="uppercase tracking-widest text-sm opacity-70">
+        Built together, one moment at a time
+      </p>
+
+      <p class="text-base leading-relaxed opacity-90 max-w-3xl mx-auto">
+        A heartfelt thank you to everyone who tested the early versions of The Mona and shared their enthusiasm and feedback.
+        Each small insight helped move this project forward.
+      </p>
+
+      <!-- Divider -->
+      <hr class="border-white/10" />
+
+      <p class="text-base leading-relaxed opacity-90 max-w-3xl mx-auto">
+        The Mona is still taking shape — growing slowly, thoughtfully, and with intention.
+        What exists today is only a snapshot in time, with more moments yet to be created.
+      </p>
+
+         <!-- Divider -->
+      <hr class="border-white/10" />
+
+      <p class="text-base leading-relaxed">
+        Thank you for walking this path with me.<br>
+        <span class="font-medium">Greg</span><br>❤️
+      </p>
+
+    </div>
+  </Glowcard>
 </section>
-  -->
+
+
+ 
 </Layout>
 
 

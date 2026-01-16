@@ -1,0 +1,94 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import Glowcard from '~/components/glowcard.astro';
+
+import '~/assets/styles/glow.css';
+import '~/assets/styles/tailwind.css';
+
+import lucienSvgUrl from '~/assets/lucien.svg?url';
+---
+
+<Layout>
+  <section id="story" class="pt-10">
+    <!-- 1 kaart -->
+    <Glowcard>
+      <div class="max-w-5xl mx-auto px-4">
+        <!-- Intro buiten de kaart (kan ook in de kaart, maar dit leest lekker) -->
+        <div class="mb-8">
+          <h2 class="text-5xl font-extrabold mb-3">
+            <span class="bg-clip-text text-transparent bg-mona bg-[length:200%_200%] animate-gradient-move">
+              The Story
+            </span>
+          </h2>
+          <p class="text-lg font-medium opacity-90">
+            Every great project starts with an idea. Here's the journey of The Mona.
+          </p>
+        </div>
+        <div class="space-y-10">
+          <!-- Block 1 -->
+          <div>
+            <h3 class="text-2xl font-bold mb-3">Inspiration</h3>
+            <p class="text-base leading-relaxed opacity-90">
+              This project was born out of a love for creativity, technology, and the joy of bringing people together.
+              The initial spark for The Mona came when we encountered “Odil de Krokodil,” a concept that quickly became
+              a beloved part of our friend group. Inspired by the positive reception, we created our own version,
+              “Lucien,” which was met with even more enthusiasm.
+            </p>
+            <img
+              src={lucienSvgUrl}
+              alt="Lucien"
+              class="mt-6 w-full max-w-sm mx-auto opacity-95 drop-shadow-[0_0_20px_rgba(255,255,255,0.15)]"
+              loading="lazy"
+            />
+          </div>
+
+          <hr class="border-white/10" />
+
+<!-- Block 2 -->
+<div>
+  <h3 class="text-2xl font-bold mb-3">Why “The Mona”?</h3>
+
+  <p class="text-base leading-relaxed opacity-90 mb-4">
+    When searching for a name, I wanted something that reflected a meaningful moment of renewal and inspiration in my life.
+    The Mona represents a period where small moments regained their beauty and where the simple act of creating felt alive again.
+    It marks a time when inspiration quietly returned, reminding me of the value of presence, curiosity, and feeling connected
+    to what I was building.
+  </p>
+
+  <p class="text-base leading-relaxed opacity-90">
+    This project captures the essence of that rediscovery — transforming a brief but impactful chapter into a creative
+    expression of gratitude and forward momentum. While moments pass and paths change, what remains is the growth they spark.
+    The Mona is a tribute to that process: holding onto what helped me move forward and turning it into something that can
+    continue to inspire and create meaningful moments for others.
+  </p>
+</div>
+
+
+          <hr class="border-white/10" />
+
+          <!-- Block 3 -->
+          <div>
+            <h3 class="text-2xl font-bold mb-3">From idea to moments</h3>
+            <p class="text-base leading-relaxed opacity-90">
+              The Mona is built to be shared: simple, playful, and a little chaotic in the best way. A project that
+              turns a small spark into something people can experience together — and hopefully laugh about later.
+            </p>
+
+            <div class="mt-6 flex flex-wrap gap-3">
+              <a
+                href="/demo"
+                class="px-4 py-2 rounded-lg bg-mona-alt text-white hover:opacity-90 transition bg-[length:200%_200%] animate-gradient-move"
+              >
+                Try the demo
+              </a>
+
+              <a href="/#features" class="px-4 py-2 rounded-lg border border-white/20 hover:bg-white/5 transition">
+                See features
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Glowcard>
+  </section>
+</Layout>
