@@ -10,8 +10,8 @@
     "deploy": "echo 'Use GitHub Actions to deploy to Pages 😊 --> changes in prod is a trigger'"
   },
   "dependencies": {
-    "@astrojs/rss": "^4.0.14",
-    "@astrojs/sitemap": "^3.6.0",
+    "@astrojs/rss": "^4.0.15",
+    "@astrojs/sitemap": "^3.7.0",
     "@astrojs/solid-js": "^5.1.3",
     "@astrolib/analytics": "^0.6.1",
     "@astrolib/seo": "^1.0.0-beta.8",
@@ -19,7 +19,7 @@
     "@iconify/tools": "^4.1.2",
     "@iconify/types": "^2.0.0",
     "@iconify/utils": "^2.3.0",
-    "astro": "^5.16.5",
+    "astro": "^5.16.11",
     "astro-embed": "^0.9.0",
     "astro-icon": "^1.1.5",
     "limax": "4.1.0",
