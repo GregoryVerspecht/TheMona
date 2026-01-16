@@ -23,4 +23,21 @@ const { metadata } = Astro.props;
     <slot />
   </main>
 
+  <footer class="mt-20 py-8 border-t border-white/10 text-center text-sm opacity-70">
+  <p>
+    © {new Date().getFullYear()} The Mona — Built together, one moment at a time.
+  </p>
+
+  <p class="mt-2">
+    <a
+      href="https://www.instagram.com/the_mona_gvtech/"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="underline underline-offset-4 hover:opacity-100 transition"
+    >
+      Instagram
+    </a>
+  </p>
+</footer>
+
 </Layout>

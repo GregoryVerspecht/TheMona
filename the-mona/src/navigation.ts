@@ -5,22 +5,22 @@ export const headerData = {
    
         {
           text: 'Features',
-          href: '#',
+          href: '/features/features',
         },
                 {
           text: 'Story',
-          href: '#',
+          href: getPermalink('/story/story'),
         },
     {
       text: 'Game',
       links: [
         {
           text: 'Overview',
-          href: getPermalink('/#eatures'),
+          href: getPermalink('/game-overview'),
         },
         {
           text: 'Gamemodes',
-          href: getPermalink('/services'),
+          href: getPermalink('/gamemodes'),
         },
       ],
     },
