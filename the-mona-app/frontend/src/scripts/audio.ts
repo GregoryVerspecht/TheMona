@@ -35,3 +35,36 @@ function initAudioPage() {
 initAudioPage();
 // 2) bij Astro client navigatie
 document.addEventListener("astro:page-load", initAudioPage);
+
+// Volume
+  const slider = document.getElementById("vol");
+  const label = document.getElementById("volVal");
+
+  // init: huidige volume ophalen
+  try {
+    const { volume } = await audioApi.getVolume();
+    slider.value = String(volume);
+    label.textContent = String(volume);
+  } catch {
+    label.textContent = slider.value;
+  }
+
+  // throttle: niet spammen tijdens slepen
+  let t = null;
+  const push = async (v) => {
+    try {
+      await audioApi.setVolume(Number(v));
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  slider.addEventListener("input", () => {
+    label.textContent = slider.value;
+    clearTimeout(t);
+    t = setTimeout(() => push(slider.value), 120);
+  });
+
+  slider.addEventListener("change", () => {
+    push(slider.value);
+  });
