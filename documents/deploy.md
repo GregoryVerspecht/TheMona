@@ -48,8 +48,10 @@ ssh mona@192.168.69.69
 
 cd /home/mona/the-mona-app/backend
 python3 -m venv .venv
-.venv/bin/pip install -r requirements.txt
+sudo .venv/bin/pip install -r requirements.txt
 ```
+
+> `sudo pip` is nodig omdat `rpi_ws281x` root-toegang vereist bij installatie op de Pi.
 
 ### 4. Bluetooth audio instellen (eenmalig op de Pi)
 
@@ -79,7 +81,7 @@ JBL als standaard audio-uitvoer instellen (na elke verbinding):
 pactl set-default-sink bluez_sink.2C_FD_B4_BE_73_C6.a2dp_sink
 ```
 
-> **Let op:** de default sink reset bij reboot. Zie sectie "Na reboot" onderaan.
+> **Let op:** de default sink reset bij reboot — de bt-connect service (stap 5b) regelt dit automatisch.
 
 ### 5. Systemd service aanmaken (eenmalig op de Pi)
 
@@ -90,7 +92,9 @@ Description=The Mona
 After=network.target mosquitto.service
 
 [Service]
-User=mona
+User=root
+Environment=XDG_RUNTIME_DIR=/run/user/1000
+Environment=PULSE_SERVER=unix:/run/user/1000/pulse/native
 WorkingDirectory=/home/mona/the-mona-app
 ExecStart=/home/mona/the-mona-app/backend/.venv/bin/python backend/main.py
 Restart=always
@@ -101,6 +105,21 @@ EOF
 
 sudo systemctl daemon-reload
 sudo systemctl enable the-mona
+```
+
+> `User=root` is vereist voor de WS2812B LED strip (PWM via `/dev/vcio`).  
+> De PulseAudio env vars zorgen dat root de Bluetooth speaker van user `mona` (UID 1000) kan bereiken.
+
+### 5b. bt-connect service installeren (eenmalig op de Pi)
+
+Zorgt voor automatisch verbinden van de JBL na reboot:
+
+```bash
+sudo cp /home/mona/the-mona-app/backend/scripts/bt-connect.sh /home/mona/bt-connect.sh
+sudo chmod +x /home/mona/bt-connect.sh
+sudo cp /home/mona/the-mona-app/backend/scripts/bt-connect.service /etc/systemd/system/bt-connect.service
+sudo systemctl daemon-reload
+sudo systemctl enable --now bt-connect
 ```
 
 ---
@@ -129,7 +148,7 @@ scp -r the-mona-app/frontend/dist/* mona@the-mona.local:/home/mona/the-mona-app/
 
 ```bash
 ssh mona@the-mona.local \
-  "cd /home/mona/the-mona-app/backend && .venv/bin/pip install -r requirements.txt"
+  "cd /home/mona/the-mona-app/backend && sudo .venv/bin/pip install -r requirements.txt"
 ```
 
 ### Stap 4 — Service herstarten

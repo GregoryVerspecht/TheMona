@@ -1,0 +1,43 @@
+---
+import Layout from '../layouts/PageLayout.astro';
+import Glowcard from '~/components/glowcard.astro';
+import '~/assets/styles/tailwind.css';
+import "~/assets/styles/glow.css";
+---
+
+<Layout>
+  <section class="pt-8">
+    <Glowcard>
+      <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+        <h1 class="text-5xl font-extrabold">
+          <span class="bg-clip-text text-transparent bg-mona bg-[length:200%_200%] animate-gradient-move">Logs</span>
+        </h1>
+        <div class="flex gap-2 items-center">
+          <select id="select-lines" class="bg-gray-800 text-white text-sm rounded px-2 py-1 border border-white/20">
+            <option value="50">50 regels</option>
+            <option value="100" selected>100 regels</option>
+            <option value="200">200 regels</option>
+            <option value="500">500 regels</option>
+          </select>
+          <button id="btn-pause" class="px-4 py-1 rounded bg-mona-alt text-white text-sm hover:opacity-90 transition bg-[length:200%_200%] animate-gradient-move">
+            Pauzeren
+          </button>
+          <button id="btn-clear" class="px-4 py-1 rounded bg-gray-700 text-white text-sm hover:opacity-80 transition">
+            Wissen
+          </button>
+        </div>
+      </div>
+
+      <div
+        id="log-container"
+        class="bg-black/40 rounded-lg p-3 h-[60vh] overflow-y-auto space-y-0.5"
+      >
+        <p class="text-gray-500 text-xs font-mono">Laden...</p>
+      </div>
+    </Glowcard>
+  </section>
+</Layout>
+
+<script>
+  import '~/scripts/logs';
+</script>

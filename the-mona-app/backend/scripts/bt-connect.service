@@ -1,0 +1,15 @@
+[Unit]
+Description=Connect JBL Bluetooth Speaker on boot
+After=bluetooth.service pulseaudio.service network.target
+Wants=bluetooth.service
+
+[Service]
+Type=oneshot
+User=root
+ExecStart=/home/mona/bt-connect.sh
+RemainAfterExit=yes
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

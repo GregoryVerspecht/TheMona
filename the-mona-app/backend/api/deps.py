@@ -18,3 +18,6 @@ def get_registry(request: Request):
 
 def get_bluetooth(request: Request):
     return request.app.state.bluetooth
+
+def get_ledstrip(request: Request):
+    return request.app.state.ledstrip

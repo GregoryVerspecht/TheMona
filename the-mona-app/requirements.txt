@@ -9,3 +9,4 @@ pyyaml
 websockets
 pygame
 python-json-logger
+rpi_ws281x

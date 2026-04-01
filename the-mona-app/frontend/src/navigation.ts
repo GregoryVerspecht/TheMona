@@ -36,6 +36,10 @@ export const headerData = {
           href: getPermalink('/bluetooth'),
         },
         {
+          text: 'Logs',
+          href: getPermalink('/logs'),
+        },
+        {
           text: 'API',
           href: getPermalink('/api'),
         },

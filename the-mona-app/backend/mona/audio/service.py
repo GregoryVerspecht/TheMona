@@ -1,3 +1,4 @@
+import asyncio
 import logging
 import os
 import pygame
@@ -15,13 +16,27 @@ class AudioService:
         self._sounds = {}
         self._volume = 1.0  # 0.0..1.0
         self._sfx_subdir = sfx_subdir
+        self._startup_sfx: str | None = None
 
     async def start(self):
+        # Route audio via PulseAudio so Bluetooth sinks (JBL) are used
+        os.environ.setdefault("SDL_AUDIODRIVER", "pulse")
+        pygame.mixer.pre_init(44100, -16, 2, 1024)
+        # Init in background so the app starts immediately
+        asyncio.create_task(self._init_with_retry())
+
+    async def _init_with_retry(self):
+        attempt = 0
+        while True:
+            attempt += 1
+            try:
+                pygame.mixer.init()
+                break
+            except Exception as e:
+                log.warning(f"Audio init attempt {attempt} failed: {e} — retrying in 5s")
+                await asyncio.sleep(5)
+
         try:
-            # Route audio via PulseAudio so Bluetooth sinks (JBL) are used
-            os.environ.setdefault("SDL_AUDIODRIVER", "pulse")
-            pygame.mixer.pre_init(44100, -16, 2, 1024)
-            pygame.mixer.init()
             self._ready = True
             self._sounds = {}
 
@@ -45,6 +60,8 @@ class AudioService:
 
             pygame.mixer.music.set_volume(self._volume)  # voor de zekerheid
             log.info({"msg": "audio ready", "sounds": sorted(self._sounds.keys())})
+            if self._startup_sfx:
+                await self.play_sfx(self._startup_sfx)
         except Exception:
             log.exception("audio init failed")
 

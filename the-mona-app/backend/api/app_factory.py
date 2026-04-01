@@ -5,6 +5,7 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from api.v1.router import api_router
 from mona.bluetooth.service import BluetoothService
+from mona.ledstrip.service import LedStripService
 
 from mona.services.button_registry import ButtonRegistry
 from mona.services.mqtt_paho import PahoMqttService, MqttConfig
@@ -47,6 +48,9 @@ def create_app(settings) -> FastAPI:
     app.state.audio = audio
     app.state.engine = engine
     app.state.bluetooth = BluetoothService()
+    ledstrip = LedStripService()
+    ledstrip.start()
+    app.state.ledstrip = ledstrip
 
     # paho thread -> schedule into this loop
     def on_button_event(btn_id: str, payload: dict):
@@ -94,6 +98,8 @@ def create_app(settings) -> FastAPI:
     async def _startup():
         app.state.loop = asyncio.get_running_loop()
         mqtt.start()
+        audio._volume = 25 / 100.0
+        audio._startup_sfx = "sea_shanty_2"
         await audio.start()
         await engine.set_idle()  # ALWAYS start idle
 
