@@ -1,7 +1,6 @@
 from __future__ import annotations
 import asyncio
 import random
-import time
 from dataclasses import dataclass
 from typing import Any, Dict, Optional, Callable, Awaitable
 
@@ -41,6 +40,7 @@ class ReactionGame(GameBase):
         self._lock = asyncio.Lock()
         self._main_task: Optional[asyncio.Task] = None
         self._timeout_task: Optional[asyncio.Task] = None
+        self._round_done: Optional[asyncio.Event] = None
 
     def _all_off(self):
         self.mqtt.publish("mona/buttons/all/cmd", {"type": "stop", "clear": True})
@@ -77,7 +77,6 @@ class ReactionGame(GameBase):
             self.score_fail = 0
 
             if params:
-                # optioneel override
                 self.cfg.rounds = int(params.get("rounds", self.cfg.rounds))
                 self.cfg.reaction_timeout_s = float(params.get("reaction_timeout_s", self.cfg.reaction_timeout_s))
 
@@ -100,50 +99,59 @@ class ReactionGame(GameBase):
             if self._main_task:
                 self._main_task.cancel()
                 self._main_task = None
+            if self._round_done:
+                self._round_done.set()
 
         self._all_off()
 
     async def _run(self):
-        await self.audio.play_sfx("success")
         await asyncio.sleep(0.6)
 
         while True:
+            # Check game done
             async with self._lock:
                 if not self.running:
                     return
                 if self.round >= self.cfg.rounds:
                     self.state = "done"
 
-            await self.on_finished()
-            return
+            if self.state == "done":
+                await self.on_finished()
+                return
 
             # WAIT_RANDOM
             async with self._lock:
                 self.state = "wait_random"
                 self.target_id = None
 
-            await asyncio.sleep(random.uniform(self.cfg.min_delay_s, self.cfg.max_delay_s))
+            try:
+                await asyncio.sleep(random.uniform(self.cfg.min_delay_s, self.cfg.max_delay_s))
+            except asyncio.CancelledError:
+                return
 
+            # Check for false start (on_button_pressed set state="fail" during sleep)
             async with self._lock:
                 if not self.running:
                     return
-                if self.state == "fail":
-                    await self.on_finished()
-                    return
-
-                devices = self.registry.list_ids(connected_only=True)
-                if not devices:
-                    self.state = "fail"
-                    self.score_fail += 1
+                player_failed = (self.state == "fail")
+                if not player_failed:
+                    devices = self.registry.list_ids(connected_only=True)
+                    if not devices:
+                        self.state = "fail"
+                        self.score_fail += 1
 
             if self.state == "fail":
-                await self.audio.play_sfx("fail")
-                self._flash_red(None)
-                await asyncio.sleep(0.4)
-                await self.on_finished()
-                return
+                if not player_failed:
+                    # No devices — system fail, show feedback
+                    await self.audio.play_sfx("fail")
+                    self._flash_red(None)
+                    await asyncio.sleep(0.4)
+                    self._all_dim_blue()
+                # player_failed: feedback already handled by on_button_pressed
+                continue
 
             # SHOW_TARGET
+            self._round_done = asyncio.Event()
             async with self._lock:
                 self.state = "show_target"
                 self.target_id = random.choice(devices)
@@ -155,7 +163,15 @@ class ReactionGame(GameBase):
 
                 if self._timeout_task:
                     self._timeout_task.cancel()
-                self._timeout_task = asyncio.create_task(self._timeout_watch(round_no=self.round, target_id=target))
+                self._timeout_task = asyncio.create_task(
+                    self._timeout_watch(round_no=self.round, target_id=target)
+                )
+
+            # Wait for button press or timeout
+            try:
+                await self._round_done.wait()
+            except asyncio.CancelledError:
+                return
 
     async def _timeout_watch(self, round_no: int, target_id: str):
         try:
@@ -173,7 +189,9 @@ class ReactionGame(GameBase):
             await self.audio.play_sfx("fail")
             self._flash_red(target_id)
             await asyncio.sleep(0.4)
-            await self.on_finished()
+            self._all_dim_blue()
+            if self._round_done:
+                self._round_done.set()
         except asyncio.CancelledError:
             return
 
@@ -182,8 +200,8 @@ class ReactionGame(GameBase):
             if not self.running:
                 return
 
-            # false start
             if self.state == "wait_random":
+                # False start
                 self.state = "fail"
                 self.score_fail += 1
                 fail_target = None
@@ -193,14 +211,13 @@ class ReactionGame(GameBase):
                 if btn_id == target:
                     self.state = "success"
                     self.score_ok += 1
-                    # stop timeout
                     if self._timeout_task:
                         self._timeout_task.cancel()
                         self._timeout_task = None
-                    # feedback
                     self.mqtt.publish(f"mona/buttons/{btn_id}/cmd", {"type": "flash", "brightness": 220, "r": 255, "g": 255, "b": 255, "interval_ms": 80, "times": 4})
-                    # back to ready look
                     self._all_dim_blue()
+                    if self._round_done:
+                        self._round_done.set()
                     return
                 else:
                     self.state = "fail"
@@ -209,8 +226,10 @@ class ReactionGame(GameBase):
             else:
                 return
 
-        # fail path (outside lock)
+        # Fail path (outside lock)
         await self.audio.play_sfx("fail")
         self._flash_red(fail_target)
         await asyncio.sleep(0.4)
-        await self.on_finished()
+        self._all_dim_blue()
+        if self._round_done:
+            self._round_done.set()

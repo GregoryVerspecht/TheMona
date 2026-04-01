@@ -5,7 +5,6 @@ function initAudioPage() {
   const setMsg = (t: string) => { if (msg) msg.textContent = t; };
 
   document.querySelectorAll<HTMLButtonElement>("button[data-sfx]").forEach((btn) => {
-    // voorkom dubbele listeners als init meerdere keren runt
     if (btn.dataset.bound === "1") return;
     btn.dataset.bound = "1";
 
@@ -29,29 +28,21 @@ function initAudioPage() {
       setMsg("Stopped");
     });
   }
-}
 
-// 1) bij echte load
-initAudioPage();
-// 2) bij Astro client navigatie
-document.addEventListener("astro:page-load", initAudioPage);
-
-// Volume
-  const slider = document.getElementById("vol");
+  // Volume slider (alleen aanwezig op audio-pagina)
+  const slider = document.getElementById("vol") as HTMLInputElement | null;
   const label = document.getElementById("volVal");
+  if (!slider || !label) return;
 
-  // init: huidige volume ophalen
-  try {
-    const { volume } = await audioApi.getVolume();
+  audioApi.getVolume().then(({ volume }: { volume: number }) => {
     slider.value = String(volume);
     label.textContent = String(volume);
-  } catch {
+  }).catch(() => {
     label.textContent = slider.value;
-  }
+  });
 
-  // throttle: niet spammen tijdens slepen
-  let t = null;
-  const push = async (v) => {
+  let t: ReturnType<typeof setTimeout> | null = null;
+  const push = async (v: string) => {
     try {
       await audioApi.setVolume(Number(v));
     } catch (e) {
@@ -61,10 +52,14 @@ document.addEventListener("astro:page-load", initAudioPage);
 
   slider.addEventListener("input", () => {
     label.textContent = slider.value;
-    clearTimeout(t);
+    if (t) clearTimeout(t);
     t = setTimeout(() => push(slider.value), 120);
   });
 
   slider.addEventListener("change", () => {
     push(slider.value);
   });
+}
+
+initAudioPage();
+document.addEventListener("astro:page-load", initAudioPage);

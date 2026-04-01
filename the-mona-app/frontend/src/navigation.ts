@@ -11,12 +11,12 @@ export const headerData = {
       text: 'Game',
       links: [
         {
-          text: 'Overview',
-          href: getPermalink('/#eatures'),
+          text: 'Spelen',
+          href: getPermalink('/game'),
         },
         {
-          text: 'Gamemodes',
-          href: getPermalink('/services'),
+          text: 'Overview',
+          href: getPermalink('/#eatures'),
         },
       ],
     },
@@ -31,7 +31,11 @@ export const headerData = {
           text: 'Buttons',
           href: getPermalink('/buttons'),
         },
-                {
+        {
+          text: 'Bluetooth',
+          href: getPermalink('/bluetooth'),
+        },
+        {
           text: 'API',
           href: getPermalink('/api'),
         },

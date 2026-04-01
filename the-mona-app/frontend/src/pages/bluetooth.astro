@@ -1,0 +1,60 @@
+---
+import Layout from '../layouts/PageLayout.astro';
+import Glowcard from '~/components/glowcard.astro';
+import '~/assets/styles/tailwind.css';
+import "~/assets/styles/glow.css";
+---
+
+<Layout>
+  <section class="pt-8 space-y-6">
+
+    <Glowcard>
+      <div class="flex items-center justify-between mb-6">
+        <h1 class="text-5xl font-extrabold">
+          <span class="bg-clip-text text-transparent bg-mona bg-[length:200%_200%] animate-gradient-move">Bluetooth</span>
+        </h1>
+        <button
+          id="bt-refresh"
+          class="px-4 py-2 rounded-lg bg-mona-alt text-white text-sm hover:opacity-90 transition bg-[length:200%_200%] animate-gradient-move"
+        >
+          Vernieuwen
+        </button>
+      </div>
+
+      <!-- Adapter status -->
+      <div class="grid grid-cols-2 gap-4 mb-6">
+        <div>
+          <p class="text-gray-400 text-sm mb-1">Adapter</p>
+          <p id="bt-adapter-avail" class="font-medium flex items-center">--</p>
+        </div>
+        <div>
+          <p class="text-gray-400 text-sm mb-1">Status</p>
+          <p id="bt-adapter-powered" class="font-medium flex items-center">--</p>
+        </div>
+      </div>
+
+      <!-- Verbonden apparaten -->
+      <div class="mb-6">
+        <p class="text-gray-400 text-sm mb-2">Verbonden</p>
+        <div id="bt-connected-list">
+          <p class="text-gray-400 text-sm">Laden...</p>
+        </div>
+      </div>
+
+      <!-- Gekoppelde apparaten -->
+      <div>
+        <p class="text-gray-400 text-sm mb-2">Gekoppelde apparaten</p>
+        <div id="bt-trusted-list">
+          <p class="text-gray-400 text-sm">Laden...</p>
+        </div>
+      </div>
+
+      <p id="bt-msg" class="text-sm mt-2"></p>
+    </Glowcard>
+
+  </section>
+</Layout>
+
+<script>
+  import '~/scripts/bluetooth';
+</script>

@@ -6,7 +6,7 @@
     "baseUrl": "../",
     "paths": {
       "~/*": [
-        "the-mona/src/*"
+        "./src/*"
       ]
     },
 

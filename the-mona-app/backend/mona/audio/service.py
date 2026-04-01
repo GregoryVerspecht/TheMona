@@ -18,6 +18,9 @@ class AudioService:
 
     async def start(self):
         try:
+            # Route audio via PulseAudio so Bluetooth sinks (JBL) are used
+            os.environ.setdefault("SDL_AUDIODRIVER", "pulse")
+            pygame.mixer.pre_init(44100, -16, 2, 1024)
             pygame.mixer.init()
             self._ready = True
             self._sounds = {}

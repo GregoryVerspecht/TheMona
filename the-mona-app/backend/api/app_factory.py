@@ -1,7 +1,10 @@
 from __future__ import annotations
 import asyncio
+import pathlib
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 from api.v1.router import api_router
+from mona.bluetooth.service import BluetoothService
 
 from mona.services.button_registry import ButtonRegistry
 from mona.services.mqtt_paho import PahoMqttService, MqttConfig
@@ -43,6 +46,7 @@ def create_app(settings) -> FastAPI:
     app.state.mqtt = mqtt
     app.state.audio = audio
     app.state.engine = engine
+    app.state.bluetooth = BluetoothService()
 
     # paho thread -> schedule into this loop
     def on_button_event(btn_id: str, payload: dict):
@@ -100,4 +104,10 @@ def create_app(settings) -> FastAPI:
         mqtt.stop()
 
     app.include_router(api_router, prefix="/api/v1")
+
+    # Serve Astro frontend (built with `npm run build`)
+    dist = pathlib.Path(__file__).parent.parent.parent / "frontend" / "dist"
+    if dist.exists():
+        app.mount("/", StaticFiles(directory=dist, html=True), name="frontend")
+
     return app

@@ -1,0 +1,61 @@
+---
+import Layout from '../layouts/PageLayout.astro';
+import Glowcard from '~/components/glowcard.astro';
+import '~/assets/styles/tailwind.css';
+import "~/assets/styles/glow.css";
+---
+
+<Layout>
+  <section class="pt-8 space-y-6">
+
+    <Glowcard>
+      <h1 class="text-5xl font-extrabold mb-6">
+        <span class="bg-clip-text text-transparent bg-mona bg-[length:200%_200%] animate-gradient-move">Game</span>
+      </h1>
+
+      <!-- Status -->
+      <div class="grid grid-cols-2 gap-4 mb-6 text-lg">
+        <div>
+          <span class="text-gray-400">Status</span><br />
+          <span id="game-state" class="font-bold text-2xl">--</span>
+        </div>
+        <div>
+          <span class="text-gray-400">Ronde</span><br />
+          <span id="game-round" class="font-bold text-2xl">0 / 5</span>
+        </div>
+        <div>
+          <span class="text-gray-400">Goed</span><br />
+          <span id="game-score-ok" class="font-bold text-2xl text-green-400">0</span>
+        </div>
+        <div>
+          <span class="text-gray-400">Fout</span><br />
+          <span id="game-score-fail" class="font-bold text-2xl text-red-400">0</span>
+        </div>
+      </div>
+
+      <!-- Knoppen -->
+      <div class="flex gap-4 flex-wrap">
+        <button
+          id="btn-start"
+          class="px-6 py-3 rounded-lg bg-mona text-white font-semibold hover:opacity-90 transition bg-[length:200%_200%] animate-gradient-move disabled:opacity-40"
+        >
+          Start spel
+        </button>
+        <button
+          id="btn-stop"
+          disabled
+          class="px-6 py-3 rounded-lg bg-mona-alt text-white font-semibold hover:opacity-90 transition bg-[length:200%_200%] animate-gradient-move disabled:opacity-40"
+        >
+          Stop
+        </button>
+      </div>
+
+      <p id="game-msg" class="mt-4 text-red-400 text-sm"></p>
+    </Glowcard>
+
+  </section>
+</Layout>
+
+<script>
+  import '~/scripts/game';
+</script>

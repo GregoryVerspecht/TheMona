@@ -15,3 +15,6 @@ def get_audio(request: Request):
 
 def get_registry(request: Request):
     return request.app.state.registry
+
+def get_bluetooth(request: Request):
+    return request.app.state.bluetooth
