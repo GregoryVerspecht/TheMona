@@ -1,6 +1,9 @@
 from __future__ import annotations
 import asyncio
+import logging
 import pathlib
+
+log = logging.getLogger(__name__)
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from api.v1.router import api_router
@@ -12,6 +15,8 @@ from mona.services.mqtt_paho import PahoMqttService, MqttConfig
 from mona.audio.service import AudioService
 from mona.engine.engine import GameEngine
 from mona.engine.games.reaction import ReactionGame, ReactionConfig
+
+STARTUP_RAINBOW_SECS = 30   # hoe lang rainbow speelt na klaar-melding (instelbaar)
 
 def create_app(settings) -> FastAPI:
     app = FastAPI(title="The Mona API")
@@ -94,14 +99,36 @@ def create_app(settings) -> FastAPI:
         on_game_cmd=on_game_cmd,
     )
 
+    async def _startup_sequence():
+        """Wacht tot audio klaar is, speel dan startup-sound + rainbow, daarna idle."""
+        log.info("startup sequence: wachten op audio...")
+        ledstrip.animate_pulse(255, 255, 255, speed_ms=5)  # wit pulseren tijdens opstart
+
+        deadline = asyncio.get_event_loop().time() + STARTUP_RAINBOW_SECS
+        while not audio._ready:
+            if asyncio.get_event_loop().time() > deadline:
+                log.warning("startup sequence: audio timeout, direct naar idle")
+                ledstrip.set_status_idle()
+                return
+            await asyncio.sleep(0.5)
+
+        remaining = deadline - asyncio.get_event_loop().time()
+        log.info(f"startup sequence: audio klaar, rainbow voor {remaining:.0f}s")
+        ledstrip.animate_rainbow(speed_ms=15)
+        await audio.play_sfx("sea_shanty_2")
+        await asyncio.sleep(max(0, remaining))
+        await audio.stop_sfx(fade_ms=500)
+        ledstrip.set_status_idle()
+        log.info("startup sequence: klaar, idle")
+
     @app.on_event("startup")
     async def _startup():
         app.state.loop = asyncio.get_running_loop()
         mqtt.start()
         audio._volume = 25 / 100.0
-        audio._startup_sfx = "sea_shanty_2"
         await audio.start()
-        await engine.set_idle()  # ALWAYS start idle
+        await engine.set_idle()
+        asyncio.create_task(_startup_sequence())
 
     @app.on_event("shutdown")
     async def _shutdown():

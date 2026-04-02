@@ -5,7 +5,7 @@ from typing import Optional
 
 log = logging.getLogger(__name__)
 
-# GPIO18 = PWM channel 0, most reliable for WS2812B on Pi
+# GPIO18 = PWM channel 0, physical pin 12 on the header
 LED_COUNT   = 20
 LED_PIN     = 18
 LED_FREQ    = 800_000   # WS2812B signal frequency
@@ -60,6 +60,11 @@ class LedStripService:
         self._cancel_animation()
         if self._available:
             self._fill(*COLOUR_OFF)
+            try:
+                self._strip._cleanup()
+            except Exception:
+                pass
+        self._available = False
 
     # ── Public API ─────────────────────────────────────────────────────────────
 
@@ -132,6 +137,7 @@ class LedStripService:
         self._animate_task = None
 
     async def _rainbow_loop(self, speed_ms: int) -> None:
+        log.info("rainbow loop started")
         try:
             pos = 0
             while True:
@@ -145,8 +151,11 @@ class LedStripService:
                 await asyncio.sleep(speed_ms / 1000)
         except asyncio.CancelledError:
             pass
+        except Exception:
+            log.exception("rainbow loop crashed")
 
     async def _pulse_loop(self, r: int, g: int, b: int, speed_ms: int) -> None:
+        log.info("pulse loop started")
         try:
             step = 2
             brightness = 0
@@ -162,3 +171,5 @@ class LedStripService:
                 await asyncio.sleep(speed_ms / 1000)
         except asyncio.CancelledError:
             pass
+        except Exception:
+            log.exception("pulse loop crashed")

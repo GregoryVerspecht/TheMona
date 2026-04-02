@@ -16,7 +16,6 @@ class AudioService:
         self._sounds = {}
         self._volume = 1.0  # 0.0..1.0
         self._sfx_subdir = sfx_subdir
-        self._startup_sfx: str | None = None
 
     async def start(self):
         # Route audio via PulseAudio so Bluetooth sinks (JBL) are used
@@ -60,8 +59,6 @@ class AudioService:
 
             pygame.mixer.music.set_volume(self._volume)  # voor de zekerheid
             log.info({"msg": "audio ready", "sounds": sorted(self._sounds.keys())})
-            if self._startup_sfx:
-                await self.play_sfx(self._startup_sfx)
         except Exception:
             log.exception("audio init failed")
 
