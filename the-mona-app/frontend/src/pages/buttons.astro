@@ -1,35 +1,67 @@
 ---
-
 import Layout from '../layouts/PageLayout.astro';
-import Hero from '~/components/widgets/hero.astro';
-import "~/assets/styles/glow.css";
 import Glowcard from '~/components/glowcard.astro';
 import '~/assets/styles/tailwind.css';
-import  { apiPost } from "~/lib/api";
+import "~/assets/styles/glow.css";
 ---
 
 <Layout>
+  <section class="pt-8 space-y-6">
 
-<section class="pt-8">
+    <!-- Controls -->
     <Glowcard>
-    
-      <h1 class="text-5xl font-extrabold mb-6">
+      <h1 class="text-5xl font-extrabold mb-6 text-left">
         <span class="bg-clip-text text-transparent bg-mona bg-[length:200%_200%] animate-gradient-move">Buttons</span>
       </h1>
-      <p id="msg"> Audio: action</p> <br>
-      <p class="text-lg font-medium mb-6">Feature 1 - stop</p>
-  
-      <button id="stop" class="px-4 py-2 rounded-lg bg-mona-alt text-white hover:opacity-90 transition bg-[length:200%_200%] animate-gradient-move"> STOP SOUNDS</button> <br>
-      <button data-sfx="success" class="px-4 py-2 rounded-lg bg-mona-alt text-white hover:opacity-90 transition bg-[length:200%_200%] animate-gradient-move"> Play success</button>  <br>
-      <button data-sfx="fail" class="px-4 py-2 rounded-lg bg-mona-alt text-white hover:opacity-90 transition bg-[length:200%_200%] animate-gradient-move"> Play fail</button>  <br>
-      <button data-sfx="sea_shanty_2" class="px-4 py-2 rounded-lg bg-mona-alt text-white hover:opacity-90 transition bg-[length:200%_200%] animate-gradient-move"> Play Sea Shanty 2</button>  <br>
 
-  </Glowcard>
+      <!-- Kleur + helderheid -->
+      <div class="flex flex-wrap items-center gap-4 mb-6">
+        <div class="flex items-center gap-2">
+          <label class="text-gray-400 text-sm">Kleur</label>
+          <input id="btn-color" type="color" value="#00ff00"
+            class="w-10 h-10 rounded cursor-pointer bg-transparent border-0" />
+        </div>
+        <div class="flex items-center gap-2 flex-1 min-w-[160px]">
+          <label class="text-gray-400 text-sm whitespace-nowrap">Helderheid</label>
+          <input id="btn-brightness" type="range" min="0" max="255" value="200"
+            class="flex-1 accent-green-400" />
+          <span id="btn-brightness-val" class="text-sm w-8 text-right">200</span>
+        </div>
+      </div>
 
-</section>
+      <!-- Broadcast -->
+      <div class="mb-2">
+        <p class="text-gray-400 text-sm mb-2">Alle knoppen</p>
+        <div class="flex flex-wrap gap-2">
+          <button id="btn-all-fill"
+            class="px-4 py-2 text-sm rounded-lg bg-mona-alt text-white hover:opacity-90 transition bg-[length:200%_200%] animate-gradient-move">
+            Fill all
+          </button>
+          <button id="btn-all-flash"
+            class="px-4 py-2 text-sm rounded-lg bg-mona-alt text-white hover:opacity-90 transition bg-[length:200%_200%] animate-gradient-move">
+            Flash all
+          </button>
+          <button id="btn-all-stop"
+            class="px-4 py-2 text-sm rounded-lg bg-red-700 text-white hover:opacity-90 transition">
+            Stop all
+          </button>
+        </div>
+      </div>
+
+      <p id="btn-msg" class="text-sm mt-3 h-5"></p>
+    </Glowcard>
+
+    <!-- Live knoppenlijst -->
+    <Glowcard>
+      <p class="text-gray-400 text-sm mb-4">Knoppen <span class="text-xs">(elke 4s bijgewerkt)</span></p>
+      <div id="btn-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <p class="text-gray-400 text-sm col-span-full">Laden...</p>
+      </div>
+    </Glowcard>
+
+  </section>
 </Layout>
+
 <script>
-  import '~/scripts/audio';
+  import '~/scripts/buttons';
 </script>
-
-

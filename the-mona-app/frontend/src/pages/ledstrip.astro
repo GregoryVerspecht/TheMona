@@ -1,0 +1,123 @@
+---
+import Layout from '../layouts/PageLayout.astro';
+import Glowcard from '~/components/glowcard.astro';
+import '~/assets/styles/tailwind.css';
+import "~/assets/styles/glow.css";
+---
+
+<Layout>
+  <section class="pt-8 space-y-6">
+
+    <!-- Status -->
+    <Glowcard>
+      <h1 class="text-5xl font-extrabold mb-6 text-left">
+        <span class="bg-clip-text text-transparent bg-mona bg-[length:200%_200%] animate-gradient-move">LED Strip</span>
+      </h1>
+
+      <div class="grid grid-cols-2 gap-4 text-sm mb-2">
+        <div>
+          <p class="text-gray-400 mb-1">Hardware</p>
+          <p id="ls-available" class="font-medium">--</p>
+        </div>
+        <div>
+          <p class="text-gray-400 mb-1">Animatie</p>
+          <p id="ls-animating" class="font-medium">--</p>
+        </div>
+        <div>
+          <p class="text-gray-400 mb-1">LEDs</p>
+          <p id="ls-count" class="font-medium">--</p>
+        </div>
+        <div>
+          <p class="text-gray-400 mb-1">Helderheid</p>
+          <p id="ls-brightness-val" class="font-medium">--</p>
+        </div>
+      </div>
+    </Glowcard>
+
+    <!-- Handmatige bediening -->
+    <Glowcard>
+      <p class="text-gray-400 text-sm font-semibold mb-4">Bediening</p>
+
+      <!-- Kleur + helderheid -->
+      <div class="flex flex-wrap items-center gap-4 mb-5">
+        <div class="flex items-center gap-2">
+          <label class="text-gray-400 text-sm">Kleur</label>
+          <input id="ls-color" type="color" value="#00ff00"
+            class="w-10 h-10 rounded cursor-pointer bg-transparent border-0" />
+        </div>
+        <div class="flex items-center gap-2 flex-1 min-w-[160px]">
+          <label class="text-gray-400 text-sm whitespace-nowrap">Helderheid</label>
+          <input id="ls-brightness" type="range" min="0" max="255" value="180"
+            class="flex-1 accent-green-400" />
+          <span id="ls-brightness-label" class="text-sm w-8 text-right">180</span>
+        </div>
+      </div>
+
+      <!-- Snelheid -->
+      <div class="flex items-center gap-2 mb-5">
+        <label class="text-gray-400 text-sm whitespace-nowrap">Snelheid (ms)</label>
+        <input id="ls-speed" type="range" min="5" max="100" value="20"
+          class="flex-1 accent-green-400" />
+        <span id="ls-speed-label" class="text-sm w-8 text-right">20</span>
+      </div>
+
+      <!-- Acties -->
+      <div class="flex flex-wrap gap-2 mb-2">
+        <button id="ls-fill"
+          class="px-4 py-2 text-sm rounded-lg bg-mona-alt text-white hover:opacity-90 transition bg-[length:200%_200%] animate-gradient-move">
+          Fill
+        </button>
+        <button id="ls-rainbow"
+          class="px-4 py-2 text-sm rounded-lg bg-mona-alt text-white hover:opacity-90 transition bg-[length:200%_200%] animate-gradient-move">
+          Rainbow
+        </button>
+        <button id="ls-pulse"
+          class="px-4 py-2 text-sm rounded-lg bg-mona-alt text-white hover:opacity-90 transition bg-[length:200%_200%] animate-gradient-move">
+          Pulse
+        </button>
+        <button id="ls-brightness-set"
+          class="px-4 py-2 text-sm rounded-lg bg-white/10 text-white hover:bg-white/20 transition">
+          Set helderheid
+        </button>
+        <button id="ls-off"
+          class="px-4 py-2 text-sm rounded-lg bg-red-700 text-white hover:opacity-90 transition">
+          Uit
+        </button>
+      </div>
+
+      <p id="ls-msg" class="text-sm mt-3 h-5"></p>
+    </Glowcard>
+
+    <!-- Game status presets -->
+    <Glowcard>
+      <p class="text-gray-400 text-sm font-semibold mb-4">Game status presets</p>
+      <div class="flex flex-wrap gap-2">
+        <button data-status="idle"
+          class="px-4 py-2 text-sm rounded-lg bg-blue-900/60 text-blue-200 hover:bg-blue-900 transition">
+          Idle
+        </button>
+        <button data-status="running"
+          class="px-4 py-2 text-sm rounded-lg bg-green-900/60 text-green-200 hover:bg-green-900 transition">
+          Running
+        </button>
+        <button data-status="success"
+          class="px-4 py-2 text-sm rounded-lg bg-green-600/60 text-white hover:bg-green-600 transition">
+          Success
+        </button>
+        <button data-status="fail"
+          class="px-4 py-2 text-sm rounded-lg bg-red-700/60 text-white hover:bg-red-700 transition">
+          Fail
+        </button>
+        <button data-status="off"
+          class="px-4 py-2 text-sm rounded-lg bg-white/10 text-gray-300 hover:bg-white/20 transition">
+          Off
+        </button>
+      </div>
+    </Glowcard>
+
+  </section>
+</Layout>
+
+<script>
+  import '~/scripts/ledstrip';
+</script>

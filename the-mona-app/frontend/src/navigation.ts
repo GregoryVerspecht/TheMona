@@ -32,6 +32,10 @@ export const headerData = {
           href: getPermalink('/buttons'),
         },
         {
+          text: 'LED Strip',
+          href: getPermalink('/ledstrip'),
+        },
+        {
           text: 'Bluetooth',
           href: getPermalink('/bluetooth'),
         },
