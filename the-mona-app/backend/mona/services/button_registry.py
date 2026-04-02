@@ -23,6 +23,7 @@ class ButtonState:
     flash_interval_ms: Optional[int] = None
     rssi: Optional[int] = None
     ip: Optional[str] = None
+    battery: Optional[int] = None
 
 class ButtonRegistry:
     def __init__(self) -> None:
@@ -69,6 +70,8 @@ class ButtonRegistry:
                 st.rssi = int(payload["rssi"])
             if "ip" in payload:
                 st.ip = str(payload["ip"])
+            if "battery" in payload:
+                st.battery = int(payload["battery"])
 
     def list(self) -> list[dict]:
         with self._lock:

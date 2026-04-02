@@ -15,15 +15,16 @@ function timeSince(iso?: string): string {
   return `${Math.floor(secs / 60)}m geleden`;
 }
 
-function batteryBar(pct?: number): string {
-  if (pct === undefined || pct === null) return '<span class="text-gray-500 text-xs">—</span>';
+function batteryBar(pct?: number | null): string {
+  if (pct === undefined || pct === null || pct < 0) return '<span class="text-gray-500 text-xs">—</span>';
   const color = pct > 50 ? "bg-green-400" : pct > 20 ? "bg-yellow-400" : "bg-red-400";
+  const icon = pct <= 20 ? "⚠️ " : "";
   return `
     <div class="flex items-center gap-1">
       <div class="w-16 h-2 bg-white/10 rounded-full overflow-hidden">
         <div class="${color} h-full rounded-full" style="width:${pct}%"></div>
       </div>
-      <span class="text-xs text-gray-400">${pct}%</span>
+      <span class="text-xs text-gray-400">${icon}${pct}%</span>
     </div>`;
 }
 
@@ -47,7 +48,15 @@ function renderButton(btn: ButtonState, color: string): string {
         </div>
         <div>
           <span class="text-gray-400">Laatste druk</span>
+          <div class="text-white text-xs last-press" data-ts="${btn.last_press ?? ""}">${timeSince(btn.last_press ?? undefined)}</div>
+        </div>
+        <div>
+          <span class="text-gray-400">Laatste activiteit</span>
           <div class="text-white text-xs last-seen" data-ts="${btn.last_seen ?? ""}">${timeSince(btn.last_seen)}</div>
+        </div>
+        <div>
+          <span class="text-gray-400">RSSI</span>
+          <div class="text-xs ${(btn.rssi ?? 0) > -70 ? 'text-green-400' : (btn.rssi ?? 0) > -85 ? 'text-yellow-400' : 'text-red-400'}">${btn.rssi != null ? btn.rssi + ' dBm' : '—'}</div>
         </div>
       </div>
 
@@ -157,8 +166,8 @@ function initButtonsPage() {
 
   // Refresh timestamp labels every 5s without full reload
   setInterval(() => {
-    grid.querySelectorAll<HTMLElement>(".last-seen").forEach((el) => {
-      el.textContent = timeSince(el.dataset.ts);
+    grid.querySelectorAll<HTMLElement>(".last-seen, .last-press").forEach((el) => {
+      el.textContent = timeSince(el.dataset.ts || undefined);
     });
   }, 5000);
 

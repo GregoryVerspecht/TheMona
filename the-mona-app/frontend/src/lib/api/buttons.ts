@@ -3,9 +3,11 @@ import { apiGet, apiPost } from "../http";
 export interface ButtonState {
   id: string;
   online: boolean;
-  battery?: number;
+  battery?: number | null;
   last_seen?: string;
+  last_press?: string | null;
   last_event?: string;
+  rssi?: number | null;
 }
 
 export const buttonsApi = {
