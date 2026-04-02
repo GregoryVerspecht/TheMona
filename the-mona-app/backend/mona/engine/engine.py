@@ -3,10 +3,11 @@ import asyncio
 from typing import Any, Dict, Optional
 
 class GameEngine:
-    def __init__(self, mqtt, audio, registry):
+    def __init__(self, mqtt, audio, registry, ledstrip=None):
         self.mqtt = mqtt
         self.audio = audio
         self.registry = registry
+        self.ledstrip = ledstrip
 
         self.games: Dict[str, Any] = {}
         self.active: Optional[str] = None
@@ -19,6 +20,8 @@ class GameEngine:
     async def set_idle(self):
         await self.stop()
         self.mqtt.publish("mona/buttons/all/cmd", {"type": "stop", "clear": True})
+        if self.ledstrip:
+            self.ledstrip.set_status_idle()
         self._publish_state()
 
     async def start(self, game: str, params: Dict[str, Any] | None = None):

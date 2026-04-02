@@ -8,49 +8,79 @@ import "~/assets/styles/glow.css";
 <Layout>
   <section class="pt-8 space-y-6">
 
+    <!-- Status -->
     <Glowcard>
-      <h1 class="text-5xl font-extrabold mb-6">
+      <h1 class="text-5xl font-extrabold mb-6 text-left">
         <span class="bg-clip-text text-transparent bg-mona bg-[length:200%_200%] animate-gradient-move">Game</span>
       </h1>
 
-      <!-- Status -->
       <div class="grid grid-cols-2 gap-4 mb-6 text-lg">
         <div>
-          <span class="text-gray-400">Status</span><br />
-          <span id="game-state" class="font-bold text-2xl">--</span>
+          <span class="text-gray-400 text-sm">Status</span>
+          <p id="game-state" class="font-bold text-2xl">--</p>
         </div>
         <div>
-          <span class="text-gray-400">Ronde</span><br />
-          <span id="game-round" class="font-bold text-2xl">0 / 5</span>
+          <span class="text-gray-400 text-sm">Ronde</span>
+          <p id="game-round" class="font-bold text-2xl">0 / 5</p>
         </div>
         <div>
-          <span class="text-gray-400">Goed</span><br />
-          <span id="game-score-ok" class="font-bold text-2xl text-green-400">0</span>
+          <span class="text-gray-400 text-sm">Goed</span>
+          <p id="game-score-ok" class="font-bold text-2xl text-green-400">0</p>
         </div>
         <div>
-          <span class="text-gray-400">Fout</span><br />
-          <span id="game-score-fail" class="font-bold text-2xl text-red-400">0</span>
+          <span class="text-gray-400 text-sm">Fout</span>
+          <p id="game-score-fail" class="font-bold text-2xl text-red-400">0</p>
         </div>
       </div>
 
-      <!-- Knoppen -->
-      <div class="flex gap-4 flex-wrap">
-        <button
-          id="btn-start"
-          class="px-6 py-3 rounded-lg bg-mona text-white font-semibold hover:opacity-90 transition bg-[length:200%_200%] animate-gradient-move disabled:opacity-40"
-        >
+      <!-- Actieve knoppen indicator -->
+      <div class="mb-6">
+        <span class="text-gray-400 text-sm">Online knoppen</span>
+        <div id="game-buttons" class="flex flex-wrap gap-2 mt-1">
+          <span class="text-gray-500 text-sm">--</span>
+        </div>
+      </div>
+
+      <div class="flex gap-3 flex-wrap">
+        <button id="btn-start"
+          class="px-6 py-3 rounded-lg bg-mona text-white font-semibold hover:opacity-90 transition bg-[length:200%_200%] animate-gradient-move disabled:opacity-40">
           Start spel
         </button>
-        <button
-          id="btn-stop"
-          disabled
-          class="px-6 py-3 rounded-lg bg-mona-alt text-white font-semibold hover:opacity-90 transition bg-[length:200%_200%] animate-gradient-move disabled:opacity-40"
-        >
+        <button id="btn-stop" disabled
+          class="px-6 py-3 rounded-lg bg-mona-alt text-white font-semibold hover:opacity-90 transition bg-[length:200%_200%] animate-gradient-move disabled:opacity-40">
           Stop
         </button>
       </div>
 
-      <p id="game-msg" class="mt-4 text-red-400 text-sm"></p>
+      <p id="game-msg" class="mt-4 text-red-400 text-sm h-5"></p>
+    </Glowcard>
+
+    <!-- Instellingen -->
+    <Glowcard>
+      <p class="text-gray-400 text-sm font-semibold mb-4">Instellingen</p>
+
+      <div class="space-y-4">
+        <div class="flex items-center gap-3">
+          <label class="text-sm text-gray-400 w-36">Rondes</label>
+          <input id="cfg-rounds" type="number" min="1" max="20" value="5"
+            class="w-20 bg-white/10 border border-white/20 rounded-lg px-3 py-1.5 text-sm text-white text-center" />
+        </div>
+        <div class="flex items-center gap-3">
+          <label class="text-sm text-gray-400 w-36">Reactietijd (s)</label>
+          <input id="cfg-timeout" type="number" min="0.5" max="10" step="0.5" value="2"
+            class="w-20 bg-white/10 border border-white/20 rounded-lg px-3 py-1.5 text-sm text-white text-center" />
+        </div>
+        <div class="flex items-center gap-3">
+          <label class="text-sm text-gray-400 w-36">Min wachttijd (s)</label>
+          <input id="cfg-min-delay" type="number" min="0.5" max="10" step="0.5" value="1.5"
+            class="w-20 bg-white/10 border border-white/20 rounded-lg px-3 py-1.5 text-sm text-white text-center" />
+        </div>
+        <div class="flex items-center gap-3">
+          <label class="text-sm text-gray-400 w-36">Max wachttijd (s)</label>
+          <input id="cfg-max-delay" type="number" min="0.5" max="15" step="0.5" value="4"
+            class="w-20 bg-white/10 border border-white/20 rounded-lg px-3 py-1.5 text-sm text-white text-center" />
+        </div>
+      </div>
     </Glowcard>
 
   </section>

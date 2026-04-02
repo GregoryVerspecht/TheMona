@@ -33,7 +33,10 @@ def create_app(settings) -> FastAPI:
     mqtt = PahoMqttService(mqtt_cfg)
     audio = AudioService(getattr(settings, "audio", None))
 
-    engine = GameEngine(mqtt=mqtt, audio=audio, registry=registry)
+    ledstrip = LedStripService()
+    ledstrip.start()
+
+    engine = GameEngine(mqtt=mqtt, audio=audio, registry=registry, ledstrip=ledstrip)
 
     async def on_reaction_finished():
         await engine.stop()
@@ -42,6 +45,7 @@ def create_app(settings) -> FastAPI:
         mqtt=mqtt,
         audio=audio,
         registry=registry,
+        ledstrip=ledstrip,
         on_finished=on_reaction_finished,
         cfg=ReactionConfig(),
     )
@@ -53,8 +57,6 @@ def create_app(settings) -> FastAPI:
     app.state.audio = audio
     app.state.engine = engine
     app.state.bluetooth = BluetoothService()
-    ledstrip = LedStripService()
-    ledstrip.start()
     app.state.ledstrip = ledstrip
 
     # paho thread -> schedule into this loop

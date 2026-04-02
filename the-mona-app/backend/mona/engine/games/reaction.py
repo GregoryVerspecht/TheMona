@@ -12,6 +12,7 @@ class ReactionConfig:
     max_delay_s: float = 4.0
     reaction_timeout_s: float = 2.0
     rounds: int = 5
+    celebration_s: float = 4.0  # rainbow na game over
 
 class ReactionGame(GameBase):
     key = "reaction"
@@ -22,11 +23,13 @@ class ReactionGame(GameBase):
         audio,
         registry,
         on_finished: Callable[[], Awaitable[None]],
+        ledstrip=None,
         cfg: ReactionConfig | None = None,
     ):
         self.mqtt = mqtt
         self.audio = audio
         self.registry = registry
+        self.ledstrip = ledstrip
         self.on_finished = on_finished
         self.cfg = cfg or ReactionConfig()
 
@@ -42,20 +45,50 @@ class ReactionGame(GameBase):
         self._timeout_task: Optional[asyncio.Task] = None
         self._round_done: Optional[asyncio.Event] = None
 
+    # ── LED helpers ────────────────────────────────────────────────────────────
+
     def _all_off(self):
         self.mqtt.publish("mona/buttons/all/cmd", {"type": "stop", "clear": True})
 
     def _all_dim_blue(self):
         self.mqtt.publish("mona/buttons/all/cmd", {"type": "fill", "brightness": 80, "r": 0, "g": 0, "b": 40})
+        if self.ledstrip:
+            self.ledstrip.set_status_idle()
 
     def _show_target(self, btn_id: str):
         self.mqtt.publish(f"mona/buttons/{btn_id}/cmd", {"type": "fill", "brightness": 220, "r": 0, "g": 220, "b": 0})
+        if self.ledstrip:
+            self.ledstrip.set_status_running()
+
+    def _flash_success(self, btn_id: str):
+        # Correcte knop: wit flitsen
+        self.mqtt.publish(f"mona/buttons/{btn_id}/cmd", {
+            "type": "flash", "brightness": 220,
+            "r": 255, "g": 255, "b": 255,
+            "interval_ms": 80, "times": 4,
+        })
+        # Alle andere knoppen: kort groen
+        self.mqtt.publish("mona/buttons/all/cmd", {
+            "type": "fill", "brightness": 120, "r": 0, "g": 200, "b": 0,
+        })
+        if self.ledstrip:
+            self.ledstrip.set_status_success()
 
     def _flash_red(self, btn_id: str | None):
         if btn_id:
-            self.mqtt.publish(f"mona/buttons/{btn_id}/cmd", {"type": "flash", "brightness": 220, "r": 255, "g": 0, "b": 0, "interval_ms": 120, "times": 6})
+            self.mqtt.publish(f"mona/buttons/{btn_id}/cmd", {
+                "type": "flash", "brightness": 220,
+                "r": 255, "g": 0, "b": 0, "interval_ms": 120, "times": 6,
+            })
         else:
-            self.mqtt.publish("mona/buttons/all/cmd", {"type": "flash", "brightness": 200, "r": 255, "g": 0, "b": 0, "interval_ms": 120, "times": 6})
+            self.mqtt.publish("mona/buttons/all/cmd", {
+                "type": "flash", "brightness": 200,
+                "r": 255, "g": 0, "b": 0, "interval_ms": 120, "times": 6,
+            })
+        if self.ledstrip:
+            self.ledstrip.set_status_fail()
+
+    # ── Public API ─────────────────────────────────────────────────────────────
 
     def status(self) -> Dict[str, Any]:
         return {
@@ -79,6 +112,9 @@ class ReactionGame(GameBase):
             if params:
                 self.cfg.rounds = int(params.get("rounds", self.cfg.rounds))
                 self.cfg.reaction_timeout_s = float(params.get("reaction_timeout_s", self.cfg.reaction_timeout_s))
+                self.cfg.min_delay_s = float(params.get("min_delay_s", self.cfg.min_delay_s))
+                self.cfg.max_delay_s = float(params.get("max_delay_s", self.cfg.max_delay_s))
+                self.cfg.celebration_s = float(params.get("celebration_s", self.cfg.celebration_s))
 
             self._all_off()
             self._all_dim_blue()
@@ -104,6 +140,8 @@ class ReactionGame(GameBase):
 
         self._all_off()
 
+    # ── Game loop ──────────────────────────────────────────────────────────────
+
     async def _run(self):
         await asyncio.sleep(0.6)
 
@@ -116,6 +154,7 @@ class ReactionGame(GameBase):
                     self.state = "done"
 
             if self.state == "done":
+                await self._celebrate()
                 await self.on_finished()
                 return
 
@@ -129,7 +168,7 @@ class ReactionGame(GameBase):
             except asyncio.CancelledError:
                 return
 
-            # Check for false start (on_button_pressed set state="fail" during sleep)
+            # Check for false start
             async with self._lock:
                 if not self.running:
                     return
@@ -142,12 +181,10 @@ class ReactionGame(GameBase):
 
             if self.state == "fail":
                 if not player_failed:
-                    # No devices — system fail, show feedback
                     await self.audio.play_sfx("fail")
                     self._flash_red(None)
-                    await asyncio.sleep(0.4)
+                    await asyncio.sleep(0.8)
                     self._all_dim_blue()
-                # player_failed: feedback already handled by on_button_pressed
                 continue
 
             # SHOW_TARGET
@@ -167,11 +204,23 @@ class ReactionGame(GameBase):
                     self._timeout_watch(round_no=self.round, target_id=target)
                 )
 
-            # Wait for button press or timeout
             try:
                 await self._round_done.wait()
             except asyncio.CancelledError:
                 return
+
+    async def _celebrate(self):
+        """Eindanimatie: rainbow op strip + success sound."""
+        if self.ledstrip:
+            self.ledstrip.animate_rainbow(speed_ms=12)
+        self.mqtt.publish("mona/buttons/all/cmd", {
+            "type": "flash", "brightness": 220,
+            "r": 0, "g": 255, "b": 100, "interval_ms": 120, "times": 8,
+        })
+        await self.audio.play_sfx("success")
+        await asyncio.sleep(self.cfg.celebration_s)
+
+    # ── Timeout watch ──────────────────────────────────────────────────────────
 
     async def _timeout_watch(self, round_no: int, target_id: str):
         try:
@@ -188,12 +237,14 @@ class ReactionGame(GameBase):
 
             await self.audio.play_sfx("fail")
             self._flash_red(target_id)
-            await asyncio.sleep(0.4)
+            await asyncio.sleep(0.8)
             self._all_dim_blue()
             if self._round_done:
                 self._round_done.set()
         except asyncio.CancelledError:
             return
+
+    # ── Button input ───────────────────────────────────────────────────────────
 
     async def on_button_pressed(self, btn_id: str) -> None:
         async with self._lock:
@@ -209,27 +260,31 @@ class ReactionGame(GameBase):
             elif self.state == "show_target":
                 target = self.target_id
                 if btn_id == target:
+                    # Correct!
                     self.state = "success"
                     self.score_ok += 1
                     if self._timeout_task:
                         self._timeout_task.cancel()
                         self._timeout_task = None
-                    self.mqtt.publish(f"mona/buttons/{btn_id}/cmd", {"type": "flash", "brightness": 220, "r": 255, "g": 255, "b": 255, "interval_ms": 80, "times": 4})
+                    self._flash_success(btn_id)
+                    await self.audio.play_sfx("success")
+                    await asyncio.sleep(0.6)
                     self._all_dim_blue()
                     if self._round_done:
                         self._round_done.set()
                     return
                 else:
+                    # Verkeerde knop
                     self.state = "fail"
                     self.score_fail += 1
                     fail_target = target
             else:
                 return
 
-        # Fail path (outside lock)
+        # Fail path (buiten lock)
         await self.audio.play_sfx("fail")
         self._flash_red(fail_target)
-        await asyncio.sleep(0.4)
+        await asyncio.sleep(0.8)
         self._all_dim_blue()
         if self._round_done:
             self._round_done.set()

@@ -4,6 +4,8 @@ from datetime import datetime, timezone
 from threading import RLock
 from typing import Any, Dict, Optional
 
+OFFLINE_TIMEOUT_S = 30  # knop geldt als offline na 30s geen berichten
+
 def now_utc() -> datetime:
     return datetime.now(timezone.utc)
 
@@ -77,14 +79,25 @@ class ButtonRegistry:
             st = self._buttons.get(btn_id)
             return self._to_dict(st) if st else None
 
+    def is_online(self, btn_id: str) -> bool:
+        """True als knop recent actief was (binnen OFFLINE_TIMEOUT_S)."""
+        with self._lock:
+            st = self._buttons.get(btn_id)
+            if not st:
+                return False
+            age = (now_utc() - st.last_seen).total_seconds()
+            return age < OFFLINE_TIMEOUT_S
+
     def list_ids(self, connected_only: bool = True) -> list[str]:
         with self._lock:
             if not connected_only:
                 return list(self._buttons.keys())
-            return [k for k, st in self._buttons.items() if st.connected]
+            return [k for k, st in self._buttons.items()
+                    if (now_utc() - st.last_seen).total_seconds() < OFFLINE_TIMEOUT_S]
 
     def _to_dict(self, st: ButtonState) -> dict:
         d = asdict(st)
         d["last_seen"] = st.last_seen.isoformat()
         d["last_press"] = st.last_press.isoformat() if st.last_press else None
+        d["online"] = (now_utc() - st.last_seen).total_seconds() < OFFLINE_TIMEOUT_S
         return d

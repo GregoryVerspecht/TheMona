@@ -16,7 +16,7 @@ export const gameApi = {
   status() {
     return apiGet<GameStatus>("/api/v1/game/status");
   },
-  start(params?: { rounds?: number; reaction_timeout_s?: number }) {
+  start(params?: { rounds?: number; reaction_timeout_s?: number; min_delay_s?: number; max_delay_s?: number }) {
     return apiPost<void>("/api/v1/game/start", params ?? {});
   },
   stop() {
